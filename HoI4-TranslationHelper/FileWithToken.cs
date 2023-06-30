@@ -16,5 +16,9 @@ namespace HoI4_TranslationHelper
             _fileName = fileName;
             _lineTextTupels = lineTextTupels;
         }
+
+        public string FileName { get => _fileName; set => _fileName = value; }
+
+        public List<LineTextTupel> GetLineTextTupels { get => _lineTextTupels; set => _lineTextTupels = value; }
     }
 }
