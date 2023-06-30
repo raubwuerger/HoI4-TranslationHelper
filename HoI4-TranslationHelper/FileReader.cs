@@ -9,9 +9,6 @@ namespace HoI4_TranslationHelper
 {
     public class FileReader
     {
-        private string openTag = "[";
-        private string closeTag = "]";
-
         public FileWithToken Read(string textFile)
         {
             string[] lines = File.ReadAllLines(textFile);

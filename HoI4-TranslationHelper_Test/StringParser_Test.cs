@@ -1,5 +1,6 @@
 using HoI4_TranslationHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace HoI4_TranslationHelper_Test
 {
@@ -12,8 +13,12 @@ namespace HoI4_TranslationHelper_Test
         [TestMethod]
         public void TestMethod1()
         {
+            List<string> tokens = new List<string>();
             string toTest = "sdfsdfsf[asds]";
-            Assert.AreEqual(StringParser.GetToken(toTest, testTokenStart, testTokenEnd), "asds");
+
+            List<string> tokenExpected = new List<string>() { "asds" };
+            List<string> tokensFound = StringParser.GetToken(toTest, tokens);
+            Assert.AreEqual(tokenExpected[0], tokensFound[0]);
         }
     }
 }
