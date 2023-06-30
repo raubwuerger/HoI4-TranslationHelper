@@ -31,20 +31,24 @@ namespace HoI4_TranslationHelper
 
         private List<LineTextTupel> ParseStrings(string[] lines )
         {
-            List<LineTextTupel> tokens = new List<LineTextTupel>();
+            List<LineTextTupel> lLineTextTupels = new List<LineTextTupel>();
             int lineNumber = 0;
             foreach( string line in lines )
             {
                 lineNumber++;
-                string token = StringParser.GetToken(line, openTag, closeTag);
-                if( null == token )
+                List<string> tokens = StringParser.GetToken(line, openTag, closeTag);
+                if( null == tokens )
                 {
                     continue;
                 }
-                tokens.Add( new LineTextTupel( lineNumber, token ) );
+
+                foreach( string token in tokens )
+                {
+                    lLineTextTupels.Add(new LineTextTupel(lineNumber, token));
+                }
             }
 
-            return tokens;
+            return lLineTextTupels;
         }
     }
 }
