@@ -36,7 +36,8 @@ namespace HoI4_TranslationHelper
             foreach( string line in lines )
             {
                 lineNumber++;
-                List<string> tokens = StringParser.GetToken(line, openTag, closeTag);
+                List<string> tokens = new List<string>();
+                tokens = StringParser.GetToken(line, tokens);
                 if( null == tokens )
                 {
                     continue;

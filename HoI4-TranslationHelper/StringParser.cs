@@ -8,24 +8,29 @@ namespace HoI4_TranslationHelper
 {
     public class StringParser
     {
-        public static List<string> GetToken(string source, string startTag, string endTag)
+        public static string _startTag = "[";
+        public static string _endTag = "]";
+        private static int _startPos;
+        private static int _endPos;
+        public static List<string> GetToken(string source, List<string> tokens)
         {
-            List<string> tokens = new List<string>();
-            if (false == source.Contains(startTag) )
+            if (false == source.Contains(_startTag) )
             {
                 return tokens;
             }
 
-            if( false == source.Contains(endTag))
+            if( false == source.Contains(_endTag))
             {
                 return tokens;
             }
 
-            int startPos = source.IndexOf(startTag, 0) + startTag.Length;
-            int endPos = source.IndexOf(endTag, startPos);
-            tokens.Add(source.Substring(startPos, endPos - startPos));
+            int _startPos = source.IndexOf(_startTag, 0) + _startTag.Length;
+            int _endPos = source.IndexOf(_endTag, _startPos);
+            tokens.Add(source.Substring(_startPos, _endPos - _startPos));
 
-            return tokens;
+            string remainingContent = source.Substring(_endPos + 1, source.Length - _endPos - 1);
+
+            return GetToken(remainingContent, tokens);
         }
     }
 }
