@@ -58,8 +58,14 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/HexGameDemonstrator/Library/
-/HexGameDemonstrator/Logs/
-/HexGameDemonstrator/Temp/
-/HexGameDemonstrator/obj/
-/HexGameDemonstrator/UserSettings/
+/HoI4-TranslationHelper/Library/
+/HoI4-TranslationHelper/Logs/
+/HoI4-TranslationHelper/Temp/
+/HoI4-TranslationHelper/obj/
+/HoI4-TranslationHelper/UserSettings/
+/HoI4-TranslationHelper/bin/
+/HoI4-TranslationHelper/obj/
+/HoI4-TranslationHelper/TestResult/
+
+/HoI4-HoI4-TranslationHelper_Test/bin/
+/HoI4-HoI4-TranslationHelper_Test/obj/
