@@ -7,20 +7,36 @@ namespace HoI4_TranslationHelper
     {
         static void Main(string[] args)
         {
-            ParseDirectoryGerman();
-            ParseDirectoryEnglish();
+            ParseDirectoryGerman(new FileReader());
+            ParseDirectoryGerman(Icons());
+
+            ParseDirectoryEnglish(new FileReader());
+            ParseDirectoryEnglish(Icons());
         }
 
-        private static void ParseDirectoryGerman()
+        private static FileReader Icons()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "icons";
+            fileReader.StringParser = ParseIcons();
+            return fileReader;
+        }
+
+        private static StringParser ParseIcons()
+        {
+            StringParser stringParser = new StringParser();
+            stringParser.StartTag = "£";
+            stringParser.EndTags.Clear();
+            stringParser.EndTags.Add(" ");
+            stringParser.EndTags.Add("\n");
+            stringParser.EndTags.Add("\"");
+            return stringParser;
+        }
+
+        private static void ParseDirectoryGerman(FileReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();
-            StringParser stringParser = new StringParser();
-//            stringParser.StartTag = "£";
-//            stringParser.EndTag = " ";
-            FileReader fileReader = new FileReader();
-            fileReader.StringParser = stringParser;
             directoryParser.FileReader = fileReader;
-            Parameterize(directoryParser);
 
             List<FileWithToken> filesGerman = directoryParser.ParseDirectory(Constance.pathGerman);
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
@@ -33,12 +49,10 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private static void ParseDirectoryEnglish()
+        private static void ParseDirectoryEnglish(FileReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();
-            FileReader fileReader = new FileReader();
             directoryParser.FileReader = fileReader;
-            Parameterize(directoryParser);
 
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
             ParameterizeEnglis(fileNameReplacer);
@@ -48,11 +62,6 @@ namespace HoI4_TranslationHelper
                 fileNameReplacer.Replace(fileWithToken);
                 FileWriter.Write(fileWithToken);
             }
-        }
-
-        private static void Parameterize(DirectoryParser directoryParser)
-        {
-
         }
 
         private static void ParameterizeGerman( FileNameReplacer fileNameReplacer )

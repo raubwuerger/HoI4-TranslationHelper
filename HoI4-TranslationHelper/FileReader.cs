@@ -12,6 +12,9 @@ namespace HoI4_TranslationHelper
         private StringParser _stringParser = new StringParser();
         public StringParser StringParser { get => _stringParser; set => _stringParser = value; }
 
+        private string _pathReplace = "variables";
+        public string PathReplace { get => _pathReplace; set => _pathReplace = value; }
+
         public FileWithToken Read(string textFile)
         {
             string[] lines = File.ReadAllLines(textFile);
@@ -29,7 +32,7 @@ namespace HoI4_TranslationHelper
             FileWithToken fileWithToken = new FileWithToken(parsedFile);
             fileWithToken.PathName = Path.GetDirectoryName(textFile);
             fileWithToken.FileName = Path.GetFileName(textFile);
-            fileWithToken.PathNameToSave = Path.Combine(fileWithToken.PathName, "replaced", fileWithToken.FileName);
+            fileWithToken.PathNameToSave = Path.Combine(fileWithToken.PathName, _pathReplace, fileWithToken.FileName);
 
             return fileWithToken;
         }
