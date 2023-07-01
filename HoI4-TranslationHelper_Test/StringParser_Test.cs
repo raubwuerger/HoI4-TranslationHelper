@@ -10,6 +10,14 @@ namespace HoI4_TranslationHelper_Test
         private string testTokenStart = "[";
         private string testTokenEnd = "]";
 
+        private StringParser _stringParser;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _stringParser = new StringParser();
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
@@ -17,7 +25,21 @@ namespace HoI4_TranslationHelper_Test
             string toTest = "sdfsdfsf[asds]";
 
             List<string> tokenExpected = new List<string>() { "asds" };
-            List<string> tokensFound = StringParser.GetToken(toTest, tokens);
+            List<string> tokensFound = _stringParser.GetToken(toTest, tokens);
+            Assert.AreEqual(tokenExpected[0], tokensFound[0]);
+        }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            List<string> tokens = new List<string>();
+            string toTest = "sdfsdfsf£asds";
+
+            _stringParser.StartTag = "£";
+            _stringParser.EndTag = " ";
+
+            List<string> tokenExpected = new List<string>() { "asds" };
+            List<string> tokensFound = _stringParser.GetToken(toTest, tokens);
             Assert.AreEqual(tokenExpected[0], tokensFound[0]);
         }
     }

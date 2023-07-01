@@ -8,11 +8,13 @@ namespace HoI4_TranslationHelper
 {
     public class StringParser
     {
-        public static string _startTag = "[";
-        public static string _endTag = "]";
-        private static int _startPos;
-        private static int _endPos;
-        public static List<string> GetToken(string source, List<string> tokens)
+        private string _startTag = "[";
+        public string StartTag { get => _startTag; set => _startTag = value; }
+
+        private string _endTag = "]";
+        public string EndTag { get => _endTag; set => _endTag = value; }
+
+        public List<string> GetToken(string source, List<string> tokens)
         {
             if (false == source.Contains(_startTag) )
             {

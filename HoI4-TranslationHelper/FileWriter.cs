@@ -16,20 +16,22 @@ namespace HoI4_TranslationHelper
                 return false;
             }
 
-            string fileName = fileWithToken.FileName;
-            if( null == fileName )
+            string pathToSave = fileWithToken.PathNameToSave;
+            if( null == pathToSave )
             {
                 return false;
             }
 
-            if (File.Exists(fileName))
+            Directory.CreateDirectory(Path.GetDirectoryName(fileWithToken.PathNameToSave));
+
+            if (File.Exists(pathToSave))
             {
-                File.Delete(fileName);
+                File.Delete(pathToSave);
             }
 
             try
             {
-                using (FileStream fs = File.Create(fileName))
+                using (FileStream fs = File.Create(pathToSave))
                 {
                     foreach (LineTextTupel lineTextTupel in fileWithToken.GetLineTextTupels)
                     {

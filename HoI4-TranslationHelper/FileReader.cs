@@ -9,6 +9,9 @@ namespace HoI4_TranslationHelper
 {
     public class FileReader
     {
+        private StringParser _stringParser = new StringParser();
+        public StringParser StringParser { get => _stringParser; set => _stringParser = value; }
+
         public FileWithToken Read(string textFile)
         {
             string[] lines = File.ReadAllLines(textFile);
@@ -23,7 +26,12 @@ namespace HoI4_TranslationHelper
                 return null;
             }
 
-            return new FileWithToken(textFile, parsedFile);
+            FileWithToken fileWithToken = new FileWithToken(parsedFile);
+            fileWithToken.PathName = Path.GetDirectoryName(textFile);
+            fileWithToken.FileName = Path.GetFileName(textFile);
+            fileWithToken.PathNameToSave = Path.Combine(fileWithToken.PathName, "replaced", fileWithToken.FileName);
+
+            return fileWithToken;
         }
 
         private List<LineTextTupel> ParseStrings(string[] lines )

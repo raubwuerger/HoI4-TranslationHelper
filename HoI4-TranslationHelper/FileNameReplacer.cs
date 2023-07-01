@@ -19,16 +19,16 @@ namespace HoI4_TranslationHelper
                 return fileWithToken;
             }
 
-            string fileName = fileWithToken.FileName;
-            if( null == fileName )
+            string fileNameToSave = fileWithToken.PathNameToSave;
+            if( null == fileNameToSave )
             {
                 return fileWithToken;
             }
 
-            string fileNameReplace = fileName.Replace(tokenToFind, tokenReplaceWith);
+            string fileNameReplace = fileNameToSave.Replace(tokenToFind, tokenReplaceWith);
             fileNameReplace += fileTypeExtension;
 
-            fileWithToken.FileName = fileNameReplace;
+            fileWithToken.PathNameToSave = fileNameReplace;
 
             return fileWithToken;
         }
