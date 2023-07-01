@@ -58,7 +58,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/1137372539/localisation/german/icons/
-/1137372539/localisation/german/variables/
-/1137372539/localisation/english/icons/
-/1137372539/localisation/english/variables/
+/HoI4-TranslationHelper/bin/
+/HoI4-TranslationHelper/obj/
+/HoI4-TranslationHelper/TestResults/
+/HoI4-TranslationHelper_Test/bin/
+/HoI4-TranslationHelper_Test/obj/
