@@ -16,6 +16,10 @@ namespace HoI4_TranslationHelper
         public FileReader FileReader { get => _fileReader; set => _fileReader = value; }
         public List<FileWithToken> ParseDirectory(string directory)
         {
+            if( false == Directory.Exists(directory) )
+            {
+                return new List<FileWithToken>();
+            }
             string[] files = Directory.GetFiles(directory, _filePattern, SearchOption.AllDirectories);
 
             List<FileWithToken> filesWithTokens = new List<FileWithToken>();

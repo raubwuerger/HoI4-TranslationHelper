@@ -7,11 +7,38 @@ namespace HoI4_TranslationHelper
     {
         static void Main(string[] args)
         {
-            ParseDirectoryGerman(new FileReader());
-            ParseDirectoryGerman(Icons());
+            if( args.Length < 1 )
+            {
+                LogInfos("No arguments passed ...");
+                return;
+            }
 
-            ParseDirectoryEnglish(new FileReader());
-            ParseDirectoryEnglish(Icons());
+            switch(args[0])
+            {
+                case "1":
+                    ParseDirectoryGerman(Brackets());
+                    ParseDirectoryEnglish(Brackets());
+                    break;
+                case "2":
+                    ParseDirectoryGerman(Icons());
+                    ParseDirectoryEnglish(Icons());
+                    break;
+                case "3":
+                    ParseDirectoryGerman(Variables());
+                    ParseDirectoryEnglish(Variables());
+                    break;
+                default:
+                    LogInfos(string.Format("Wrong argument {0} passed ...", args[0]) );
+                    break;
+            }
+        }
+
+        private static void LogInfos(string text)
+        {
+            Console.WriteLine(text + Environment.NewLine);
+            Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
+            Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
+            Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
         }
 
         private static FileReader Icons()
@@ -26,12 +53,45 @@ namespace HoI4_TranslationHelper
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "£";
-            stringParser.EndTags.Clear();
             stringParser.EndTags.Add(" ");
             stringParser.EndTags.Add("\n");
             stringParser.EndTags.Add("\"");
             return stringParser;
         }
+
+        private static FileReader Variables()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "variables";
+            fileReader.StringParser = ParseVariables();
+            return fileReader;
+        }
+
+        private static StringParser ParseVariables()
+        {
+            StringParser stringParser = new StringParser();
+            stringParser.StartTag = "$";
+            stringParser.EndTags.Add("$");
+            return stringParser;
+        }
+
+        private static FileReader Brackets()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "brackets";
+            fileReader.StringParser = ParseBrackets();
+            return fileReader;
+        }
+
+        private static StringParser ParseBrackets()
+        {
+            StringParser stringParser = new StringParser();
+            stringParser.StartTag = "[";
+            stringParser.EndTags.Clear();
+            stringParser.EndTags.Add("]");
+            return stringParser;
+        }
+
 
         private static void ParseDirectoryGerman(FileReader fileReader)
         {
@@ -48,7 +108,6 @@ namespace HoI4_TranslationHelper
                 FileWriter.Write(fileWithToken);
             }
         }
-
         private static void ParseDirectoryEnglish(FileReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();
