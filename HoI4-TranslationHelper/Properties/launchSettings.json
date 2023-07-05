@@ -1,7 +1,8 @@
 {
   "profiles": {
     "HoI4-TranslationHelper": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "4"
     }
   }
 }

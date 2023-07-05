@@ -8,10 +8,13 @@ namespace HoI4_TranslationHelper
 {
     public class StringParser
     {
-        private string _startTag = "[";
+        private string _startTag;
         public string StartTag { get => _startTag; set => _startTag = value; }
 
-        private List<string> _endTags = new List<string>() { "]" };
+        private int _subStringCount = 0;
+        public int SubStringCount { get => _subStringCount; set => _subStringCount = value; }
+
+        private List<string> _endTags = new List<string>() {};
         public List<string> EndTags { get => _endTags; set => _endTags = value; }
 
         public List<string> GetToken(string source, List<string> tokens)
@@ -32,7 +35,14 @@ namespace HoI4_TranslationHelper
                 }
                 int _endPos = source.IndexOf(endTag, _startPos);
 
-                tokens.Add(source.Substring(_startPos, _endPos - _startPos));
+                if(_subStringCount == 0 )
+                {
+                    tokens.Add(source.Substring(_startPos, _endPos - _startPos));
+                }
+                else 
+                {
+                    tokens.Add(source.Substring(_startPos, _subStringCount));
+                }
 
                 string remainingContent = source.Substring(_endPos + 1, source.Length - _endPos - 1);
 

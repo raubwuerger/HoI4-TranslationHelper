@@ -109,6 +109,7 @@ namespace HoI4_TranslationHelper
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "§";
             stringParser.EndTags.Add("§!");
+            stringParser.SubStringCount = 2;
             return stringParser;
         }
 
