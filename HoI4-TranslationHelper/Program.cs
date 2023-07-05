@@ -27,6 +27,10 @@ namespace HoI4_TranslationHelper
                     ParseDirectoryGerman(Variables());
                     ParseDirectoryEnglish(Variables());
                     break;
+                case "4":
+                    ParseDirectoryGerman(Colors());
+                    ParseDirectoryEnglish(Colors());
+                    break;
                 default:
                     LogInfos(string.Format("Wrong argument {0} passed ...", args[0]) );
                     break;
@@ -39,6 +43,23 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
             Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
+        }
+
+        private static FileReader Brackets()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "brackets";
+            fileReader.StringParser = ParseBrackets();
+            return fileReader;
+        }
+
+        private static StringParser ParseBrackets()
+        {
+            StringParser stringParser = new StringParser();
+            stringParser.StartTag = "[";
+            stringParser.EndTags.Clear();
+            stringParser.EndTags.Add("]");
+            return stringParser;
         }
 
         private static FileReader Icons()
@@ -75,23 +96,21 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader Brackets()
+        private static FileReader Colors()
         {
             FileReader fileReader = new FileReader();
-            fileReader.PathReplace = "brackets";
-            fileReader.StringParser = ParseBrackets();
+            fileReader.PathReplace = "colors";
+            fileReader.StringParser = ParseColors();
             return fileReader;
         }
 
-        private static StringParser ParseBrackets()
+        private static StringParser ParseColors()
         {
             StringParser stringParser = new StringParser();
-            stringParser.StartTag = "[";
-            stringParser.EndTags.Clear();
-            stringParser.EndTags.Add("]");
+            stringParser.StartTag = "§";
+            stringParser.EndTags.Add("§!");
             return stringParser;
         }
-
 
         private static void ParseDirectoryGerman(FileReader fileReader)
         {
