@@ -35,6 +35,10 @@ namespace HoI4_TranslationHelper
                     ParseDirectoryGerman(InnerDoubleQuotes());
                     ParseDirectoryEnglish(InnerDoubleQuotes());
                     break;
+                case "6":
+                    ParseDirectoryGerman(Keys());
+                    ParseDirectoryEnglish(Keys());
+                    break;
                 default:
                     LogInfos(string.Format("Wrong argument {0} passed ...", args[0]) );
                     break;
@@ -132,6 +136,24 @@ namespace HoI4_TranslationHelper
             StringParserFirstLast stringParser = new StringParserFirstLast();
             stringParser.StartTag = "\"";
             stringParser.EndTags.Add("\"");
+            return stringParser;
+        }
+
+        private static FileReader Keys()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "keys";
+            fileReader.StringParser = ParseKeys();
+            return fileReader;
+        }
+
+        private static IStringParser ParseKeys()
+        {
+            StringParserKey stringParser = new StringParserKey();
+            stringParser.StartTag = "\"";
+            stringParser.LineIgnores.Add("#");
+            stringParser.LineIgnores.Add(" #");
+            stringParser.LineIgnores.Add("  #");
             return stringParser;
         }
 

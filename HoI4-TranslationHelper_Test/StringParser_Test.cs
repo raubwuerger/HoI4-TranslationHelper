@@ -15,6 +15,9 @@ namespace HoI4_TranslationHelper_Test
         private string _testStringInnerDoubleQuotesReal = "news.3.d:0 \"Äthiopien ist italienisch\", sagt Mussolini, als seine Truppen Addis Abeba besetzen\\n Äthiopiens Ära der Unabhängigkeit, die seit biblischen Zeiten andauerte, endete heute Nachmittag um 4 Uhr, nachdem Badoglio 30.000 Mann in die Hauptstadt geführt hatte, während am Himmel Flugzeuge schwirrten. In Rom sprach Mussolini zu einer riesigen Menschenmenge auf der Piazza Venezia, die sich auf jedem Dorfplatz Italiens vor den Lautsprechern versammelte, und die Botschaft war klar: Die Welt hat ihre erste Kostprobe italienischer Militärmacht bekommen - und es wird nicht die letzte sein!\"";
         private string _testStringInnerDoubleQuotesRealShort = "news.3.d:0 \"Äthiopien ist italienisch\", sagt Mussolini, Kostprobe italienischer Militärmacht bekommen sein!\"";
         private string _testStringInnerDoubleQuotesRealEmpty = "news.3.d:0 \"\"";
+        private string _testStringLineToIgnore = "# \"";
+        private string _testStringLineToIgnore1 = " #\"";
+        private string _testStringLineToIgnore2 = "  #       \"";
 
         [TestInitialize]
         public void Initialize()
@@ -87,6 +90,72 @@ namespace HoI4_TranslationHelper_Test
 
             List<string> tokensFound = stringParserBase.GetToken(_testStringInnerDoubleQuotesRealEmpty, tokens);
             Assert.AreEqual(tokensFound[0], tokensFound[0]);
+        }
+
+        [TestMethod]
+        public void Key_Test01()
+        {
+            StringParserBase stringParserBase = new StringParserKey();
+
+            List<string> tokens = new List<string>();
+            stringParserBase.StartTag = "\"";
+
+            List<string> tokensFound = stringParserBase.GetToken(_testStringInnerDoubleQuotesRealShort, tokens);
+            Assert.AreEqual(tokensFound[0], tokensFound[0]);
+        }
+
+        [TestMethod]
+        public void Key_Test02()
+        {
+            StringParserBase stringParserBase = new StringParserKey();
+
+            List<string> tokens = new List<string>();
+            stringParserBase.StartTag = "\"";
+
+            List<string> tokensFound = stringParserBase.GetToken(_testStringInnerDoubleQuotesRealEmpty, tokens);
+            Assert.AreEqual(tokensFound[0], tokensFound[0]);
+        }
+
+        [TestMethod]
+        public void Key_Test03()
+        {
+            StringParserBase stringParserBase = new StringParserKey();
+
+            List<string> tokens = new List<string>();
+            stringParserBase.StartTag = "\"";
+            stringParserBase.LineIgnores.Add("#");
+            stringParserBase.LineIgnores.Add(" #");
+
+            List<string> tokensFound = stringParserBase.GetToken(_testStringLineToIgnore, tokens);
+            
+            Assert.IsTrue(stringParserBase.GetToken(_testStringLineToIgnore, tokens).Count == 0);
+        }
+
+        [TestMethod]
+        public void Key_Test04()
+        {
+            StringParserBase stringParserBase = new StringParserKey();
+
+            List<string> tokens = new List<string>();
+            stringParserBase.StartTag = "\"";
+            stringParserBase.LineIgnores.Add("#");
+            stringParserBase.LineIgnores.Add(" #");
+
+            Assert.IsTrue(stringParserBase.GetToken(_testStringLineToIgnore1, tokens).Count == 0);
+        }
+
+        [TestMethod]
+        public void Key_Test05()
+        {
+            StringParserBase stringParserBase = new StringParserKey();
+
+            List<string> tokens = new List<string>();
+            stringParserBase.StartTag = "\"";
+            stringParserBase.LineIgnores.Add("#");
+            stringParserBase.LineIgnores.Add(" #");
+            stringParserBase.LineIgnores.Add("  #");
+
+            Assert.IsTrue(stringParserBase.GetToken(_testStringLineToIgnore2, tokens).Count == 0);
         }
     }
 }
