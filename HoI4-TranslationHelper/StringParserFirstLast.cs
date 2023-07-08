@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HoI4_TranslationHelper
 {
-    public class StringParser : StringParserBase
+    public class StringParserFirstLast : StringParserBase
     {
         public override List<string> GetToken(string source, List<string> tokens)
         {
@@ -16,7 +16,7 @@ namespace HoI4_TranslationHelper
             }
             int _startPos = source.IndexOf(StartTag, 0) + StartTag.Length;
 
-            foreach (string endTag in EndTags )
+            foreach (string endTag in EndTags)
             {
                 string subString = source.Substring(_startPos, source.Length - _startPos);
 
@@ -24,20 +24,21 @@ namespace HoI4_TranslationHelper
                 {
                     continue;
                 }
-                int _endPos = source.IndexOf(endTag, _startPos);
+                int _endPos = source.LastIndexOf(endTag, _startPos);
 
-                if(SubStringCount == 0 )
+                if (SubStringCount == 0)
                 {
-                    tokens.Add(source.Substring(_startPos, _endPos - _startPos));
+                    int count = source.Length - _endPos - 1;
+                    if( count > 0 )
+                    {
+                        count--;
+                    }
+                    tokens.Add(source.Substring(_startPos, count));
                 }
-                else 
+                else
                 {
                     tokens.Add(source.Substring(_startPos, SubStringCount));
                 }
-
-                string remainingContent = source.Substring(_endPos + 1, source.Length - _endPos - 1);
-
-                return GetToken(remainingContent, tokens);
             }
 
             return tokens;

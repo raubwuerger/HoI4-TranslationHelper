@@ -31,6 +31,10 @@ namespace HoI4_TranslationHelper
                     ParseDirectoryGerman(Colors());
                     ParseDirectoryEnglish(Colors());
                     break;
+                case "5":
+                    ParseDirectoryGerman(InnerDoubleQuotes());
+                    ParseDirectoryEnglish(InnerDoubleQuotes());
+                    break;
                 default:
                     LogInfos(string.Format("Wrong argument {0} passed ...", args[0]) );
                     break;
@@ -43,6 +47,8 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
             Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
+            Console.WriteLine("4 --> colors \"§\"" + Environment.NewLine);
+            Console.WriteLine("5 --> innerDoubleQuotes \"\" ... \" \"" + Environment.NewLine);
         }
 
         private static FileReader Brackets()
@@ -53,7 +59,7 @@ namespace HoI4_TranslationHelper
             return fileReader;
         }
 
-        private static StringParser ParseBrackets()
+        private static IStringParser ParseBrackets()
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "[";
@@ -88,7 +94,7 @@ namespace HoI4_TranslationHelper
             return fileReader;
         }
 
-        private static StringParser ParseVariables()
+        private static IStringParser ParseVariables()
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "$";
@@ -104,7 +110,7 @@ namespace HoI4_TranslationHelper
             return fileReader;
         }
 
-        private static StringParser ParseColors()
+        private static IStringParser ParseColors()
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "§";
@@ -112,6 +118,23 @@ namespace HoI4_TranslationHelper
             stringParser.SubStringCount = 1;
             return stringParser;
         }
+
+        private static FileReader InnerDoubleQuotes()
+        {
+            FileReader fileReader = new FileReader();
+            fileReader.PathReplace = "innerDoubleQuotes";
+            fileReader.StringParser = ParseInnerDoubleQuotes();
+            return fileReader;
+        }
+
+        private static IStringParser ParseInnerDoubleQuotes()
+        {
+            StringParserFirstLast stringParser = new StringParserFirstLast();
+            stringParser.StartTag = "\"";
+            stringParser.EndTags.Add("\"");
+            return stringParser;
+        }
+
 
         private static void ParseDirectoryGerman(FileReader fileReader)
         {
