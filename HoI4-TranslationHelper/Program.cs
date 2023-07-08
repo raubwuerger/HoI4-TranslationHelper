@@ -52,7 +52,8 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
             Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
             Console.WriteLine("4 --> colors \"§\"" + Environment.NewLine);
-            Console.WriteLine("5 --> innerDoubleQuotes \"\" ... \" \"" + Environment.NewLine);
+            Console.WriteLine("5 --> innerDoubleQuotes \" ... \"\" ... \"" + Environment.NewLine);
+            Console.WriteLine("6 --> keys \"...\"" + Environment.NewLine);
         }
 
         private static FileReader Brackets()
