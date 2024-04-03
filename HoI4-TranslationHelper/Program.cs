@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Xml;
+using WeThePeople_ModdingTool.FileUtilities;
 
 namespace HoI4_TranslationHelper
 {
@@ -7,14 +10,20 @@ namespace HoI4_TranslationHelper
     {
         static void Main(string[] args)
         {
-            if( args.Length < 1 )
+            if (args.Length < 1)
             {
                 LogInfos("No arguments passed ...");
                 return;
             }
 
-            switch(args[0])
+            ReadConfig();
+
+            switch (args[0])
             {
+                case "0":
+                    ParseDirectoryGerman(FolderCompare());
+                    ParseDirectoryEnglish(FolderCompare());
+                    break;
                 case "1":
                     ParseDirectoryGerman(Brackets());
                     ParseDirectoryEnglish(Brackets());
@@ -40,7 +49,7 @@ namespace HoI4_TranslationHelper
                     ParseDirectoryEnglish(Keys());
                     break;
                 default:
-                    LogInfos(string.Format("Wrong argument {0} passed ...", args[0]) );
+                    LogInfos(string.Format("Wrong argument {0} passed ...", args[0]));
                     break;
             }
         }
@@ -48,6 +57,7 @@ namespace HoI4_TranslationHelper
         private static void LogInfos(string text)
         {
             Console.WriteLine(text + Environment.NewLine);
+            Console.WriteLine("0 --> folderCompare" + Environment.NewLine);
             Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
             Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
@@ -78,6 +88,12 @@ namespace HoI4_TranslationHelper
             FileReader fileReader = new FileReader();
             fileReader.PathReplace = "icons";
             fileReader.StringParser = ParseIcons();
+            return fileReader;
+        }
+
+        private static FileReader FolderCompare()
+        {
+            FileReader fileReader = new FileReader();
             return fileReader;
         }
 
@@ -164,11 +180,13 @@ namespace HoI4_TranslationHelper
             DirectoryParser directoryParser = new DirectoryParser();
             directoryParser.FileReader = fileReader;
 
-            List<FileWithToken> filesGerman = directoryParser.ParseDirectory(Constance.pathGerman);
+            List<FileWithToken> files = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman +"; found count files: " + files.Count);
+
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
             ParameterizeGerman(fileNameReplacer);
 
-            foreach (FileWithToken fileWithToken in filesGerman)
+            foreach (FileWithToken fileWithToken in files)
             {
                 fileNameReplacer.Replace(fileWithToken);
                 FileWriter.Write(fileWithToken);
@@ -179,10 +197,13 @@ namespace HoI4_TranslationHelper
             DirectoryParser directoryParser = new DirectoryParser();
             directoryParser.FileReader = fileReader;
 
+            List<FileWithToken> files = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + files.Count);
+
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
             ParameterizeEnglis(fileNameReplacer);
-            List<FileWithToken> filesEnglish = directoryParser.ParseDirectory(Constance.pathEnglish);
-            foreach (FileWithToken fileWithToken in filesEnglish)
+
+            foreach (FileWithToken fileWithToken in files)
             {
                 fileNameReplacer.Replace(fileWithToken);
                 FileWriter.Write(fileWithToken);
@@ -201,6 +222,38 @@ namespace HoI4_TranslationHelper
             fileNameReplacer.tokenToFind = "_l_english";
             fileNameReplacer.tokenReplaceWith = "";
             fileNameReplacer.extendPath = "english";
+        }
+
+        private static void ReadConfig()
+        {
+            XmlDocument config = XMLFileUtility.Load(Constance.config);
+            if( null == config )
+            {
+                Console.WriteLine("Unable to load config: " + Constance.config + Environment.NewLine);
+                return;
+            }
+            XmlNodeList configPaths = config.SelectNodes("/HoI4-TranslationHelper/Paths");
+
+            string pathEnglish = FindNodeByName(configPaths, Constance.configNodePathEnglish);
+            if( null != pathEnglish )
+            {
+                HoI4_TranslationHelper_Config.PathEnglish = pathEnglish;
+            }
+
+            string pathGerman = FindNodeByName(configPaths, Constance.configNodePathGerman);
+            if (null != pathGerman )
+            {
+                HoI4_TranslationHelper_Config.PathGerman = pathGerman;
+            }
+        }
+
+        private static string FindNodeByName(XmlNodeList nodes, string nodeName )
+        {
+            foreach(XmlNode node in nodes )
+            {
+                return node[nodeName].InnerText;
+            }
+            return null;
         }
     }
 }

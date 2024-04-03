@@ -6,4 +6,14 @@
     <RootNamespace>HoI4_TranslationHelper</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="HoI4-TranslationHelper.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="HoI4-TranslationHelper.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
