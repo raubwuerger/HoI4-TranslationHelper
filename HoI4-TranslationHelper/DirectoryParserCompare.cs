@@ -14,19 +14,19 @@ namespace HoI4_TranslationHelper
 
         private FileReader _fileReader = new FileReader();
         public FileReader FileReader { get => _fileReader; set => _fileReader = value; }
-        public List<string> ParseDirectory(string directory)
+        public Dictionary<string,string> ParseDirectory(string directory)
         {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+
             if (false == Directory.Exists(directory))
             {
-                return null;
+                return result;
             }
             string[] files = Directory.GetFiles(directory, _filePattern, SearchOption.AllDirectories);
 
-            List<string> result = new List<string>();
             foreach (var file in files)
             {
-                //                result.Add(Path.GetFileName(file).Replace("\\", "/"));
-                result.Add(Path.GetFileNameWithoutExtension(file).Replace("\\", "/")); 
+                result.Add(file, Path.GetFileNameWithoutExtension(file).Replace("\\", "/")); 
             }
 
             return result;

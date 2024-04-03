@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Xml;
 
 namespace HoI4_TranslationHelper
@@ -21,7 +23,7 @@ namespace HoI4_TranslationHelper
             switch (args[0])
             {
                 case "0":
-                    CompareFolder();
+                    CreateMissingTranslationFiles();
                     break;
                 case "1":
                     ParseDirectoryGerman(Brackets());
@@ -65,31 +67,63 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("6 --> keys \"...\"" + Environment.NewLine);
         }
 
-        private static void CompareFolder()
+        private static void CreateMissingTranslationFiles()
         {
-            const string german = "german";
-            DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
-            List<string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            List<string> filesEnglishReplaced = RemoveString(filesEnglish, Constance.localisationEnglish);
+            List<string> missingTranslationFiles = FindMissingTranslationFiles();
+            foreach(string file  in missingTranslationFiles) 
+            { 
+                if( true == File.Exists(file) )
+                {
+                    continue;
+                }
 
-            DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
-            List<string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            List<string> filesGermanReplaced = RemoveString(filesGerman, Constance.localisationGerman);
-
-            var secondNotFirst = filesGermanReplaced.Except(filesEnglishReplaced).ToList();
-            foreach(var file in secondNotFirst) 
-            {
-                Console.WriteLine(file + Constance.localisationGerman + Constance.localisationExtension);
+                using(FileStream fs = File.Create(file)) 
+                {
+                    byte[] content = new UTF8Encoding(true).GetBytes("l_german:\n");
+                    fs.Write(content, 0, content.Length);
+                }
             }
         }
 
-        private static List<string> RemoveString(List<string> list, string toRemove )
+        private static List<string> FindMissingTranslationFiles()
         {
-            List<string> result = new List<string>();
+            DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
+            Dictionary<string, string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            Dictionary<string, string> filesEnglishReplaced = RemoveStringFromValue(filesEnglish, Constance.localisationEnglish);
 
-            foreach ( string s in list ) 
+            DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
+            Dictionary<string, string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            Dictionary<string, string> filesGermanReplaced = RemoveStringFromValue(filesGerman, Constance.localisationGerman);
+
+            var firstNotSecond = filesEnglishReplaced.Except(filesGermanReplaced).ToList();
+            List<string> missingTranslationFiles = new List<string>();
+            foreach (var file in firstNotSecond)
+            {
+                missingTranslationFiles.Add(Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(file.Value + Constance.localisationGerman + Constance.localisationExtension)));
+            }
+
+            return missingTranslationFiles;
+        }
+
+        private static Dictionary<string,string> RemoveStringFromValue(Dictionary<string,string> list, string toRemove )
+        {
+            Dictionary<string,string> result = new Dictionary<string, string>();
+
+            foreach (KeyValuePair<string, string> s in list ) 
             { 
-                result.Add( s.Replace(toRemove,"") );
+                result.Add( s.Key, s.Value.Replace(toRemove,"") );
+            }
+
+            return result;
+        }
+
+        private static Dictionary<string, string> RemoveStringFromKey(Dictionary<string, string> list, string toRemove)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+
+            foreach (KeyValuePair<string, string> s in list)
+            {
+                result.Add(s.Key, s.Value.Replace(toRemove, ""));
             }
 
             return result;
