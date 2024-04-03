@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Xml;
-using WeThePeople_ModdingTool.FileUtilities;
 
 namespace HoI4_TranslationHelper
 {
@@ -21,8 +21,7 @@ namespace HoI4_TranslationHelper
             switch (args[0])
             {
                 case "0":
-                    ParseDirectoryGerman(FolderCompare());
-                    ParseDirectoryEnglish(FolderCompare());
+                    CompareFolder();
                     break;
                 case "1":
                     ParseDirectoryGerman(Brackets());
@@ -66,6 +65,35 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("6 --> keys \"...\"" + Environment.NewLine);
         }
 
+        private static void CompareFolder()
+        {
+            DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
+            List<string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            List<string> filesEnglishReplaced = RemoveString(filesEnglish, "english");
+
+            DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
+            List<string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            List<string> filesGermanReplaced = RemoveString(filesGerman, "german");
+
+            var filteredList = filesEnglishReplaced.Intersect(filesGermanReplaced, StringComparer.OrdinalIgnoreCase);
+
+            var firstNotSecond = filesEnglishReplaced.Except(filesGermanReplaced).ToList();
+            var secondNotFirst = filesGermanReplaced.Except(filesEnglishReplaced).ToList();
+
+        }
+
+        private static List<string> RemoveString(List<string> list, string toRemove )
+        {
+            List<string> result = new List<string>();
+
+            foreach ( string s in list ) 
+            { 
+                result.Add( s.Replace(toRemove,"") );
+            }
+
+            return result;
+        }
+
         private static FileReader Brackets()
         {
             FileReader fileReader = new FileReader();
@@ -91,10 +119,11 @@ namespace HoI4_TranslationHelper
             return fileReader;
         }
 
-        private static FileReader FolderCompare()
+        private static FolderReader FolderCompare(string fileNamePartToIgnore)
         {
-            FileReader fileReader = new FileReader();
-            return fileReader;
+            FolderReader folderReader = new FolderReader();
+            folderReader.fileNamePartToIgnore = fileNamePartToIgnore;
+            return folderReader;
         }
 
         private static StringParser ParseIcons()
@@ -192,6 +221,7 @@ namespace HoI4_TranslationHelper
                 FileWriter.Write(fileWithToken);
             }
         }
+
         private static void ParseDirectoryEnglish(FileReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();

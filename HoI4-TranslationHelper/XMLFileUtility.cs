@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace WeThePeople_ModdingTool.FileUtilities
+namespace HoI4_TranslationHelper
 {
     public class XMLFileUtility
     {
