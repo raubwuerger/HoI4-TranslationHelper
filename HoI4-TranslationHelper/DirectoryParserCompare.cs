@@ -23,7 +23,11 @@ namespace HoI4_TranslationHelper
             string[] files = Directory.GetFiles(directory, _filePattern, SearchOption.AllDirectories);
 
             List<string> result = new List<string>();
-            result.AddRange(files);
+            foreach (var file in files)
+            {
+                //                result.Add(Path.GetFileName(file).Replace("\\", "/"));
+                result.Add(Path.GetFileNameWithoutExtension(file).Replace("\\", "/")); 
+            }
 
             return result;
         }

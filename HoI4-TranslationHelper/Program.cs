@@ -67,19 +67,20 @@ namespace HoI4_TranslationHelper
 
         private static void CompareFolder()
         {
+            const string german = "german";
             DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
             List<string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            List<string> filesEnglishReplaced = RemoveString(filesEnglish, "english");
+            List<string> filesEnglishReplaced = RemoveString(filesEnglish, Constance.localisationEnglish);
 
             DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
             List<string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            List<string> filesGermanReplaced = RemoveString(filesGerman, "german");
+            List<string> filesGermanReplaced = RemoveString(filesGerman, Constance.localisationGerman);
 
-            var filteredList = filesEnglishReplaced.Intersect(filesGermanReplaced, StringComparer.OrdinalIgnoreCase);
-
-            var firstNotSecond = filesEnglishReplaced.Except(filesGermanReplaced).ToList();
             var secondNotFirst = filesGermanReplaced.Except(filesEnglishReplaced).ToList();
-
+            foreach(var file in secondNotFirst) 
+            {
+                Console.WriteLine(file + Constance.localisationGerman + Constance.localisationExtension);
+            }
         }
 
         private static List<string> RemoveString(List<string> list, string toRemove )
