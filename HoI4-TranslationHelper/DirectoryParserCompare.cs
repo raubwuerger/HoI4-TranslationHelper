@@ -26,7 +26,7 @@ namespace HoI4_TranslationHelper
 
             foreach (var file in files)
             {
-                result.Add(file, Path.GetFileNameWithoutExtension(file).Replace("\\", "/")); 
+                result.Add(Path.GetFileNameWithoutExtension(file).Replace("\\", "/"), file); 
             }
 
             return result;

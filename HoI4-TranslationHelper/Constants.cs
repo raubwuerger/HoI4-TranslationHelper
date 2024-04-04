@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HoI4_TranslationHelper
 {
-    public class Constance
+    public class Constants
     {
         public static string config = @".\HoI4-TranslationHelper.xml";
         public static string configNodePaths = "Paths";

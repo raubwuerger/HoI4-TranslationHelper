@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -80,7 +81,7 @@ namespace HoI4_TranslationHelper
                 using(FileStream fs = File.Create(file)) 
                 {
                     byte[] content = new UTF8Encoding(true).GetBytes("l_german:\n");
-                    fs.Write(content, 0, content.Length);
+//                    fs.Write(content, 0, content.Length);
                 }
             }
         }
@@ -89,17 +90,34 @@ namespace HoI4_TranslationHelper
         {
             DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
             Dictionary<string, string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            Dictionary<string, string> filesEnglishReplaced = RemoveStringFromValue(filesEnglish, Constance.localisationEnglish);
+            Dictionary<string, string> filesEnglishReplaced = RemoveStringFromKey(filesEnglish, Constants.localisationEnglish);
 
             DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
             Dictionary<string, string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            Dictionary<string, string> filesGermanReplaced = RemoveStringFromValue(filesGerman, Constance.localisationGerman);
+            Dictionary<string, string> filesGermanReplaced = RemoveStringFromKey(filesGerman, Constants.localisationGerman);
+
+
+            List<string> missingGerman = filesEnglishReplaced.Keys.Except(filesGermanReplaced.Keys).ToList();
+            List<string> toMuchGerman = filesGermanReplaced.Keys.Except(filesEnglishReplaced.Keys).ToList();
+
+            Console.WriteLine("##### German translation files to delete:");
+            foreach (string file in toMuchGerman)
+            {
+                Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
+            }
+
+
+            Console.WriteLine("##### German translation files missing:");
+            foreach (string file in missingGerman)
+            {
+                Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
+            }
 
             var firstNotSecond = filesEnglishReplaced.Except(filesGermanReplaced).ToList();
             List<string> missingTranslationFiles = new List<string>();
             foreach (var file in firstNotSecond)
             {
-                missingTranslationFiles.Add(Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(file.Value + Constance.localisationGerman + Constance.localisationExtension)));
+                missingTranslationFiles.Add(Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(file.Value + Constants.localisationGerman + Constants.localisationExtension)));
             }
 
             return missingTranslationFiles;
@@ -123,7 +141,7 @@ namespace HoI4_TranslationHelper
 
             foreach (KeyValuePair<string, string> s in list)
             {
-                result.Add(s.Key, s.Value.Replace(toRemove, ""));
+                result.Add(s.Key.Replace(toRemove, ""), s.Value);
             }
 
             return result;
@@ -291,21 +309,21 @@ namespace HoI4_TranslationHelper
 
         private static void ReadConfig()
         {
-            XmlDocument config = XMLFileUtility.Load(Constance.config);
+            XmlDocument config = XMLFileUtility.Load(Constants.config);
             if( null == config )
             {
-                Console.WriteLine("Unable to load config: " + Constance.config + Environment.NewLine);
+                Console.WriteLine("Unable to load config: " + Constants.config + Environment.NewLine);
                 return;
             }
             XmlNodeList configPaths = config.SelectNodes("/HoI4-TranslationHelper/Paths");
 
-            string pathEnglish = FindNodeByName(configPaths, Constance.configNodePathEnglish);
+            string pathEnglish = FindNodeByName(configPaths, Constants.configNodePathEnglish);
             if( null != pathEnglish )
             {
                 HoI4_TranslationHelper_Config.PathEnglish = pathEnglish;
             }
 
-            string pathGerman = FindNodeByName(configPaths, Constance.configNodePathGerman);
+            string pathGerman = FindNodeByName(configPaths, Constants.configNodePathGerman);
             if (null != pathGerman )
             {
                 HoI4_TranslationHelper_Config.PathGerman = pathGerman;
