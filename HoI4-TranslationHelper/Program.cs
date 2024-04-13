@@ -47,8 +47,7 @@ namespace HoI4_TranslationHelper
                     ParseDirectoryEnglish(InnerDoubleQuotes());
                     break;
                 case "6":
-                    ParseDirectoryGerman(Keys());
-                    ParseDirectoryEnglish(Keys());
+                    CreateMissingKeysForTranslationFile();
                     break;
                 default:
                     LogInfos(string.Format("Wrong argument {0} passed ...", args[0]));
@@ -121,6 +120,54 @@ namespace HoI4_TranslationHelper
             }
 
             return missingTranslationFiles;
+        }
+
+        private static void CreateMissingKeysForTranslationFile()
+        {
+            DirectoryParser directoryParserEnglish = new DirectoryParser();
+            directoryParserEnglish.FileReader = Keys();
+
+            List<FileWithToken> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + filesEnglish.Count);
+
+            FileNameReplacer fileNameReplacer = new FileNameReplacer();
+            ParameterizeEnglish(fileNameReplacer);
+            fileNameReplacer.tokenReplaceWith = "_l_german";
+
+            DirectoryParser directoryParserGerman = new DirectoryParser();
+            directoryParserEnglish.FileReader = Keys();
+
+            List<FileWithToken> filesGerman = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + filesGerman.Count);
+
+            foreach (FileWithToken fileWithToken in filesEnglish)
+            {
+                fileNameReplacer.Replace(fileWithToken);
+
+//                FileWriter.Write(fileWithToken);
+            }
+        }
+
+
+
+        private static List<String> FindMissingKeysForTranslationFile(FileReader fileReader)
+        {
+            DirectoryParser directoryParserEnglish = new DirectoryParser();
+            directoryParserEnglish.FileReader = fileReader;
+
+            List<FileWithToken> files = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + files.Count);
+
+            FileNameReplacer fileNameReplacer = new FileNameReplacer();
+            ParameterizeGerman(fileNameReplacer);
+
+            foreach (FileWithToken fileWithToken in files)
+            {
+                fileNameReplacer.Replace(fileWithToken);
+                FileWriter.Write(fileWithToken);
+            }
+
+            return null;
         }
 
         private static Dictionary<string,string> RemoveStringFromValue(Dictionary<string,string> list, string toRemove )
@@ -284,7 +331,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + files.Count);
 
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
-            ParameterizeEnglis(fileNameReplacer);
+            ParameterizeEnglish(fileNameReplacer);
 
             foreach (FileWithToken fileWithToken in files)
             {
@@ -300,7 +347,7 @@ namespace HoI4_TranslationHelper
             fileNameReplacer.extendPath = "german";
         }
 
-        private static void ParameterizeEnglis(FileNameReplacer fileNameReplacer)
+        private static void ParameterizeEnglish(FileNameReplacer fileNameReplacer)
         {
             fileNameReplacer.tokenToFind = "_l_english";
             fileNameReplacer.tokenReplaceWith = "";

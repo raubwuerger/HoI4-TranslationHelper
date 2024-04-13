@@ -9,6 +9,7 @@ namespace HoI4_TranslationHelper
     public class FileWithToken
     {
         private string _fileName;
+        private string _fileNameWithoutLocalisation;
         private string _pathName;
         private string _pathNameToSave;
         private List<LineTextTupel> _lineTextTupels = new List<LineTextTupel>();
@@ -23,6 +24,8 @@ namespace HoI4_TranslationHelper
         public string PathName { get => _pathName; set => _pathName = value; }
 
         public string PathNameToSave { get => _pathNameToSave; set => _pathNameToSave = value; }
+
+        public string FileNameWithoutLocalisation { get => _fileNameWithoutLocalisation; set => _fileNameWithoutLocalisation = value; }
 
         public List<LineTextTupel> GetLineTextTupels { get => _lineTextTupels; set => _lineTextTupels = value; }
     }
