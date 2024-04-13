@@ -124,28 +124,82 @@ namespace HoI4_TranslationHelper
 
         private static void CreateMissingKeysForTranslationFile()
         {
-            DirectoryParser directoryParserEnglish = new DirectoryParser();
-            directoryParserEnglish.FileReader = Keys();
+            DirectoryParser directoryParser = new DirectoryParser();
+            directoryParser.FileReader = Keys();
 
-            List<FileWithToken> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            List<FileWithToken> filesEnglish = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
             Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + filesEnglish.Count);
 
-            FileNameReplacer fileNameReplacer = new FileNameReplacer();
-            ParameterizeEnglish(fileNameReplacer);
-            fileNameReplacer.tokenReplaceWith = "_l_german";
-
-            DirectoryParser directoryParserGerman = new DirectoryParser();
-            directoryParserEnglish.FileReader = Keys();
-
-            List<FileWithToken> filesGerman = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + filesGerman.Count);
+            FileNameReplacer fileNameReplacerEnglish = new FileNameReplacer();
+            ParameterizeEnglish(fileNameReplacerEnglish);
+            fileNameReplacerEnglish.tokenReplaceWith = "_l_german";
 
             foreach (FileWithToken fileWithToken in filesEnglish)
             {
-                fileNameReplacer.Replace(fileWithToken);
-
-//                FileWriter.Write(fileWithToken);
+                fileNameReplacerEnglish.Replace(fileWithToken);
             }
+
+            List<FileWithToken> filesGerman = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + filesGerman.Count);
+
+            FileNameReplacer fileNameReplacerGerman = new FileNameReplacer();
+            ParameterizeGerman(fileNameReplacerGerman);
+            fileNameReplacerGerman.tokenReplaceWith = "_l_english";
+
+            foreach (FileWithToken fileWithToken in filesGerman)
+            {
+                fileNameReplacerGerman.Replace(fileWithToken);
+            }
+
+            List<FileWithToken> filesToCompare = new List<FileWithToken>();
+            foreach (FileWithToken fileEnglish in filesEnglish)
+            {
+                FileWithToken fileGerman = filesGerman.Find(f => (f.FileNameWithoutLocalisation.Equals(fileEnglish.FileNameWithoutLocalisation)));
+                if( null == fileGerman )
+                {
+                    continue;
+                }
+
+                List<LineTextTupel> keysGerman = fileGerman.GetLineTextTupels;
+                List<LineTextTupel> keysEnglish = fileEnglish.GetLineTextTupels;
+
+                var missingGermans= keysEnglish
+                    .Select(p => p._text)
+                    .Except(keysGerman.Select(q => q._text))
+                    .ToList();
+
+                var toDeleteGermans = keysGerman
+                    .Select(p => p._text)
+                    .Except(keysEnglish.Select(q => q._text))
+                    .ToList();
+
+                if( false == missingGermans.Any() && false == toDeleteGermans.Any() )
+                {
+                    return;
+                }
+
+                Console.WriteLine("##### Analyzing file: " + fileGerman.FileName);
+
+                if (true == missingGermans.Any() )
+                {
+                    Console.WriteLine("## German translation keys missing");
+                    foreach (string missingGerman in missingGermans)
+                    {
+                        Console.WriteLine(missingGerman);
+                    }
+                }
+
+                if( true == toDeleteGermans.Any() )
+                {
+                    Console.WriteLine("## German translation keys to delete");
+                    foreach (string toDeleteGerman in toDeleteGermans)
+                    {
+                        Console.WriteLine(toDeleteGerman);
+                    }
+                }
+                Console.WriteLine(Environment.NewLine);
+            }
+
         }
 
 
