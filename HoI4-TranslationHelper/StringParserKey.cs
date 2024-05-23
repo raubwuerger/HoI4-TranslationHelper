@@ -21,9 +21,11 @@ namespace HoI4_TranslationHelper
             }
 
             int _startPos = source.IndexOf(StartTag, 0) + StartTag.Length;
-
             int _endPos = _startPos;
             _startPos = 0;
+
+            String tokenToAdd;
+
             if (SubStringCount == 0)
             {
                 int count = _endPos - 1;
@@ -31,12 +33,14 @@ namespace HoI4_TranslationHelper
                 {
                     count--;
                 }
-                tokens.Add(source.Substring(_startPos, count));
+                tokenToAdd = source.Substring(_startPos, count);
             }
             else
             {
-                tokens.Add(source.Substring(_startPos, SubStringCount));
+                tokenToAdd = source.Substring(_startPos, SubStringCount);
             }
+
+            tokens.Add(tokenToAdd.TrimStart());
 
             return tokens;
         }

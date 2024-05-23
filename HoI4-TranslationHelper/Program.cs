@@ -161,6 +161,7 @@ namespace HoI4_TranslationHelper
             stringParser.StartTag = "[";
             stringParser.EndTags.Clear();
             stringParser.EndTags.Add("]");
+            IgnoreCommentLines(stringParser);
             return stringParser;
         }
 
@@ -186,6 +187,7 @@ namespace HoI4_TranslationHelper
             stringParser.EndTags.Add(" ");
             stringParser.EndTags.Add("\n");
             stringParser.EndTags.Add("\"");
+            IgnoreCommentLines(stringParser);
             return stringParser;
         }
 
@@ -202,6 +204,7 @@ namespace HoI4_TranslationHelper
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "$";
             stringParser.EndTags.Add("$");
+            IgnoreCommentLines(stringParser);
             return stringParser;
         }
 
@@ -218,6 +221,7 @@ namespace HoI4_TranslationHelper
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "§";
             stringParser.EndTags.Add("§!");
+            IgnoreCommentLines(stringParser);
             stringParser.SubStringCount = 1;
             return stringParser;
         }
@@ -234,6 +238,7 @@ namespace HoI4_TranslationHelper
         {
             StringParserFirstLast stringParser = new StringParserFirstLast();
             stringParser.StartTag = "\"";
+            IgnoreCommentLines(stringParser);
             stringParser.EndTags.Add("\"");
             return stringParser;
         }
@@ -250,9 +255,7 @@ namespace HoI4_TranslationHelper
         {
             StringParserKey stringParser = new StringParserKey();
             stringParser.StartTag = "\"";
-            stringParser.LineIgnores.Add("#");
-            stringParser.LineIgnores.Add(" #");
-            stringParser.LineIgnores.Add("  #");
+            IgnoreCommentLines(stringParser);
             return stringParser;
         }
 
@@ -337,6 +340,13 @@ namespace HoI4_TranslationHelper
                 return node[nodeName].InnerText;
             }
             return null;
+        }
+
+        private static void IgnoreCommentLines(StringParserBase stringParserBase)
+        {
+            stringParserBase.LineIgnores.Add("#");
+            stringParserBase.LineIgnores.Add(" #");
+            stringParserBase.LineIgnores.Add("  #");
         }
     }
 }

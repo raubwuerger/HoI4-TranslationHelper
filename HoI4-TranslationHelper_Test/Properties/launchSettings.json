@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "HoI4-TranslationHelper": {
+    "HoI4-TranslationHelper_Test": {
       "commandName": "Project",
       "commandLineArgs": "6"
     }
