@@ -53,7 +53,7 @@ namespace HoI4_TranslationHelper
 
                 foreach( string token in tokens )
                 {
-                    lLineTextTupels.Add(new LineTextTupel(lineNumber, token));
+                    lLineTextTupels.Add(new LineTextTupel(lineNumber, token.Trim()));
                 }
             }
 
