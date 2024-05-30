@@ -162,18 +162,20 @@ namespace HoI4_TranslationHelper
 
                 List<LineTextTupel> keysGerman = fileGerman.GetLineTextTupels;
                 List<LineTextTupel> keysEnglish = fileEnglish.GetLineTextTupels;
+                List<String> missingGermans = new List<String>();
 
-                var missingGermans= keysEnglish
-                    .Select(p => p._text)
-                    .Except(keysGerman.Select(q => q._text))
-                    .ToList();
+                foreach ( LineTextTupel lineTextTupel in keysEnglish )
+                {
+                    var item = keysGerman.FirstOrDefault(o => o._text.Equals(lineTextTupel._text));
+                    if (item != null  )
+                    {
+                        continue;
+                    }
+                    missingGermans.Add(lineTextTupel._text);
 
-                var toDeleteGermans = keysGerman
-                    .Select(p => p._text)
-                    .Except(keysEnglish.Select(q => q._text))
-                    .ToList();
+                }
 
-                if( false == missingGermans.Any() && false == toDeleteGermans.Any() )
+                if( false == missingGermans.Any())
                 {
                     return;
                 }
@@ -189,14 +191,6 @@ namespace HoI4_TranslationHelper
                     }
                 }
 
-                if( true == toDeleteGermans.Any() )
-                {
-                    Console.WriteLine("## German translation keys to delete");
-                    foreach (string toDeleteGerman in toDeleteGermans)
-                    {
-                        Console.WriteLine(toDeleteGerman);
-                    }
-                }
                 Console.WriteLine(Environment.NewLine);
             }
 
