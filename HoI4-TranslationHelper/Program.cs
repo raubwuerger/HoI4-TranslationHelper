@@ -70,6 +70,8 @@ namespace HoI4_TranslationHelper
         private static void CreateMissingTranslationFiles()
         {
             List<string> missingTranslationFiles = FindMissingTranslationFiles();
+            //INFO: 2024-12-06 - JHA - Currently not active as not fully thought through
+            /*
             foreach(string file  in missingTranslationFiles) 
             { 
                 if( true == File.Exists(file) )
@@ -80,9 +82,10 @@ namespace HoI4_TranslationHelper
                 using(FileStream fs = File.Create(file)) 
                 {
                     byte[] content = new UTF8Encoding(true).GetBytes("l_german:\n");
-//                    fs.Write(content, 0, content.Length);
+                    //fs.Write(content, 0, content.Length);
                 }
             }
+            */
         }
 
         private static List<string> FindMissingTranslationFiles()
@@ -99,27 +102,31 @@ namespace HoI4_TranslationHelper
             List<string> missingGerman = filesEnglishReplaced.Keys.Except(filesGermanReplaced.Keys).ToList();
             List<string> toMuchGerman = filesGermanReplaced.Keys.Except(filesEnglishReplaced.Keys).ToList();
 
+            Console.WriteLine("################################################################################");
             Console.WriteLine("##### German translation files to delete:");
+            Console.WriteLine("################################################################################");
             foreach (string file in toMuchGerman)
             {
                 Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
             }
 
 
+            List<string> missingTranslationFiles = new List<string>();
+            Console.WriteLine("################################################################################");
             Console.WriteLine("##### German translation files missing:");
+            Console.WriteLine("################################################################################");
             foreach (string file in missingGerman)
             {
                 Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
-            }
-
-            var firstNotSecond = filesEnglishReplaced.Except(filesGermanReplaced).ToList();
-            List<string> missingTranslationFiles = new List<string>();
-            foreach (var file in firstNotSecond)
-            {
-                missingTranslationFiles.Add(Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(file.Value + Constants.localisationGerman + Constants.localisationExtension)));
+                missingTranslationFiles.Add(CreateMissingGermanTranslationFile(file));
             }
 
             return missingTranslationFiles;
+        }
+
+        private static string CreateMissingGermanTranslationFile( string missingFile )
+        {
+            return Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(missingFile + Constants.localisationGerman + Constants.localisationExtension));
         }
 
         private static void CreateMissingKeysForTranslationFile()
@@ -195,8 +202,6 @@ namespace HoI4_TranslationHelper
             }
 
         }
-
-
 
         private static List<String> FindMissingKeysForTranslationFile(FileReader fileReader)
         {
