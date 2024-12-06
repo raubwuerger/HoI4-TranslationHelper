@@ -26,7 +26,14 @@ namespace HoI4_TranslationHelper
 
             foreach (var file in files)
             {
-                result.Add(Path.GetFileNameWithoutExtension(file).Replace("\\", "/"), file); 
+                try
+                {
+                    result.Add(Path.GetFileNameWithoutExtension(file).Replace("\\", "/"), file);
+                }
+                catch(ArgumentException ex)
+                {
+                    Console.WriteLine("File already registered: " +file.ToString());
+                }
             }
 
             return result;
