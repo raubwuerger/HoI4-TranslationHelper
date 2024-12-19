@@ -47,8 +47,8 @@ namespace HoI4_TranslationHelper_Test
         [TestMethod]
         public void TestMethod1()
         {
-            IEnumerable<string> inFirstOnly = listOneItem.Except(listTwoItems);
-            IEnumerable<string> inSecondOnly = listOneItem.Except(listTwoItems);
+            List<string> inFirstOnly = listOneItem.Except(listTwoItems).ToList<string>();
+            List<string> inSecondOnly = listTwoItems.Except(listOneItem).ToList<string>();
             Assert.AreEqual(inFirstOnly, inSecondOnly);
         }
     }
