@@ -28,5 +28,10 @@ namespace HoI4_TranslationHelper
         public string FileNameWithoutLocalisation { get => _fileNameWithoutLocalisation; set => _fileNameWithoutLocalisation = value; }
 
         public List<LineTextTupel> GetLineTextTupels { get => _lineTextTupels; set => _lineTextTupels = value; }
+
+        public int Count()
+        {
+            return _lineTextTupels.Count;
+        }
     }
 }

@@ -12,8 +12,8 @@ namespace HoI4_TranslationHelper
         private string _filePattern = "*.yml";
         public string FilePattern { get => _filePattern; set => _filePattern = value; }
 
-        private FileReader _fileReader = new FileReader();
-        public FileReader FileReader { get => _fileReader; set => _fileReader = value; }
+        private FileTokenReader _fileReader = new FileTokenReader();
+        public FileTokenReader FileReader { get => _fileReader; set => _fileReader = value; }
         public List<FileWithToken> ParseDirectory(string directory)
         {
             if( false == Directory.Exists(directory) )

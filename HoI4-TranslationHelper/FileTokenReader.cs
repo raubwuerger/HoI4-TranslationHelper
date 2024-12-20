@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HoI4_TranslationHelper
 {
-    public class FileReader
+    public class FileTokenReader
     {
         private IStringParser _stringParser;
         public IStringParser StringParser { get => _stringParser; set => _stringParser = value; }
@@ -17,6 +17,21 @@ namespace HoI4_TranslationHelper
 
         public FileWithToken Read(string textFile)
         {
+            if( null == _stringParser )
+            {
+                return null;
+            }
+
+            if (null == _pathReplace)
+            {
+                return null;
+            }
+
+            if( null == textFile)
+            {
+                return null;
+            }
+
             string[] lines = File.ReadAllLines(textFile);
             if( false == lines.Any() )
             {

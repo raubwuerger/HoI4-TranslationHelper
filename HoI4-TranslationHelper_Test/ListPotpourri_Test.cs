@@ -11,15 +11,18 @@ namespace HoI4_TranslationHelper_Test
     [TestClass]
     public class ListPotpourri_Test
     {
-        List<string> listNoItems = new List<string>();
+        List<string> listItemsNone = new List<string>();
 
-        List<string> listOneItem = new List<string>();
-        List<string> listTwoItems = new List<string>();
-        List<string> listThreeItems = new List<string>();
+        List<string> listItemsA = new List<string>();
+        List<string> listItemsAB = new List<string>();
+        List<string> listItemsABC = new List<string>();
+        List<string> listItemsAC = new List<string>();
+        List<string> listItemsBC = new List<string>();
+        List<string> listItemsC = new List<string>();
 
-        List<string> listOneOtherItem = new List<string>();
-        List<string> listTwoOtherItems = new List<string>();
-        List<string> listThreeOtherItem = new List<string>();
+        List<string> listItemsX = new List<string>();
+        List<string> listItemsXY = new List<string>();
+        List<string> listItemsXYZ = new List<string>();
 
 
         string a = "a";
@@ -34,22 +37,52 @@ namespace HoI4_TranslationHelper_Test
         [TestInitialize]
         public void Initialize()
         {
-            listOneItem.Add(a);
+            listItemsA.Add(a);
 
-            listTwoItems.Add(a);
-            listTwoItems.Add(b);
+            listItemsAB.Add(a);
+            listItemsAB.Add(b);
 
-            listThreeItems.Add(a);
-            listThreeItems.Add(b);
-            listThreeItems.Add(c);
+            listItemsABC.Add(a);
+            listItemsABC.Add(b);
+            listItemsABC.Add(c);
+            
+            listItemsAC.Add(a);
+            listItemsAC.Add(c);
+
+            listItemsBC.Add(b);
+            listItemsBC.Add(c);
+
+            listItemsC.Add(c);
+
+            listItemsX.Add(x);
+
+            listItemsXY.Add(x);
+            listItemsXY.Add(y);
+
+            listItemsXYZ.Add(x);
+            listItemsXYZ.Add(y);
+            listItemsXYZ.Add(z);
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-            List<string> inFirstOnly = listOneItem.Except(listTwoItems).ToList<string>();
-            List<string> inSecondOnly = listTwoItems.Except(listOneItem).ToList<string>();
-            Assert.AreEqual(inFirstOnly, inSecondOnly);
+            List<string> list_A_except_None = listItemsA.Except(listItemsNone).ToList<string>();
+            List<string> list_A_except_A = listItemsA.Except(listItemsA).ToList<string>();
+            List<string> list_A_except_AB = listItemsA.Except(listItemsAB).ToList<string>();
+            List<string> list_A_except_ABC = listItemsA.Except(listItemsABC).ToList<string>();
+
+            List<string> list_AB_except_None = listItemsAB.Except(listItemsNone).ToList<string>();
+            List<string> list_AB_except_A = listItemsAB.Except(listItemsA).ToList<string>();
+            List<string> list_AB_except_ABC = listItemsAB.Except(listItemsABC).ToList<string>();
+
+            List<string> list_ABC_except_None = listItemsABC.Except(listItemsNone).ToList<string>();
+            List<string> list_ABC_except_A = listItemsABC.Except(listItemsA).ToList<string>();
+            List<string> list_ABC_except_AB = listItemsABC.Except(listItemsAB).ToList<string>();
+
+
+            List<string> inSecondOnly = listItemsAB.Except(listItemsA).ToList<string>();
+            Assert.AreEqual(list_A_except_AB, inSecondOnly);
         }
     }
 }

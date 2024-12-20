@@ -203,7 +203,7 @@ namespace HoI4_TranslationHelper
 
         }
 
-        private static List<String> FindMissingKeysForTranslationFile(FileReader fileReader)
+        private static List<String> FindMissingKeysForTranslationFile(FileTokenReader fileReader)
         {
             DirectoryParser directoryParserEnglish = new DirectoryParser();
             directoryParserEnglish.FileReader = fileReader;
@@ -247,9 +247,9 @@ namespace HoI4_TranslationHelper
             return result;
         }
 
-        private static FileReader Brackets()
+        private static FileTokenReader Brackets()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "brackets";
             fileReader.StringParser = ParseBrackets();
             return fileReader;
@@ -265,9 +265,9 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader Icons()
+        private static FileTokenReader Icons()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "icons";
             fileReader.StringParser = ParseIcons();
             return fileReader;
@@ -291,9 +291,9 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader Variables()
+        private static FileTokenReader Variables()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "variables";
             fileReader.StringParser = ParseVariables();
             return fileReader;
@@ -308,9 +308,9 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader Colors()
+        private static FileTokenReader Colors()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "colors";
             fileReader.StringParser = ParseColors();
             return fileReader;
@@ -326,9 +326,9 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader InnerDoubleQuotes()
+        private static FileTokenReader InnerDoubleQuotes()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "innerDoubleQuotes";
             fileReader.StringParser = ParseInnerDoubleQuotes();
             return fileReader;
@@ -343,9 +343,9 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        private static FileReader Keys()
+        private static FileTokenReader Keys()
         {
-            FileReader fileReader = new FileReader();
+            FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "keys";
             fileReader.StringParser = ParseKeys();
             return fileReader;
@@ -360,7 +360,7 @@ namespace HoI4_TranslationHelper
         }
 
 
-        private static void ParseDirectoryGerman(FileReader fileReader)
+        private static void ParseDirectoryGerman(FileTokenReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();
             directoryParser.FileReader = fileReader;
@@ -378,7 +378,7 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private static void ParseDirectoryEnglish(FileReader fileReader)
+        private static void ParseDirectoryEnglish(FileTokenReader fileReader)
         {
             DirectoryParser directoryParser = new DirectoryParser();
             directoryParser.FileReader = fileReader;
