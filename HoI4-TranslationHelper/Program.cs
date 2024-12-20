@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HoI4_TranslationHelper
 {
@@ -19,35 +20,39 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-            ReadConfig();
+            ConfigReader configReader = new ConfigReader(); 
+            if( false == configReader.Read() )
+            {
+                return;
+            }
 
             switch (args[0])
             {
                 case "0":
-                    CreateMissingTranslationFiles();
+                    MissingTranslationFilesCreator.Create();
                     break;
                 case "1":
-                    ParseDirectoryGerman(Brackets());
-                    ParseDirectoryEnglish(Brackets());
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderBrackets());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderBrackets());
                     break;
                 case "2":
-                    ParseDirectoryGerman(Icons());
-                    ParseDirectoryEnglish(Icons());
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderIcons());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderIcons());
                     break;
                 case "3":
-                    ParseDirectoryGerman(Variables());
-                    ParseDirectoryEnglish(Variables());
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderVariables());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderVariables());
                     break;
                 case "4":
-                    ParseDirectoryGerman(Colors());
-                    ParseDirectoryEnglish(Colors());
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderColors());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderColors());
                     break;
                 case "5":
-                    ParseDirectoryGerman(InnerDoubleQuotes());
-                    ParseDirectoryEnglish(InnerDoubleQuotes());
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderInnerDoubleQuotes());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderInnerDoubleQuotes());
                     break;
                 case "6":
-                    CreateMissingKeysForTranslationFile();
+                    MissingKeysCreator.Create();
                     break;
                 default:
                     LogInfos(string.Format("Wrong argument {0} passed ...", args[0]));
@@ -67,142 +72,6 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("6 --> keys \"...\"" + Environment.NewLine);
         }
 
-        private static void CreateMissingTranslationFiles()
-        {
-            List<string> missingTranslationFiles = FindMissingTranslationFiles();
-            //INFO: 2024-12-06 - JHA - Currently not active as not fully thought through
-            /*
-            foreach(string file  in missingTranslationFiles) 
-            { 
-                if( true == File.Exists(file) )
-                {
-                    continue;
-                }
-
-                using(FileStream fs = File.Create(file)) 
-                {
-                    byte[] content = new UTF8Encoding(true).GetBytes("l_german:\n");
-                    //fs.Write(content, 0, content.Length);
-                }
-            }
-            */
-        }
-
-        private static List<string> FindMissingTranslationFiles()
-        {
-            DirectoryParserCompare directoryParserEnglish = new DirectoryParserCompare();
-            Dictionary<string, string> filesEnglish = directoryParserEnglish.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            Dictionary<string, string> filesEnglishReplaced = RemoveStringFromKey(filesEnglish, Constants.localisationEnglish);
-
-            DirectoryParserCompare directoryParserGerman = new DirectoryParserCompare();
-            Dictionary<string, string> filesGerman = directoryParserGerman.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            Dictionary<string, string> filesGermanReplaced = RemoveStringFromKey(filesGerman, Constants.localisationGerman);
-
-
-            List<string> missingGerman = filesEnglishReplaced.Keys.Except(filesGermanReplaced.Keys).ToList();
-            List<string> toMuchGerman = filesGermanReplaced.Keys.Except(filesEnglishReplaced.Keys).ToList();
-
-            Console.WriteLine("################################################################################");
-            Console.WriteLine("##### German translation files to delete:");
-            Console.WriteLine("################################################################################");
-            foreach (string file in toMuchGerman)
-            {
-                Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
-            }
-
-
-            List<string> missingTranslationFiles = new List<string>();
-            Console.WriteLine("################################################################################");
-            Console.WriteLine("##### German translation files missing:");
-            Console.WriteLine("################################################################################");
-            foreach (string file in missingGerman)
-            {
-                Console.WriteLine(file +Constants.localisationGerman +Constants.localisationExtension);
-                missingTranslationFiles.Add(CreateMissingGermanTranslationFile(file));
-            }
-
-            return missingTranslationFiles;
-        }
-
-        private static string CreateMissingGermanTranslationFile( string missingFile )
-        {
-            return Path.Combine(HoI4_TranslationHelper_Config.PathGerman, Path.GetFileName(missingFile + Constants.localisationGerman + Constants.localisationExtension));
-        }
-
-        private static void CreateMissingKeysForTranslationFile()
-        {
-            DirectoryParser directoryParser = new DirectoryParser();
-            directoryParser.FileReader = Keys();
-
-            List<FileWithToken> filesEnglish = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + filesEnglish.Count);
-
-            FileNameReplacer fileNameReplacerEnglish = new FileNameReplacer();
-            ParameterizeEnglish(fileNameReplacerEnglish);
-            fileNameReplacerEnglish.tokenReplaceWith = "_l_german";
-
-            foreach (FileWithToken fileWithToken in filesEnglish)
-            {
-                fileNameReplacerEnglish.Replace(fileWithToken);
-            }
-
-            List<FileWithToken> filesGerman = directoryParser.ParseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + filesGerman.Count);
-
-            FileNameReplacer fileNameReplacerGerman = new FileNameReplacer();
-            ParameterizeGerman(fileNameReplacerGerman);
-            fileNameReplacerGerman.tokenReplaceWith = "_l_english";
-
-            foreach (FileWithToken fileWithToken in filesGerman)
-            {
-                fileNameReplacerGerman.Replace(fileWithToken);
-            }
-
-            List<FileWithToken> filesToCompare = new List<FileWithToken>();
-            foreach (FileWithToken fileEnglish in filesEnglish)
-            {
-                FileWithToken fileGerman = filesGerman.Find(f => (f.FileNameWithoutLocalisation.Equals(fileEnglish.FileNameWithoutLocalisation)));
-                if( null == fileGerman )
-                {
-                    continue;
-                }
-
-                List<LineTextTupel> keysGerman = fileGerman.GetLineTextTupels;
-                List<LineTextTupel> keysEnglish = fileEnglish.GetLineTextTupels;
-                List<String> missingGermans = new List<String>();
-
-                foreach ( LineTextTupel lineTextTupel in keysEnglish )
-                {
-                    var item = keysGerman.FirstOrDefault(o => o._text.Equals(lineTextTupel._text));
-                    if (item != null  )
-                    {
-                        continue;
-                    }
-                    missingGermans.Add(lineTextTupel._text);
-
-                }
-
-                if( false == missingGermans.Any())
-                {
-                    return;
-                }
-
-                Console.WriteLine("##### Analyzing file: " + fileGerman.FileName);
-
-                if (true == missingGermans.Any() )
-                {
-                    Console.WriteLine("## German translation keys missing");
-                    foreach (string missingGerman in missingGermans)
-                    {
-                        Console.WriteLine(missingGerman);
-                    }
-                }
-
-                Console.WriteLine(Environment.NewLine);
-            }
-
-        }
-
         private static List<String> FindMissingKeysForTranslationFile(FileTokenReader fileReader)
         {
             DirectoryParser directoryParserEnglish = new DirectoryParser();
@@ -212,7 +81,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman + "; found count files: " + files.Count);
 
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
-            ParameterizeGerman(fileNameReplacer);
+            Utility.ParameterizeGerman(fileNameReplacer);
 
             foreach (FileWithToken fileWithToken in files)
             {
@@ -223,142 +92,12 @@ namespace HoI4_TranslationHelper
             return null;
         }
 
-        private static Dictionary<string,string> RemoveStringFromValue(Dictionary<string,string> list, string toRemove )
-        {
-            Dictionary<string,string> result = new Dictionary<string, string>();
-
-            foreach (KeyValuePair<string, string> s in list ) 
-            { 
-                result.Add( s.Key, s.Value.Replace(toRemove,"") );
-            }
-
-            return result;
-        }
-
-        private static Dictionary<string, string> RemoveStringFromKey(Dictionary<string, string> list, string toRemove)
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-
-            foreach (KeyValuePair<string, string> s in list)
-            {
-                result.Add(s.Key.Replace(toRemove, ""), s.Value);
-            }
-
-            return result;
-        }
-
-        private static FileTokenReader Brackets()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "brackets";
-            fileReader.StringParser = ParseBrackets();
-            return fileReader;
-        }
-
-        private static IStringParser ParseBrackets()
-        {
-            StringParser stringParser = new StringParser();
-            stringParser.StartTag = "[";
-            stringParser.EndTags.Clear();
-            stringParser.EndTags.Add("]");
-            IgnoreCommentLines(stringParser);
-            return stringParser;
-        }
-
-        private static FileTokenReader Icons()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "icons";
-            fileReader.StringParser = ParseIcons();
-            return fileReader;
-        }
-
         private static FolderReader FolderCompare(string fileNamePartToIgnore)
         {
             FolderReader folderReader = new FolderReader();
             folderReader.fileNamePartToIgnore = fileNamePartToIgnore;
             return folderReader;
         }
-
-        private static StringParser ParseIcons()
-        {
-            StringParser stringParser = new StringParser();
-            stringParser.StartTag = "£";
-            stringParser.EndTags.Add(" ");
-            stringParser.EndTags.Add("\n");
-            stringParser.EndTags.Add("\"");
-            IgnoreCommentLines(stringParser);
-            return stringParser;
-        }
-
-        private static FileTokenReader Variables()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "variables";
-            fileReader.StringParser = ParseVariables();
-            return fileReader;
-        }
-
-        private static IStringParser ParseVariables()
-        {
-            StringParser stringParser = new StringParser();
-            stringParser.StartTag = "$";
-            stringParser.EndTags.Add("$");
-            IgnoreCommentLines(stringParser);
-            return stringParser;
-        }
-
-        private static FileTokenReader Colors()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "colors";
-            fileReader.StringParser = ParseColors();
-            return fileReader;
-        }
-
-        private static IStringParser ParseColors()
-        {
-            StringParser stringParser = new StringParser();
-            stringParser.StartTag = "§";
-            stringParser.EndTags.Add("§!");
-            IgnoreCommentLines(stringParser);
-            stringParser.SubStringCount = 1;
-            return stringParser;
-        }
-
-        private static FileTokenReader InnerDoubleQuotes()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "innerDoubleQuotes";
-            fileReader.StringParser = ParseInnerDoubleQuotes();
-            return fileReader;
-        }
-
-        private static IStringParser ParseInnerDoubleQuotes()
-        {
-            StringParserFirstLast stringParser = new StringParserFirstLast();
-            stringParser.StartTag = "\"";
-            IgnoreCommentLines(stringParser);
-            stringParser.EndTags.Add("\"");
-            return stringParser;
-        }
-
-        private static FileTokenReader Keys()
-        {
-            FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "keys";
-            fileReader.StringParser = ParseKeys();
-            return fileReader;
-        }
-
-        private static IStringParser ParseKeys()
-        {
-            StringParserKey stringParser = new StringParserKey();
-            stringParser.StartTag = "\"";
-            IgnoreCommentLines(stringParser);
-            return stringParser;
-        }
-
 
         private static void ParseDirectoryGerman(FileTokenReader fileReader)
         {
@@ -369,7 +108,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathGerman +"; found count files: " + files.Count);
 
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
-            ParameterizeGerman(fileNameReplacer);
+            Utility.ParameterizeGerman(fileNameReplacer);
 
             foreach (FileWithToken fileWithToken in files)
             {
@@ -387,7 +126,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Parsing directory: " + HoI4_TranslationHelper_Config.PathEnglish + "; found count files: " + files.Count);
 
             FileNameReplacer fileNameReplacer = new FileNameReplacer();
-            ParameterizeEnglish(fileNameReplacer);
+            Utility.ParameterizeEnglish(fileNameReplacer);
 
             foreach (FileWithToken fileWithToken in files)
             {
@@ -396,57 +135,5 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private static void ParameterizeGerman( FileNameReplacer fileNameReplacer )
-        {
-            fileNameReplacer.tokenToFind = "_l_german";
-            fileNameReplacer.tokenReplaceWith = "";
-            fileNameReplacer.extendPath = "german";
-        }
-
-        private static void ParameterizeEnglish(FileNameReplacer fileNameReplacer)
-        {
-            fileNameReplacer.tokenToFind = "_l_english";
-            fileNameReplacer.tokenReplaceWith = "";
-            fileNameReplacer.extendPath = "english";
-        }
-
-        private static void ReadConfig()
-        {
-            XmlDocument config = XMLFileUtility.Load(Constants.config);
-            if( null == config )
-            {
-                Console.WriteLine("Unable to load config: " + Constants.config + Environment.NewLine);
-                return;
-            }
-            XmlNodeList configPaths = config.SelectNodes("/HoI4-TranslationHelper/Paths");
-
-            string pathEnglish = FindNodeByName(configPaths, Constants.configNodePathEnglish);
-            if( null != pathEnglish )
-            {
-                HoI4_TranslationHelper_Config.PathEnglish = pathEnglish;
-            }
-
-            string pathGerman = FindNodeByName(configPaths, Constants.configNodePathGerman);
-            if (null != pathGerman )
-            {
-                HoI4_TranslationHelper_Config.PathGerman = pathGerman;
-            }
-        }
-
-        private static string FindNodeByName(XmlNodeList nodes, string nodeName )
-        {
-            foreach(XmlNode node in nodes )
-            {
-                return node[nodeName].InnerText;
-            }
-            return null;
-        }
-
-        private static void IgnoreCommentLines(StringParserBase stringParserBase)
-        {
-            stringParserBase.LineIgnores.Add("#");
-            stringParserBase.LineIgnores.Add(" #");
-            stringParserBase.LineIgnores.Add("  #");
-        }
     }
 }

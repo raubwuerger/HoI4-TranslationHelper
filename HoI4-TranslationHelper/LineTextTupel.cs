@@ -39,5 +39,10 @@ namespace HoI4_TranslationHelper
 
             return _text.Equals(this._text);
         }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_lineNumber, _text);
+        }
     }
 }
