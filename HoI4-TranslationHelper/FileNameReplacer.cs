@@ -31,10 +31,14 @@ namespace HoI4_TranslationHelper
 
             fileWithToken.PathNameToSave = fileNameReplace;
 
-            int indexOf_LocalisationStartString = fileWithToken.FileName.IndexOf(localisationStartString);
-            if( indexOf_LocalisationStartString != -1 )
+            int indexOf_LocalisationStartString = fileWithToken.FileName.IndexOf(localisationStartString, StringComparison.OrdinalIgnoreCase);
+            if (indexOf_LocalisationStartString != -1)
             {
-                fileWithToken.FileNameWithoutLocalisation = fileWithToken.FileName.Substring(0,indexOf_LocalisationStartString);
+                fileWithToken.FileNameWithoutLocalisation = fileWithToken.FileName.Substring(0, indexOf_LocalisationStartString);
+            }
+            else
+            {
+                fileWithToken.FileNameWithoutLocalisation = fileWithToken.FileName;
             }
 
             return fileWithToken;

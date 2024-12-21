@@ -51,7 +51,7 @@ namespace HoI4_TranslationHelper
 
                 List<LineTextTupel> keysGerman = fileGerman.GetLineTextTupels;
                 List<LineTextTupel> keysEnglish = fileEnglish.GetLineTextTupels;
-                List<String> missingGermans = new List<String>();
+                List<LineTextTupel> missingGermans = new List<LineTextTupel>();
 
                 foreach (LineTextTupel lineTextTupel in keysEnglish)
                 {
@@ -76,7 +76,7 @@ namespace HoI4_TranslationHelper
                     {
                         continue;
                     }
-                    missingGermans.Add(lineTextTupel._text);
+                    missingGermans.Add(lineTextTupel);
 
                 }
 
@@ -90,9 +90,9 @@ namespace HoI4_TranslationHelper
                 if (true == missingGermans.Any())
                 {
                     Console.WriteLine("## German translation keys missing");
-                    foreach (string missingGerman in missingGermans)
+                    foreach (LineTextTupel missingGerman in missingGermans)
                     {
-                        Console.WriteLine(missingGerman);
+                        Console.WriteLine(missingGerman._lineNumber + " - " +missingGerman._text);
                     }
                 }
 
