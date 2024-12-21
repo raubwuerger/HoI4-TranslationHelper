@@ -2,7 +2,7 @@
   "profiles": {
     "HoI4-TranslationHelper": {
       "commandName": "Project",
-      "commandLineArgs": "RoadTo56 6"
+      "commandLineArgs": "BlackICE 6"
     }
   }
 }

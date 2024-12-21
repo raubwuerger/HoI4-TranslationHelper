@@ -33,13 +33,13 @@ namespace HoI4_TranslationHelper
                 }
 
                 DataSetMod dataSetMod = new DataSetMod(modName);
-                string pathEnglish = Utility.FindNodeByName(configPaths, Constants.configNodePathEnglish);
+                string pathEnglish = Utility.FindNodeByName(configPath.ChildNodes, Constants.configNodePathEnglish);
                 if (null != pathEnglish)
                 {
                     dataSetMod.PathEnglish = pathEnglish;
                 }
 
-                string pathGerman = Utility.FindNodeByName(configPaths, Constants.configNodePathGerman);
+                string pathGerman = Utility.FindNodeByName(configPath.ChildNodes, Constants.configNodePathGerman);
                 if (null != pathGerman)
                 {
                     dataSetMod.PathGerman = pathGerman;

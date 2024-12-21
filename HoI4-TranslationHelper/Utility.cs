@@ -41,7 +41,7 @@ namespace HoI4_TranslationHelper
             }
             return null;
         }
-        public static string FindNodeByName(XmlNodeList nodes, string nodeName)
+        public static string FindChildNodeByName(XmlNodeList nodes, string nodeName)
         {
             foreach (XmlNode node in nodes)
             {
@@ -50,6 +50,17 @@ namespace HoI4_TranslationHelper
             return null;
         }
 
+        public static string FindNodeByName(XmlNodeList nodes, string nodeName)
+        {
+            foreach (XmlNode node in nodes)
+            {
+                if (node.Name == nodeName)
+                {
+                    return node.InnerText;
+                }
+            }
+            return null;
+        }
         public static void ParameterizeGerman(FileNameReplacer fileNameReplacer)
         {
             fileNameReplacer.tokenToFind = "_l_german";
