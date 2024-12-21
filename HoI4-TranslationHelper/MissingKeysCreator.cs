@@ -37,6 +37,9 @@ namespace HoI4_TranslationHelper
                 fileNameReplacerGerman.Replace(fileWithToken);
             }
 
+            Dictionary<string, FileWithToken> overallKeys = new Dictionary<string, FileWithToken>();
+            Dictionary<string, string> duplicateKeys = new Dictionary<string, string>();
+
             List<FileWithToken> filesToCompare = new List<FileWithToken>();
             foreach (FileWithToken fileEnglish in filesEnglish)
             {
@@ -52,6 +55,22 @@ namespace HoI4_TranslationHelper
 
                 foreach (LineTextTupel lineTextTupel in keysEnglish)
                 {
+                    if (true == overallKeys.ContainsKey(lineTextTupel._text))
+                    {
+                        FileWithToken allreadyExisting = overallKeys[lineTextTupel._text];
+                        if (true == duplicateKeys.ContainsKey(lineTextTupel._text))
+                        {
+                            Console.WriteLine("Following key exists more then twice -> key: " + lineTextTupel._text + " | file: " + fileEnglish.FileName);
+                        }
+                        else
+                        {
+                            duplicateKeys.Add(lineTextTupel._text, fileEnglish.FileName +";" + allreadyExisting.FileName);
+                        }
+                    }
+                    else
+                    {
+                        overallKeys.Add(lineTextTupel._text, fileEnglish);
+                    }
                     var item = keysGerman.FirstOrDefault(o => o._text.Equals(lineTextTupel._text));
                     if (item != null)
                     {
@@ -63,7 +82,7 @@ namespace HoI4_TranslationHelper
 
                 if (false == missingGermans.Any())
                 {
-                    return;
+                    continue;
                 }
 
                 Console.WriteLine("##### Analyzing file: " + fileGerman.FileName);
@@ -80,6 +99,14 @@ namespace HoI4_TranslationHelper
                 Console.WriteLine(Environment.NewLine);
             }
 
+            if (true == duplicateKeys.Any())
+            {
+                Console.WriteLine("##### Following keys exist twice: ");
+                foreach (KeyValuePair<string, string> entry in duplicateKeys)
+                {
+                    Console.WriteLine("key: " + entry.Key + " | files: " + entry.Value);
+                }
+            }
         }
     }
 
