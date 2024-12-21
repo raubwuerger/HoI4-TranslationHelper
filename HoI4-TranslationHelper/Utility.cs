@@ -63,5 +63,23 @@ namespace HoI4_TranslationHelper
             fileNameReplacer.tokenReplaceWith = "";
             fileNameReplacer.extendPath = "english";
         }
+
+        public static string GetAttributeValueByName(XmlAttributeCollection xmlAttributeCollection, string name )
+        {
+            if ( xmlAttributeCollection == null )
+            {
+                return null;
+            }
+
+            foreach ( XmlAttribute attribute in xmlAttributeCollection )
+            { 
+                if ( attribute.Name == name ) 
+                {  
+                    return attribute.Value; 
+                } 
+            }
+
+            return null;
+        }
     }
 }

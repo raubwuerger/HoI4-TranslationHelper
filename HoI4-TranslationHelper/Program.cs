@@ -20,13 +20,18 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-            ConfigReader configReader = new ConfigReader(); 
-            if( false == configReader.Read() )
+            if( false == SetActiveMod(args[0]))
             {
                 return;
             }
 
-            switch (args[0])
+            if(args.Length < 2)
+            {
+                LogInfos("No arguments passed ...");
+                return;
+            }
+
+            switch (args[1])
             {
                 case "0":
                     MissingTranslationFilesCreator.Create();
@@ -63,6 +68,10 @@ namespace HoI4_TranslationHelper
         private static void LogInfos(string text)
         {
             Console.WriteLine(text + Environment.NewLine);
+            Console.WriteLine("args[0] == mod name");
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine("args[1] == compare type");
+            Console.WriteLine(Environment.NewLine);
             Console.WriteLine("0 --> folderCompare" + Environment.NewLine);
             Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
@@ -133,6 +142,24 @@ namespace HoI4_TranslationHelper
                 fileNameReplacer.Replace(fileWithToken);
                 FileWriter.Write(fileWithToken);
             }
+        }
+
+        private static bool SetActiveMod(string modName)
+        {
+            ConfigReader configReader = new ConfigReader();
+            if (false == configReader.Read())
+            {
+                return false;
+            }
+
+            ModSelector modSelector = new ModSelector();
+            modSelector.ConfigReader = configReader;
+            if( false == modSelector.SelectMod(modName) )
+            {
+                return false;
+            }
+
+            return true;
         }
 
     }

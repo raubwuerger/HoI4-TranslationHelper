@@ -2,7 +2,7 @@
   "profiles": {
     "HoI4-TranslationHelper": {
       "commandName": "Project",
-      "commandLineArgs": "6"
+      "commandLineArgs": "RoadTo56 0"
     }
   }
 }

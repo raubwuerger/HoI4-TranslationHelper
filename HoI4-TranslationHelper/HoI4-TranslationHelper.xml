@@ -1,8 +1,12 @@
 <HoI4-TranslationHelper>
-	<Paths>
-		<!--english>C:\Projects\Hearts-of-Iron-IV_RoadTo56\820260968\localisation\english</english-->
-		<!--german>C:\Projects\Hearts-of-Iron-IV_RoadTo56\2421485863\localisation\german</german-->
-		<english>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\english</english>
-		<german>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\german</german>
-	</Paths>
+  <Paths>
+    <Mod name="RoadTo56">
+      <english>C:\Projects\Hearts-of-Iron-IV_RoadTo56\820260968\localisation\english</english>
+      <german>C:\Projects\Hearts-of-Iron-IV_RoadTo56\2421485863\localisation\german</german>
+    </Mod>
+    <Mod name="BlackICE">
+      <english>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\english</english>
+      <german>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\german</german>
+    </Mod>
+  </Paths>
 </HoI4-TranslationHelper>
