@@ -12,22 +12,6 @@ namespace HoI4_TranslationHelper
         public static void Create()
         {
                 List<string> missingTranslationFiles = FindMissingTranslationFiles();
-                //INFO: 2024-12-06 - JHA - Currently not active as not fully thought through
-                /*
-                foreach(string file  in missingTranslationFiles) 
-                { 
-                    if( true == File.Exists(file) )
-                    {
-                        continue;
-                    }
-
-                    using(FileStream fs = File.Create(file)) 
-                    {
-                        byte[] content = new UTF8Encoding(true).GetBytes("l_german:\n");
-                        //fs.Write(content, 0, content.Length);
-                    }
-                }
-                */
         }
 
         private static List<string> FindMissingTranslationFiles()

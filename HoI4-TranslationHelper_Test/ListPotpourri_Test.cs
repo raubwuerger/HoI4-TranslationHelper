@@ -16,6 +16,7 @@ namespace HoI4_TranslationHelper_Test
         List<string> listItemsA = new List<string>();
         List<string> listItemsAB = new List<string>();
         List<string> listItemsABC = new List<string>();
+        List<string> listItemsB = new List<string>();
         List<string> listItemsAC = new List<string>();
         List<string> listItemsBC = new List<string>();
         List<string> listItemsC = new List<string>();
@@ -49,6 +50,8 @@ namespace HoI4_TranslationHelper_Test
             listItemsAC.Add(a);
             listItemsAC.Add(c);
 
+            listItemsB.Add(b);
+
             listItemsBC.Add(b);
             listItemsBC.Add(c);
 
@@ -69,12 +72,32 @@ namespace HoI4_TranslationHelper_Test
         {
             List<string> list_A_except_None = listItemsA.Except(listItemsNone).ToList<string>();
             List<string> list_A_except_A = listItemsA.Except(listItemsA).ToList<string>();
+            List<string> list_A_except_B = listItemsA.Except(listItemsB).ToList<string>();
+            List<string> list_A_except_C = listItemsA.Except(listItemsC).ToList<string>();
             List<string> list_A_except_AB = listItemsA.Except(listItemsAB).ToList<string>();
             List<string> list_A_except_ABC = listItemsA.Except(listItemsABC).ToList<string>();
 
+            List<string> list_B_except_None = listItemsB.Except(listItemsNone).ToList<string>();
+            List<string> list_B_except_B = listItemsB.Except(listItemsB).ToList<string>();
+            List<string> list_B_except_A = listItemsB.Except(listItemsA).ToList<string>();
+            List<string> list_B_except_C = listItemsB.Except(listItemsC).ToList<string>();
+            List<string> list_B_except_AB = listItemsB.Except(listItemsAB).ToList<string>();
+            List<string> list_B_except_ABC = listItemsB.Except(listItemsABC).ToList<string>();
+
+
             List<string> list_AB_except_None = listItemsAB.Except(listItemsNone).ToList<string>();
             List<string> list_AB_except_A = listItemsAB.Except(listItemsA).ToList<string>();
+            List<string> list_AB_except_B = listItemsAB.Except(listItemsB).ToList<string>();
+            List<string> list_AB_except_C = listItemsAB.Except(listItemsC).ToList<string>();
+            List<string> list_AB_except_AC = listItemsAB.Except(listItemsAC).ToList<string>();
             List<string> list_AB_except_ABC = listItemsAB.Except(listItemsABC).ToList<string>();
+
+            List<string> list_AC_except_None = listItemsAC.Except(listItemsNone).ToList<string>();
+            List<string> list_AC_except_A = listItemsAC.Except(listItemsA).ToList<string>();
+            List<string> list_AC_except_B = listItemsAC.Except(listItemsB).ToList<string>();
+            List<string> list_AC_except_C = listItemsAC.Except(listItemsC).ToList<string>();
+            List<string> list_AC_except_AB = listItemsAC.Except(listItemsAB).ToList<string>();
+            List<string> list_AC_except_ABC = listItemsAC.Except(listItemsABC).ToList<string>();
 
             List<string> list_ABC_except_None = listItemsABC.Except(listItemsNone).ToList<string>();
             List<string> list_ABC_except_A = listItemsABC.Except(listItemsA).ToList<string>();
