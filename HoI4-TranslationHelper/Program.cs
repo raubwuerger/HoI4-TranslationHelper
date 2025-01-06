@@ -12,22 +12,24 @@ namespace HoI4_TranslationHelper
 {
     class Program
     {
+        private static List<DataSetMod> _modList = new List<DataSetMod>();
         static void Main(string[] args)
         {
             if (args.Length < 1)
             {
-                LogInfos("No arguments passed ...");
+                LogInfosCompareFunctions("No arguments passed ...");
                 return;
             }
 
             if( false == SetActiveMod(args[0]))
             {
+                LogInfosMods("No mod selected ...");
                 return;
             }
 
             if(args.Length < 2)
             {
-                LogInfos("No arguments passed ...");
+                LogInfosCompareFunctions("No arguments passed ...");
                 return;
             }
 
@@ -60,16 +62,25 @@ namespace HoI4_TranslationHelper
                     MissingKeysCreator.Create();
                     break;
                 default:
-                    LogInfos(string.Format("Wrong argument {0} passed ...", args[0]));
+                    LogInfosCompareFunctions(string.Format("Wrong argument {0} passed ...", args[0]));
                     break;
             }
         }
 
-        private static void LogInfos(string text)
+        private static void LogInfosMods(string text)
         {
             Console.WriteLine(text + Environment.NewLine);
             Console.WriteLine("args[0] == mod name");
             Console.WriteLine(Environment.NewLine);
+            foreach (DataSetMod dataSetMod in _modList )
+            {
+                Console.WriteLine( dataSetMod.Name + Environment.NewLine);
+            }
+        }
+
+        private static void LogInfosCompareFunctions(string text)
+        {
+            Console.WriteLine(text + Environment.NewLine);
             Console.WriteLine("args[1] == compare type");
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("0 --> folderCompare" + Environment.NewLine);
@@ -152,9 +163,11 @@ namespace HoI4_TranslationHelper
                 return false;
             }
 
+            _modList = configReader.ModList;
             ModSelector modSelector = new ModSelector();
+
             modSelector.ConfigReader = configReader;
-            if( false == modSelector.SelectMod(modName) )
+            if( false == modSelector.SelectMod(modName.Trim()) )
             {
                 return false;
             }
