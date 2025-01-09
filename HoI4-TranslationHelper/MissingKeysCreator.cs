@@ -58,13 +58,10 @@ namespace HoI4_TranslationHelper
                     if (true == overallKeys.ContainsKey(lineTextTupel._text))
                     {
                         FileWithToken allreadyExisting = overallKeys[lineTextTupel._text];
-                        if (true == duplicateKeys.ContainsKey(lineTextTupel._text))
+                        LineTextTupel lineTextTupelAllreadyExisting = allreadyExisting.GetLineTextTupels.Find( x => x._text.Equals(lineTextTupel._text));
+                        if (false == duplicateKeys.ContainsKey(lineTextTupel._text))
                         {
-                            Console.WriteLine("Following key exists more then twice -> key: " + lineTextTupel._text + " | file: " + fileEnglish.FileName);
-                        }
-                        else
-                        {
-                            duplicateKeys.Add(lineTextTupel._text, fileEnglish.FileName +";" + allreadyExisting.FileName);
+                            duplicateKeys.Add(lineTextTupel._text, allreadyExisting.FileName + ":" + lineTextTupelAllreadyExisting._lineNumber + " and " + fileEnglish.FileName + ":" + lineTextTupel._lineNumber);
                         }
                     }
                     else
