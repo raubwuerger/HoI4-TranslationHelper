@@ -8,5 +8,9 @@
       <english>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\english</english>
       <german>C:\Projects\Hearts-of-Iron-IV_BlackICE\2993385538\localisation\german</german>
     </Mod>
+    <Mod name="Stellaris">
+      <english>C:\Projects\Stellaris-StarTrek-NewCivilizations\1886496498\english</english>
+      <german>C:\Projects\Stellaris-StarTrek-NewCivilizations\1886496498\german</german>
+    </Mod>
   </Paths>
 </HoI4-TranslationHelper>

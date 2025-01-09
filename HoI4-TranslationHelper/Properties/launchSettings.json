@@ -2,7 +2,7 @@
   "profiles": {
     "HoI4-TranslationHelper": {
       "commandName": "Project",
-      "commandLineArgs": "BlackICE 6"
+      "commandLineArgs": "Stellaris 6"
     }
   }
 }
