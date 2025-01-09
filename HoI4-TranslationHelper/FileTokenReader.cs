@@ -15,7 +15,7 @@ namespace HoI4_TranslationHelper
         private string _pathReplace;
         public string PathReplace { get => _pathReplace; set => _pathReplace = value; }
 
-        public FileWithToken Read(string textFile)
+        public FileWithToken Read(string textFileName)
         {
             if( null == _stringParser )
             {
@@ -27,12 +27,12 @@ namespace HoI4_TranslationHelper
                 return null;
             }
 
-            if( null == textFile)
+            if( null == textFileName)
             {
                 return null;
             }
 
-            string[] lines = File.ReadAllLines(textFile);
+            string[] lines = File.ReadAllLines(textFileName);
             if( false == lines.Any() )
             {
                 return null;
@@ -45,8 +45,8 @@ namespace HoI4_TranslationHelper
             }
 
             FileWithToken fileWithToken = new FileWithToken(parsedFile);
-            fileWithToken.PathName = Path.GetDirectoryName(textFile);
-            fileWithToken.FileName = Path.GetFileName(textFile);
+            fileWithToken.PathName = Path.GetDirectoryName(textFileName);
+            fileWithToken.FileName = Path.GetFileName(textFileName);
             fileWithToken.PathNameToSave = Path.Combine(fileWithToken.PathName, _pathReplace, fileWithToken.FileName);
 
             return fileWithToken;
