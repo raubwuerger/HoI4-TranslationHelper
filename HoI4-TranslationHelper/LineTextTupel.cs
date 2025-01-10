@@ -38,7 +38,7 @@ namespace HoI4_TranslationHelper
                 return false;
             }
 
-            return Token.Equals(this.Token);
+            return lineTextTupel.Equals(this.Token);
         }
 
         public override int GetHashCode()

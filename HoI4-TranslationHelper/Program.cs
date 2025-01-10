@@ -39,7 +39,8 @@ namespace HoI4_TranslationHelper
                     MissingTranslationFilesCreator.Create();
                     break;
                 case "1":
-                    MissingBracketsCreator.Create();
+                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderBrackets());
+                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderBrackets());
                     break;
                 case "2":
                     ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderIcons());
@@ -59,6 +60,9 @@ namespace HoI4_TranslationHelper
                     break;
                 case "6":
                     MissingKeysCreator.Create();
+                    break;
+                case "7":
+                    TranslationFileAnalyser.Analyse();
                     break;
                 default:
                     LogInfosCompareFunctions(string.Format("Wrong argument {0} passed ...", args[0]));
