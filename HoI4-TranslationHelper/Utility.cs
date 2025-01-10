@@ -61,20 +61,6 @@ namespace HoI4_TranslationHelper
             }
             return null;
         }
-        public static void ParameterizeGerman(FileNameReplacer fileNameReplacer)
-        {
-            fileNameReplacer.tokenToFind = "_l_german";
-            fileNameReplacer.tokenReplaceWith = "";
-            fileNameReplacer.extendPath = "german";
-        }
-
-        public static void ParameterizeEnglish(FileNameReplacer fileNameReplacer)
-        {
-            fileNameReplacer.tokenToFind = "_l_english";
-            fileNameReplacer.tokenReplaceWith = "";
-            fileNameReplacer.extendPath = "english";
-        }
-
         public static string GetAttributeValueByName(XmlAttributeCollection xmlAttributeCollection, string name )
         {
             if ( xmlAttributeCollection == null )
