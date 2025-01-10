@@ -43,7 +43,7 @@ namespace HoI4_TranslationHelper
         {
             FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "variables";
-            fileReader.StringParser = StringParserFactory.Instance.CreateParserVariables();
+            fileReader.StringParser = StringParserFactory.Instance.CreateParserNestingStrings();
             return fileReader;
         }
 

@@ -44,7 +44,7 @@ namespace HoI4_TranslationHelper
             return stringParser;
         }
 
-        public IStringParser CreateParserVariables()
+        public IStringParser CreateParserNestingStrings()
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = "$";

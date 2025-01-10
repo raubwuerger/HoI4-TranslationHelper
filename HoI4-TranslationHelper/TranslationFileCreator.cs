@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,13 @@ namespace HoI4_TranslationHelper
 {
     internal class TranslationFileCreator
     {
+        LineObjectCreator lineObjectCreator = new LineObjectCreator();
         public TranslationFile Create(string fileName)
         {
             TranslationFile translationFile = new TranslationFile(fileName);
             translationFile.FileNameWithoutLocalisation = CreateFileNameWithoutLocalisation(fileName);
 
+            lineObjectCreator.TranslationFile = translationFile;
             translationFile.Lines = CreateLineObjects(File.ReadAllLines(fileName));
 
             return translationFile;
@@ -33,30 +36,54 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private Dictionary<long,LineObject> CreateLineObjects(string[] lines)
+        private Dictionary<ulong,LineObject> CreateLineObjects(string[] lines)
         {
             if (lines == null || lines.Length == 0)
             {  
                 return null;
             }   
 
-            Dictionary<long, LineObject> lineObjects = new Dictionary<long, LineObject>();
+            Dictionary<ulong, LineObject> lineObjects = new Dictionary<ulong, LineObject>();
             List<LineTextTupel> lineTextTupels = new List<LineTextTupel>();
 
-            IStringParser stringParser = StringParserFactory.Instance.CreateParserBrackets();
-
-            int lineNumber = 0;
+            ulong lineNumber = 0;
             foreach (string line in lines)
             {
-                lineNumber++;
-                LineObject lineObject = new LineObject(lineNumber);
-                lineObjects.Add(lineNumber, lineObject);
+                SetKey(line);
+                SetBrackets(line);
+                SetNestingStrings(line);
 
-                List<string> tokens = new List<string>();
-                lineObject.Brackets = stringParser.GetToken(line, tokens);
+                lineNumber++;
+                LineObject lineObject = lineObjectCreator.Create(lineNumber);
+                lineObjects.Add(lineNumber, lineObject);
             }
 
             return lineObjects;
+        }
+
+        private void SetKey(string line)
+        {
+            IStringParser stringParser = StringParserFactory.Instance.CreateParserKey();
+            List<string> token = new List<string>();
+            token = stringParser.GetToken(line, token);
+            if (token.Count > 0)
+            {
+                lineObjectCreator.Key = token[0];
+            }
+        }
+
+        private void SetBrackets(string line)
+        {
+            IStringParser stringParser = StringParserFactory.Instance.CreateParserBrackets();
+            List<string> token = new List<string>();
+            lineObjectCreator.Brackets = stringParser.GetToken(line, token);
+        }
+
+        private void SetNestingStrings(string line)
+        {
+            IStringParser stringParser = StringParserFactory.Instance.CreateParserNestingStrings();
+            List<string> token = new List<string>();
+            lineObjectCreator.NestingStrings = stringParser.GetToken(line, token);
         }
     }
 }
