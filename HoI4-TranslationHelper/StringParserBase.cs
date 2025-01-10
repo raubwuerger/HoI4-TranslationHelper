@@ -22,6 +22,21 @@ namespace HoI4_TranslationHelper
 
         abstract public List<string> GetToken(string source, List<string> tokens);
 
+        protected bool IsValid()
+        {
+            if (_startTag == null)
+            {
+                return false;
+            }
+
+            if (_endTags == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        
         protected bool IgnoreLine(string source)
         {
             foreach( string ignore in _lineIgnores )

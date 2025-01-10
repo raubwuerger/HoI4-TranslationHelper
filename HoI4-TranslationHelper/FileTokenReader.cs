@@ -54,7 +54,7 @@ namespace HoI4_TranslationHelper
 
         private List<LineTextTupel> ParseStrings(string[] lines )
         {
-            List<LineTextTupel> lLineTextTupels = new List<LineTextTupel>();
+            List<LineTextTupel> lineTextTupels = new List<LineTextTupel>();
             int lineNumber = 0;
             foreach( string line in lines )
             {
@@ -68,11 +68,13 @@ namespace HoI4_TranslationHelper
 
                 foreach( string token in tokens )
                 {
-                    lLineTextTupels.Add(new LineTextTupel(lineNumber, token.Trim()));
+                    LineTextTupel lineTextTupel = new LineTextTupel(lineNumber, token.Trim());
+                    lineTextTupel.LineText = line;
+                    lineTextTupels.Add(lineTextTupel);
                 }
             }
 
-            return lLineTextTupels;
+            return lineTextTupels;
         }
     }
 }

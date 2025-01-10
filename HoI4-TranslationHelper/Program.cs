@@ -39,8 +39,7 @@ namespace HoI4_TranslationHelper
                     MissingTranslationFilesCreator.Create();
                     break;
                 case "1":
-                    ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderBrackets());
-                    ParseDirectoryEnglish(FileTokenReaderFactory.Instance.CreateReaderBrackets());
+                    MissingBracketsCreator.Create();
                     break;
                 case "2":
                     ParseDirectoryGerman(FileTokenReaderFactory.Instance.CreateReaderIcons());
@@ -84,9 +83,9 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("args[1] == compare type");
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("0 --> folderCompare" + Environment.NewLine);
-            Console.WriteLine("1 --> brackets \"[]\"" + Environment.NewLine);
+            Console.WriteLine("1 --> namespaces \"[]\"" + Environment.NewLine);
             Console.WriteLine("2 --> icons \"£\"" + Environment.NewLine);
-            Console.WriteLine("3 --> variables \"$\"" + Environment.NewLine);
+            Console.WriteLine("3 --> nested strings \"$\"" + Environment.NewLine);
             Console.WriteLine("4 --> colors \"§\"" + Environment.NewLine);
             Console.WriteLine("5 --> innerDoubleQuotes \" ... \"\" ... \"" + Environment.NewLine);
             Console.WriteLine("6 --> keys \"...\"" + Environment.NewLine);

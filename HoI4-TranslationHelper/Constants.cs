@@ -19,6 +19,11 @@ namespace HoI4_TranslationHelper
         public static string localisationEnglish = "english";
         public static string localisationGerman = "german";
 
+        public static string LOCALISATION_ENGLISH_FULL = "_l_english";
+        public static string LOCALISATION_GERMAN_FULL = "_l_german";
+
         public static string localisationExtension = ".yml";
+        public static string LOCALISATION_START_STRING = "_l_";
+
     }
 }

@@ -12,7 +12,6 @@ namespace HoI4_TranslationHelper
         public string tokenReplaceWith = "";
         public string extendPath = "";
         public string fileTypeExtension = ".txt";
-        public string localisationStartString = "_l_";
         public FileWithToken Replace(FileWithToken fileWithToken)
         {
             if( null == fileWithToken )
@@ -31,7 +30,7 @@ namespace HoI4_TranslationHelper
 
             fileWithToken.PathNameToSave = fileNameReplace;
 
-            int indexOf_LocalisationStartString = fileWithToken.FileName.IndexOf(localisationStartString, StringComparison.OrdinalIgnoreCase);
+            int indexOf_LocalisationStartString = fileWithToken.FileName.IndexOf(Constants.LOCALISATION_START_STRING, StringComparison.OrdinalIgnoreCase);
             if (indexOf_LocalisationStartString != -1)
             {
                 fileWithToken.FileNameWithoutLocalisation = fileWithToken.FileName.Substring(0, indexOf_LocalisationStartString);

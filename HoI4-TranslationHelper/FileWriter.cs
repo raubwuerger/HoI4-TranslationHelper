@@ -35,9 +35,9 @@ namespace HoI4_TranslationHelper
                 {
                     foreach (LineTextTupel lineTextTupel in fileWithToken.GetLineTextTupels)
                     {
-                        string lineTemp = lineTextTupel._lineNumber.ToString();
+                        string lineTemp = lineTextTupel.LineNumber.ToString();
                         lineTemp += "\t";
-                        lineTemp += lineTextTupel._text;
+                        lineTemp += lineTextTupel.Token;
                         lineTemp += Environment.NewLine;
 
                         byte[] line = new UTF8Encoding(true).GetBytes(lineTemp);

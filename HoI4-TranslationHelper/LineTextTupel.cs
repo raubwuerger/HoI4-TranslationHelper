@@ -8,13 +8,14 @@ namespace HoI4_TranslationHelper
 {
     public class LineTextTupel
     {
-        public int _lineNumber;
-        public string _text;
+        public int LineNumber;
+        public string Token;
+        public string LineText;
 
-        public LineTextTupel( int lineNumber, string text )
+        public LineTextTupel( int lineNumber, string token )
         {
-            _lineNumber = lineNumber;
-            _text = text;
+            LineNumber = lineNumber;
+            Token = token;
         }
 
         public override bool Equals(object obj) => this.Equals(obj as LineTextTupel);
@@ -37,12 +38,12 @@ namespace HoI4_TranslationHelper
                 return false;
             }
 
-            return _text.Equals(this._text);
+            return Token.Equals(this.Token);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_lineNumber, _text);
+            return HashCode.Combine(LineNumber, Token);
         }
     }
 }

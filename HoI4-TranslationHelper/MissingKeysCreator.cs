@@ -55,20 +55,20 @@ namespace HoI4_TranslationHelper
 
                 foreach (LineTextTupel lineTextTupel in keysEnglish)
                 {
-                    if (true == overallKeys.ContainsKey(lineTextTupel._text))
+                    if (true == overallKeys.ContainsKey(lineTextTupel.Token))
                     {
-                        FileWithToken allreadyExisting = overallKeys[lineTextTupel._text];
-                        LineTextTupel lineTextTupelAllreadyExisting = allreadyExisting.GetLineTextTupels.Find( x => x._text.Equals(lineTextTupel._text));
-                        if (false == duplicateKeys.ContainsKey(lineTextTupel._text))
+                        FileWithToken allreadyExisting = overallKeys[lineTextTupel.Token];
+                        LineTextTupel lineTextTupelAllreadyExisting = allreadyExisting.GetLineTextTupels.Find( x => x.Token.Equals(lineTextTupel.Token));
+                        if (false == duplicateKeys.ContainsKey(lineTextTupel.Token))
                         {
-                            duplicateKeys.Add(lineTextTupel._text, allreadyExisting.FileName + ":" + lineTextTupelAllreadyExisting._lineNumber + " and " + fileEnglish.FileName + ":" + lineTextTupel._lineNumber);
+                            duplicateKeys.Add(lineTextTupel.Token, allreadyExisting.FileName + ":" + lineTextTupelAllreadyExisting.LineNumber + " and " + fileEnglish.FileName + ":" + lineTextTupel.LineNumber);
                         }
                     }
                     else
                     {
-                        overallKeys.Add(lineTextTupel._text, fileEnglish);
+                        overallKeys.Add(lineTextTupel.Token, fileEnglish);
                     }
-                    var item = keysGerman.FirstOrDefault(o => o._text.Equals(lineTextTupel._text));
+                    var item = keysGerman.FirstOrDefault(o => o.Token.Equals(lineTextTupel.Token));
                     if (item != null)
                     {
                         continue;
@@ -89,7 +89,7 @@ namespace HoI4_TranslationHelper
                     Console.WriteLine("## German translation keys missing");
                     foreach (LineTextTupel missingGerman in missingGermans)
                     {
-                        Console.WriteLine(missingGerman._lineNumber + " - " +missingGerman._text);
+                        Console.WriteLine(missingGerman.LineNumber + " - " +missingGerman.Token);
                     }
                 }
 
