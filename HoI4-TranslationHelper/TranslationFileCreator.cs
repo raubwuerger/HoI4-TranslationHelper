@@ -55,6 +55,7 @@ namespace HoI4_TranslationHelper
 
                 lineNumber++;
                 LineObject lineObject = lineObjectCreator.Create(lineNumber);
+                lineObject.OriginalLine = line;
                 lineObjects.Add(lineNumber, lineObject);
             }
 

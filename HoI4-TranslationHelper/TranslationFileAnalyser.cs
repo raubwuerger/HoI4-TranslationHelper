@@ -38,6 +38,8 @@ namespace HoI4_TranslationHelper
             return translationFiles;
         }
 
+
+
         private static void DoCompare(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
         {
             if( null == localisationEnglish || null == localisationGerman )
@@ -46,7 +48,8 @@ namespace HoI4_TranslationHelper
             }
 
             CheckMissingTranslationFile(localisationEnglish,localisationGerman);
-            CheckMissingKeys(localisationEnglish, localisationGerman);
+            SubstitueSourceFiles(localisationEnglish[0]);
+//            CheckMissingKeys(localisationEnglish, localisationGerman);
         }
 
         private static void CheckMissingTranslationFile(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
@@ -63,6 +66,12 @@ namespace HoI4_TranslationHelper
                     Console.WriteLine(translationFile + Environment.NewLine);
                 }
             }
+        }
+
+        private static void SubstitueSourceFiles(TranslationFile translationFile)
+        {
+            FileSubstitutor fileSubstitutor = new FileSubstitutor();
+            fileSubstitutor.Substitute(translationFile);
         }
 
         private static DataSetLineObjectCompare CreateDataSetLineObjectCompare(List<TranslationFile> localisation)

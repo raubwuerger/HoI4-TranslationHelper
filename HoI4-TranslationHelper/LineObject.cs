@@ -13,7 +13,8 @@ namespace HoI4_TranslationHelper
         string _key;
         List<string> _brackets = new List<string>();
         List<string> _nestingStrings = new List<string>();
-
+        string _originalLine;
+        string _originalLineSubstituted;
         public LineObject(ulong lineNumber)
         {
             _lineNumber = lineNumber;
@@ -26,5 +27,7 @@ namespace HoI4_TranslationHelper
         internal TranslationFile TranslationFile { get => _translationFile; set => _translationFile = value; }
         public List<string> Brackets { get => _brackets; set => _brackets = value; }
         public List<string> NestingStrings { get => _nestingStrings; set => _nestingStrings = value; }
+        public string OriginalLine { get => _originalLine; set => _originalLine = value;  }
+        public string OriginalLineSubstituted { get => _originalLineSubstituted; set => _originalLineSubstituted = value; }
     }
 }
