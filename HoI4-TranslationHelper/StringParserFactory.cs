@@ -23,6 +23,12 @@ namespace HoI4_TranslationHelper
 
         private StringParserFactory() { }
 
+        public static string NESTING_STRINGS_START = "$";
+        public static string NESTING_STRINGS_END = "$";
+
+        public static string COLOR_CODE_START = "§";
+        public static string COLOR_CODE_END = "§!";
+
         public IStringParser CreateParserBrackets()
         {
             StringParser stringParser = new StringParser();
@@ -47,17 +53,17 @@ namespace HoI4_TranslationHelper
         public IStringParser CreateParserNestingStrings()
         {
             StringParser stringParser = new StringParser();
-            stringParser.StartTag = "$";
-            stringParser.EndTags.Add("$");
+            stringParser.StartTag = NESTING_STRINGS_START;
+            stringParser.EndTags.Add(NESTING_STRINGS_END);
             IgnoreCommentLines(stringParser);
             return stringParser;
         }
 
-        public IStringParser CreateParserColors()
+        public IStringParser CreateParserColorCodes()
         {
             StringParser stringParser = new StringParser();
-            stringParser.StartTag = "§";
-            stringParser.EndTags.Add("§!");
+            stringParser.StartTag = COLOR_CODE_START;
+            stringParser.EndTags.Add(COLOR_CODE_END);
             IgnoreCommentLines(stringParser);
             stringParser.SubStringCount = 1;
             return stringParser;

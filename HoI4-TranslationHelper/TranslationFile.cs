@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace HoI4_TranslationHelper
 {
-    internal class TranslationFile
+    public class TranslationFile
     {
         private string _fileName;
         private string _fileNameWithoutLocalisation;
@@ -23,9 +23,10 @@ namespace HoI4_TranslationHelper
         {
         }
 
-        public Dictionary<ulong, LineObject> Lines { get => _lines; set => _lines = value; }
         public string FileName { get => _fileName; }
         public string FileNameWithoutLocalisation { get => _fileNameWithoutLocalisation; set => _fileNameWithoutLocalisation = value; }
+        internal Dictionary<ulong, LineObject> Lines { get => _lines; set => _lines = value; }
+
         public override string ToString()
         {
             return _fileName;

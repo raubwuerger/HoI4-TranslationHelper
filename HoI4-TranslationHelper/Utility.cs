@@ -78,5 +78,30 @@ namespace HoI4_TranslationHelper
 
             return null;
         }
+
+        public static string CreateStringFromTranslationFile(TranslationFile translationFile)
+        {
+            if (translationFile == null)
+            {
+                return null;
+            }
+
+            Dictionary<ulong, LineObject> _lines = translationFile.Lines;
+            List<LineObject> lines = _lines.Values.ToList();
+
+            string completeString = "";
+            foreach ( LineObject lineObject in lines )
+            {
+                string substitutedLine = lineObject.OriginalLineSubstituted;
+                if ( substitutedLine == null )
+                {
+                    substitutedLine = lineObject.OriginalLine;
+                }
+                completeString += substitutedLine;
+                completeString += Environment.NewLine;
+            }
+
+            return completeString;
+        }
     }
 }

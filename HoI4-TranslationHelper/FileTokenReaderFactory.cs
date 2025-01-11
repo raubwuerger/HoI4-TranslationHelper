@@ -51,7 +51,7 @@ namespace HoI4_TranslationHelper
         {
             FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "colors";
-            fileReader.StringParser = StringParserFactory.Instance.CreateParserColors();
+            fileReader.StringParser = StringParserFactory.Instance.CreateParserColorCodes();
             return fileReader;
         }
 
