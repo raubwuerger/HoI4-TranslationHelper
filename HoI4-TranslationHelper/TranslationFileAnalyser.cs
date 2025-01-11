@@ -130,6 +130,16 @@ namespace HoI4_TranslationHelper
             Console.WriteLine(Environment.NewLine);
         }
 
+        private static LineObject CreateLineObjectMissing(List<string> missingEnglishBrackets, KeyValuePair<string, LineObject> pair )
+        {
+            LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
+            missingLineObject.Brackets = missingEnglishBrackets;
+            missingLineObject.TranslationFile = pair.Value.TranslationFile;
+            missingLineObject.Key = pair.Key;
+            missingLineObject.NestingStrings = pair.Value.NestingStrings;
+            return missingLineObject;
+        }
+
         private static void LogMissingBrackets(Dictionary<string, LineObject> dictionaryEnglish, Dictionary<string, LineObject> dictionaryGerman)
         {
             Console.WriteLine("Missing brackets []" + Environment.NewLine);
@@ -146,24 +156,16 @@ namespace HoI4_TranslationHelper
                         
                         if (true == dictionaryGerman.TryGetValue(pair.Key, out lineObject))
                         {
-                            List<string> missingGerman = pair.Value.Brackets.Except(lineObject.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
-                            if (missingGerman.Count > 0)
+                            List<string> missingGermanBrackets = pair.Value.Brackets.Except(lineObject.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingGermanBrackets.Count > 0)
                             {
-                                LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
-                                missingLineObject.Brackets = missingGerman;
-                                missingLineObject.TranslationFile = pair.Value.TranslationFile;
-                                missingLineObject.Key = pair.Key;
-                                missingBracketsGerman.Add(missingLineObject);
+                                missingBracketsGerman.Add(CreateLineObjectMissing(missingGermanBrackets, pair));
                             }
 
-                            List<string> missingEnglish = lineObject.Brackets.Except(pair.Value.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
-                            if (missingEnglish.Count > 0)
+                            List<string> missingEnglishBrackets = lineObject.Brackets.Except(pair.Value.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingEnglishBrackets.Count > 0)
                             {
-                                LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
-                                missingLineObject.Brackets = missingEnglish;
-                                missingLineObject.TranslationFile = pair.Value.TranslationFile;
-                                missingLineObject.Key = pair.Key;
-                                missingBracketsEnglish.Add(missingLineObject);
+                                missingBracketsEnglish.Add(CreateLineObjectMissing(missingEnglishBrackets, pair));
                             }
                         }
                     }
