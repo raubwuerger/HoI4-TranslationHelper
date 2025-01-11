@@ -19,7 +19,10 @@ namespace HoI4_TranslationHelper
         IStringParser parserNestingStrings = StringParserFactory.Instance.CreateParserNestingStrings();
 
 
-        private Dictionary<string, string> _Substitute = new Dictionary<string, string>(); //ulong substitute number, string original text
+        private Dictionary<string, string> _colorCodeSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
+        private static string COLOR_CODE_SUFFIX = "CC";
+        private static string COLOR_CODE_SIGN_START = StringParserFactory.COLOR_CODE_START;
+        private static string COLOR_CODE_SIGN_END = StringParserFactory.COLOR_CODE_END;
         IStringParser parserColorCodes = StringParserFactory.Instance.CreateParserColorCodes();
         
 
@@ -39,7 +42,8 @@ namespace HoI4_TranslationHelper
             Substitute( translationFile.Lines.Values.ToList() );
             Console.WriteLine("Done");
             WriteSubstitionFile(translationFile);
-            WriteSubstitionFileNestingStrings(_nestingStringsSubstitute);
+            WriteSubstitionFile(_nestingStringsSubstitute);
+            WriteSubstitionFile(_colorCodeSubstitute);
         }
 
         public void Substitute( List<LineObject> lineObjects )
@@ -57,6 +61,7 @@ namespace HoI4_TranslationHelper
             foreach ( var lineObject in lineObjects ) 
             {
                 SubstituteNestingString(lineObject);
+                SubstituteColorCode(lineObject);    
             }
         }
 
@@ -73,13 +78,35 @@ namespace HoI4_TranslationHelper
 
             lineObject.OriginalLineSubstituted = substitute;
         }
-
-        private string GenerateSubNestingString( string sub )
+        private string GenerateSubNestingString(string sub)
         {
             int count = _nestingStringsSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + NESTING_STRING_SUFFIX  + count.ToString() + SUBSTITUTION_END;
-            _nestingStringsSubstitute.Add(subString, sub );
+            string subString = SUBSTITUTION_START + NESTING_STRING_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            _nestingStringsSubstitute.Add(subString, sub);
+            return subString;
+        }
+
+        private void SubstituteColorCode(LineObject lineObject)
+        {
+            List<string> token = new List<string>();
+            token = parserColorCodes.GetToken(lineObject.OriginalLine, token);
+
+            string substitute = lineObject.OriginalLine;
+            foreach (string subs in token)
+            {
+                substitute = substitute.Replace(COLOR_CODE_SIGN_START + subs + COLOR_CODE_SIGN_END, GenerateSubColorCode(COLOR_CODE_SIGN_START + subs + COLOR_CODE_SIGN_END));
+            }
+
+            lineObject.OriginalLineSubstituted = substitute;
+        }
+
+        private string GenerateSubColorCode(string sub)
+        {
+            int count = _colorCodeSubstitute.Count();
+            count++;
+            string subString = SUBSTITUTION_START + COLOR_CODE_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            _colorCodeSubstitute.Add(subString, sub);
             return subString;
         }
 
@@ -110,14 +137,14 @@ namespace HoI4_TranslationHelper
 
         private string GetSubstitutedLine(LineObject lineObject)
         {
-            if( lineObject.OriginalLineSubstituted != null )
+            if( lineObject.OriginalLineSubstituted.Length > 0 )
             {
                 return lineObject.OriginalLineSubstituted;
             }
             return lineObject.OriginalLine;
         }
 
-        private void WriteSubstitionFileNestingStrings( Dictionary<string, string> nestingStrings )
+        private void WriteSubstitionFile( Dictionary<string, string> nestingStrings )
         {
             if ( nestingStrings == null )
             {
@@ -125,6 +152,5 @@ namespace HoI4_TranslationHelper
             }
             fileWriterSubstitutionItem.Write( nestingStrings );
         }
-
     }
 }

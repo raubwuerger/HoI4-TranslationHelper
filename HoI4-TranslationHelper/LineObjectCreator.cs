@@ -16,9 +16,12 @@ namespace HoI4_TranslationHelper
 
         List<string> _brackets;
         public List<string> Brackets { get => _brackets; set => _brackets = value; }
-        public List<string> NestingStrings { get => _nestingStrings; set => _nestingStrings = value; }
 
         List<string> _nestingStrings;
+        public List<string> NestingStrings { get => _nestingStrings; set => _nestingStrings = value; }
+        public List<string> ColorCodes { get => _colorCodes; set => _colorCodes = value; }
+
+        List<string> _colorCodes;
 
         public LineObject Create( ulong lineNumber )
         {
@@ -27,6 +30,7 @@ namespace HoI4_TranslationHelper
             lineObject.Key = _key;
             lineObject.Brackets = _brackets;
             lineObject.NestingStrings = _nestingStrings;
+            lineObject.ColorCodes = _colorCodes;
 
             CleanUp();
 
@@ -38,6 +42,7 @@ namespace HoI4_TranslationHelper
             _key = null;
             _brackets = null;
             _nestingStrings = null;
+            _colorCodes = null;
         }
     }
 }

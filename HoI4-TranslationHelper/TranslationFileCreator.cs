@@ -52,6 +52,7 @@ namespace HoI4_TranslationHelper
                 SetKey(line);
                 SetBrackets(line);
                 SetNestingStrings(line);
+                SetColorCodes(line);
 
                 lineNumber++;
                 LineObject lineObject = lineObjectCreator.Create(lineNumber);
@@ -85,6 +86,13 @@ namespace HoI4_TranslationHelper
             IStringParser stringParser = StringParserFactory.Instance.CreateParserNestingStrings();
             List<string> token = new List<string>();
             lineObjectCreator.NestingStrings = stringParser.GetToken(line, token);
+        }
+
+        private void SetColorCodes(string line)
+        {
+            IStringParser stringParser = StringParserFactory.Instance.CreateParserColorCodes(); 
+            List<string> token = new List<string>();
+            lineObjectCreator.ColorCodes = stringParser.GetToken(line, token);
         }
     }
 }
