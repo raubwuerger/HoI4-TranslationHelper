@@ -96,12 +96,12 @@ namespace HoI4_TranslationHelper
             DataSetLineObjectCompare dataSetLineObjectCompareEnglish = CreateDataSetLineObjectCompare(localisationEnglish);
             DataSetLineObjectCompare dataSetLineObjectCompareGerman = CreateDataSetLineObjectCompare(localisationGerman);
 
-            LogMissingKeys(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
+//            LogMissingKeys(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
             LogMissingBrackets(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
 //            LogMissingNestingStrings(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
 
-            LogMultipleKeys(dataSetLineObjectCompareEnglish.keysMultiple);
-            LogMultipleKeys(dataSetLineObjectCompareGerman.keysMultiple);
+//            LogMultipleKeys(dataSetLineObjectCompareEnglish.keysMultiple);
+//            LogMultipleKeys(dataSetLineObjectCompareGerman.keysMultiple);
         }
 
         private static void LogMultipleKeys(List<LineObject> keysMultiple)
@@ -130,39 +130,76 @@ namespace HoI4_TranslationHelper
             Console.WriteLine(Environment.NewLine);
         }
 
-        private static void LogMissingBrackets(Dictionary<string, LineObject> keysBase, Dictionary<string, LineObject> keysShould)
+        private static void LogMissingBrackets(Dictionary<string, LineObject> dictionaryEnglish, Dictionary<string, LineObject> dictionaryGerman)
         {
             Console.WriteLine("Missing brackets []" + Environment.NewLine);
-            List<LineObject> missingBrackets = new List<LineObject>();
+            List<LineObject> missingBracketsGerman = new List<LineObject>();
+            List<LineObject> missingBracketsEnglish = new List<LineObject>();
 
-            keysBase.ToList().ForEach
+            dictionaryEnglish.ToList().ForEach
             (
                 pair =>
                 {
-                    if (true == keysShould.ContainsKey(pair.Key))
+                    if (true == dictionaryGerman.ContainsKey(pair.Key))
                     {
                         LineObject lineObject = new LineObject(0UL);
-                        if (true == keysShould.TryGetValue(pair.Key, out lineObject))
+                        
+                        if (true == dictionaryGerman.TryGetValue(pair.Key, out lineObject))
                         {
-                            List<string> missing = pair.Value.Brackets.Except(lineObject.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
-                            if (missing.Count > 0)
+                            List<string> missingGerman = pair.Value.Brackets.Except(lineObject.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingGerman.Count > 0)
                             {
                                 LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
-                                missingLineObject.Brackets = missing;
-                                missingBrackets.Add(missingLineObject);
+                                missingLineObject.Brackets = missingGerman;
+                                missingLineObject.TranslationFile = pair.Value.TranslationFile;
+                                missingLineObject.Key = pair.Key;
+                                missingBracketsGerman.Add(missingLineObject);
+                            }
+
+                            List<string> missingEnglish = lineObject.Brackets.Except(pair.Value.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingEnglish.Count > 0)
+                            {
+                                LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
+                                missingLineObject.Brackets = missingEnglish;
+                                missingLineObject.TranslationFile = pair.Value.TranslationFile;
+                                missingLineObject.Key = pair.Key;
+                                missingBracketsEnglish.Add(missingLineObject);
                             }
                         }
                     }
                 }
             );
 
-            missingBrackets.ForEach
+            string translationFileName = "";
+            Console.WriteLine("##### Missing brackets german #####");
+            missingBracketsGerman.ForEach
             (
-                item => Console.WriteLine(item.LineNumber + ": " +string.Join(", ", item.Brackets)  )
+                item =>
+                {
+                    if( false == translationFileName.Equals(item.TranslationFile.FileName) )
+                    {
+                        translationFileName = item.TranslationFile.FileName;
+                        Console.WriteLine(translationFileName);
+                    }
+                    Console.WriteLine(item.Key +" (" +item.LineNumber + "): " + string.Join(", ", item.Brackets));
+                }
+            );
+            Console.WriteLine();
+
+            Console.WriteLine("##### Missing brackets english #####");
+            missingBracketsEnglish.ForEach
+            (
+                item =>
+                {
+                    if (false == translationFileName.Equals(item.TranslationFile.FileName))
+                    {
+                        translationFileName = item.TranslationFile.FileName;
+                        Console.WriteLine(translationFileName);
+                    }
+                    Console.WriteLine(item.Key + " (" + item.LineNumber + "): "  + string.Join(", ", item.Brackets));
+                }
             );
         }
-        // + ": " + item.Brackets.ForEach(Console.WriteLine)
-        //            missingNestingStrings.ForEach(item => Console.WriteLine(item.Key +": " +item.Brackets.ForEach(Console.WriteLine)));
 
         private static string CreateStringFromList(List<string> strings)
         {
