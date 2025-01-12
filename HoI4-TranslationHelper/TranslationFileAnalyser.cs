@@ -15,8 +15,23 @@ namespace HoI4_TranslationHelper
             List<TranslationFile> localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
             List<TranslationFile> localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
             SubstitueSourceFiles(localisationEnglish[0]);
-//            DoCompare(localisationEnglish, localisationGerman);
 
+            ReSubstitueSourceFiles( Create(localisationGerman[0], localisationEnglish[0].FileName) );
+
+//            DoCompare(localisationEnglish, localisationGerman);
+        }
+
+        private static TranslationFileSetSubstitution Create(TranslationFile substitutedFile, string pathToSubstiteFile)
+        {
+            TranslationFileSetSubstitution translationFileSetSubstitution = new TranslationFileSetSubstitution();
+
+            translationFileSetSubstitution.SubstitutedFile = substitutedFile;
+            translationFileSetSubstitution.PathNestingStringsFile = pathToSubstiteFile +"." +FileSubstitutionConstants.NESTING_STRING_SUFFIX;
+            translationFileSetSubstitution.PathNamespaceFile = pathToSubstiteFile + "." + FileSubstitutionConstants.NAMESPACE_SUFFIX;
+            translationFileSetSubstitution.PathIconFile = pathToSubstiteFile + "." + FileSubstitutionConstants.ICON_SUFFIX;
+            translationFileSetSubstitution.PathColorCodeFile = pathToSubstiteFile + "." + FileSubstitutionConstants.COLOR_CODE_SUFFIX;
+
+            return translationFileSetSubstitution;
         }
 
         private static List<TranslationFile> AnalyseDirectory( string directory )
@@ -65,6 +80,11 @@ namespace HoI4_TranslationHelper
                     Console.WriteLine(translationFile + Environment.NewLine);
                 }
             }
+        }
+        private static void ReSubstitueSourceFiles( TranslationFileSetSubstitution translationFileSetSubstitution )
+        {
+            FileSubstitutor fileSubstitutor = new FileSubstitutor();
+            fileSubstitutor.ReSubstitute(translationFileSetSubstitution);
         }
 
         private static void SubstitueSourceFiles(TranslationFile translationFile)

@@ -103,5 +103,42 @@ namespace HoI4_TranslationHelper
 
             return completeString;
         }
+
+        /**
+         * Double keys will be bypassed.
+         */
+        public static Dictionary<string, string> ConvertToDictionary(List<string> lines)
+        {
+            Dictionary<string, string> resubstitutes = new Dictionary<string, string>();
+            if (lines == null)
+            {
+                return resubstitutes;
+            }
+
+            foreach (string line in lines)
+            {
+                string[] splitted = line.Split(';');
+                if (splitted.Length < 2)
+                {
+                    continue;
+                }
+
+                if (true == string.IsNullOrEmpty(splitted[0]))
+                {
+                    continue;
+                }
+                try
+                {
+                    resubstitutes.Add(splitted[0], splitted[1]);
+                }
+                catch(Exception ex)
+                {
+                    continue;
+                }
+            }
+
+            return resubstitutes;
+        }
+
     }
 }

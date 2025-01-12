@@ -9,33 +9,69 @@ namespace HoI4_TranslationHelper
 {
     internal class FileSubstitutor
     {
-        private static string SUBSTITUTION_START = "___";
-        private static string SUBSTITUTION_END = "___";
-
         private Dictionary<string, string> _nestingStringsSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private static string NESTING_STRING_SUFFIX = "NE";
-        private static string NESTING_STRING_SIGN_START = StringParserFactory.NESTING_STRINGS_START;
-        private static string NESTING_STRING_SIGN_END = StringParserFactory.NESTING_STRINGS_END;
-
 
         private Dictionary<string, string> _colorCodeSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private static string COLOR_CODE_SUFFIX = "CC";
-        private static string COLOR_CODE_SIGN_START = StringParserFactory.COLOR_CODE_START;
-        private static string COLOR_CODE_SIGN_END = StringParserFactory.COLOR_CODE_END;
-
 
         private Dictionary<string, string> _namespaceSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private static string NAMESPACE_SUFFIX = "NS";
-        private static string NAMESPACE_START_SIGN_START = StringParserFactory.NAMESPACE_START;
-        private static string NAMESPACE_START_SIGN_END = StringParserFactory.NAMESPACE_END;
-
 
         private Dictionary<string, string> _iconSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private static string ICON_SUFFIX = "IC";
-        private static string ICON_START_SIGN_START = StringParserFactory.ICON_START;
-        private static string ICON_START_SIGN_END = StringParserFactory.ICON_END;
 
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
+        FileReaderSubstitutionItem fileReaderSubstitutionItem = new FileReaderSubstitutionItem();
+
+        public void ReSubstitute( TranslationFileSetSubstitution translationFileSetSubstitution )
+        {
+            if (translationFileSetSubstitution == null)
+            {
+                return;
+            }
+
+            fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathNestingStringsFile;
+            DoReSubstitute(translationFileSetSubstitution);
+        }
+
+        public void DoReSubstitute( TranslationFileSetSubstitution translationFileSetSubstitution )
+        {
+            List<LineObject> lineObjects = translationFileSetSubstitution.SubstitutedFile.Lines.Values.ToList();
+            if (lineObjects == null)
+            {
+                return;
+            }
+
+            if (lineObjects.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var lineObject in lineObjects)
+            {
+                ReSubstituteNestingString(translationFileSetSubstitution, lineObject);
+                ReSubstituteColorCode(lineObject);
+                ReSubstituteNamespace(lineObject);
+                ReSubstituteIcon(lineObject);
+            }
+        }
+
+        private void ReSubstituteNestingString(TranslationFileSetSubstitution translationFileSetSubstitution, LineObject lineObject)
+        {
+            Dictionary<string, string> _nestingStringsReSubstitute = fileReaderSubstitutionItem.Read();
+            Console.WriteLine("");
+        }
+
+        private void ReSubstituteColorCode(LineObject lineObject)
+        {
+
+        }
+
+        private void ReSubstituteNamespace(LineObject lineObject)
+        {
+
+        }
+        private void ReSubstituteIcon(LineObject lineObject)
+        {
+
+        }
 
         public void Substitute( TranslationFile translationFile )
         {
@@ -44,24 +80,22 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-
             Substitute( translationFile.Lines.Values.ToList() );
-            Console.WriteLine("Done");
 
             fileWriterSubstitutionItem.FileName = translationFile.FileName;
             fileWriterSubstitutionItem.FileSuffix = "";
             WriteSubstitionFile(translationFile);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + NESTING_STRING_SUFFIX;
+            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NESTING_STRING_SUFFIX;
             WriteSubstitionFile(_nestingStringsSubstitute);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + COLOR_CODE_SUFFIX;
+            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.COLOR_CODE_SUFFIX;
             WriteSubstitionFile(_colorCodeSubstitute);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + NAMESPACE_SUFFIX;
+            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NAMESPACE_SUFFIX;
             WriteSubstitionFile(_namespaceSubstitute);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + ICON_SUFFIX;
+            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.ICON_SUFFIX;
             WriteSubstitionFile(_iconSubstitute);
         }
 
@@ -100,14 +134,14 @@ namespace HoI4_TranslationHelper
         }
         private string GenerateCompleteNestingStringToken(string subs)
         {
-            return NESTING_STRING_SIGN_START + subs + NESTING_STRING_SIGN_END;
+            return FileSubstitutionConstants.NESTING_STRING_SIGN_START + subs + FileSubstitutionConstants.NESTING_STRING_SIGN_END;
         }
 
         private string GenerateNestingStringSubstitute(string sub)
         {
             int count = _nestingStringsSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + NESTING_STRING_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.NESTING_STRING_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
             _nestingStringsSubstitute.Add(subString, sub);
             return subString;
         }
@@ -127,14 +161,14 @@ namespace HoI4_TranslationHelper
 
         private string GenerateCompleteColorCodeToken(string subs)
         {
-            return COLOR_CODE_SIGN_START + subs;
+            return FileSubstitutionConstants.COLOR_CODE_SIGN_START + subs;
         }
 
         private string GenerateColorCodeSubstitute(string sub)
         {
             int count = _colorCodeSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + COLOR_CODE_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.COLOR_CODE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
             _colorCodeSubstitute.Add(subString, sub);
             return subString;
         }
@@ -164,14 +198,14 @@ namespace HoI4_TranslationHelper
 
         private string GenerateCompleteNamespaceToken(string subs)
         {
-            return NAMESPACE_START_SIGN_START + subs + NAMESPACE_START_SIGN_END;
+            return FileSubstitutionConstants.NAMESPACE_START_SIGN_START + subs + FileSubstitutionConstants.NAMESPACE_START_SIGN_END;
         }
 
         private string GenerateNamespaceSubstitute(string sub)
         {
             int count = _namespaceSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + NAMESPACE_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.NAMESPACE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
             _namespaceSubstitute.Add(subString, sub);
             return subString;
         }
@@ -190,14 +224,14 @@ namespace HoI4_TranslationHelper
 
         private string GenerateCompleteIconToken(string subs)
         {
-            return ICON_START_SIGN_START + subs + ICON_START_SIGN_END;
+            return FileSubstitutionConstants.ICON_START_SIGN_START + subs + FileSubstitutionConstants.ICON_START_SIGN_END;
         }
 
         private string GenerateIconSubstitute(string sub)
         {
             int count = _iconSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + ICON_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.ICON_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
             _iconSubstitute.Add(subString, sub);
             return subString;
         }
