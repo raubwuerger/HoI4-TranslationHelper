@@ -14,9 +14,10 @@ namespace HoI4_TranslationHelper
         {
             List<TranslationFile> localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
             List<TranslationFile> localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            SubstitueSourceFiles(localisationEnglish[0]);
 
-//            ReSubstitueSourceFiles( Create(localisationGerman[0], localisationEnglish[0].FileName) );
+//            SubstitueSourceFiles(localisationEnglish[0]);
+
+            ReSubstitueSourceFiles( Create(localisationGerman[0], localisationEnglish[0].FileName) );
 
 //            DoCompare(localisationEnglish, localisationGerman);
         }

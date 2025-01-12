@@ -16,6 +16,9 @@ namespace HoI4_TranslationHelper
 
 
         private Dictionary<string, string> _nestingStringsReSubstitute = new Dictionary<string, string>();
+        private Dictionary<string, string> _colorCodeReSubstitute = new Dictionary<string, string>();
+        private Dictionary<string, string> _namespaceReSubstitute = new Dictionary<string, string>();
+        private Dictionary<string, string> _iconReSubstitute = new Dictionary<string, string>();
 
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
         FileReaderSubstitutionItem fileReaderSubstitutionItem = new FileReaderSubstitutionItem();
@@ -29,6 +32,16 @@ namespace HoI4_TranslationHelper
 
             fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathNestingStringsFile;
             _nestingStringsReSubstitute = fileReaderSubstitutionItem.Read();
+
+            fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathColorCodeFile;
+            _colorCodeReSubstitute = fileReaderSubstitutionItem.Read();
+
+            fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathNamespaceFile;
+            _namespaceReSubstitute = fileReaderSubstitutionItem.Read();
+
+            fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathIconFile;
+            _iconReSubstitute = fileReaderSubstitutionItem.Read();
+
             DoReSubstitute(translationFileSetSubstitution);
         }
 
@@ -47,15 +60,22 @@ namespace HoI4_TranslationHelper
 
             foreach (var lineObject in lineObjects)
             {
-                ReSubstituteNestingString(translationFileSetSubstitution, lineObject);
+                ReSubstituteNestingString(lineObject);
                 ReSubstituteColorCode(lineObject);
                 ReSubstituteNamespace(lineObject);
                 ReSubstituteIcon(lineObject);
             }
+
+            Console.WriteLine("Finished ...");
         }
 
-        private void ReSubstituteNestingString(TranslationFileSetSubstitution translationFileSetSubstitution, LineObject lineObject)
+        private void ReSubstituteNestingString(LineObject lineObject)
         {
+            if (false == _nestingStringsReSubstitute.Any())
+            {
+                return;
+            }
+
             KeyValuePair<string, string> keyValuePair = _nestingStringsReSubstitute.First();
             if( false == lineObject.OriginalLine.Contains(keyValuePair.Key) )
             {
@@ -70,16 +90,59 @@ namespace HoI4_TranslationHelper
 
         private void ReSubstituteColorCode(LineObject lineObject)
         {
+            if (false == _colorCodeReSubstitute.Any())
+            {
+                return;
+            }
 
+            KeyValuePair<string, string> keyValuePair = _colorCodeReSubstitute.First();
+            if (false == lineObject.OriginalLine.Contains(keyValuePair.Key))
+            {
+                return;
+            }
+
+            lineObject.OriginalLine = StringExtensionMethods.ReplaceFirst(lineObject.OriginalLine, keyValuePair.Key, keyValuePair.Value);
+            _colorCodeReSubstitute.Remove(keyValuePair.Key);
+
+            Console.WriteLine("Substituted (" + lineObject.LineNumber + ") " + keyValuePair.Key + " --> " + keyValuePair.Value);
+            
         }
 
         private void ReSubstituteNamespace(LineObject lineObject)
         {
+            if (false == _namespaceReSubstitute.Any())
+            {
+                return;
+            }
 
+            KeyValuePair<string, string> keyValuePair = _namespaceReSubstitute.First();
+            if (false == lineObject.OriginalLine.Contains(keyValuePair.Key))
+            {
+                return;
+            }
+
+            lineObject.OriginalLine = StringExtensionMethods.ReplaceFirst(lineObject.OriginalLine, keyValuePair.Key, keyValuePair.Value);
+            _namespaceReSubstitute.Remove(keyValuePair.Key);
+
+            Console.WriteLine("Substituted (" + lineObject.LineNumber + ") " + keyValuePair.Key + " --> " + keyValuePair.Value);
         }
         private void ReSubstituteIcon(LineObject lineObject)
         {
+            if(false == _iconReSubstitute.Any() )
+            {
+                return;
+            }
 
+            KeyValuePair<string, string> keyValuePair = _iconReSubstitute.First();
+            if (false == lineObject.OriginalLine.Contains(keyValuePair.Key))
+            {
+                return;
+            }
+
+            lineObject.OriginalLine = StringExtensionMethods.ReplaceFirst(lineObject.OriginalLine, keyValuePair.Key, keyValuePair.Value);
+            _iconReSubstitute.Remove(keyValuePair.Key);
+
+            Console.WriteLine("Substituted (" + lineObject.LineNumber + ") " + keyValuePair.Key + " --> " + keyValuePair.Value);
         }
 
         public void Substitute( TranslationFile translationFile )
