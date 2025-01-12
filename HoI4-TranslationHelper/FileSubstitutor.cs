@@ -10,12 +10,12 @@ namespace HoI4_TranslationHelper
     internal class FileSubstitutor
     {
         private Dictionary<string, string> _nestingStringsSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-
         private Dictionary<string, string> _colorCodeSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-
         private Dictionary<string, string> _namespaceSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-
         private Dictionary<string, string> _iconSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
+
+
+        private Dictionary<string, string> _nestingStringsReSubstitute = new Dictionary<string, string>();
 
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
         FileReaderSubstitutionItem fileReaderSubstitutionItem = new FileReaderSubstitutionItem();
@@ -28,6 +28,7 @@ namespace HoI4_TranslationHelper
             }
 
             fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathNestingStringsFile;
+            _nestingStringsReSubstitute = fileReaderSubstitutionItem.Read();
             DoReSubstitute(translationFileSetSubstitution);
         }
 
@@ -55,8 +56,16 @@ namespace HoI4_TranslationHelper
 
         private void ReSubstituteNestingString(TranslationFileSetSubstitution translationFileSetSubstitution, LineObject lineObject)
         {
-            Dictionary<string, string> _nestingStringsReSubstitute = fileReaderSubstitutionItem.Read();
-            Console.WriteLine("");
+            KeyValuePair<string, string> keyValuePair = _nestingStringsReSubstitute.First();
+            if( false == lineObject.OriginalLine.Contains(keyValuePair.Key) )
+            {
+                return;
+            }
+
+            lineObject.OriginalLine = StringExtensionMethods.ReplaceFirst(lineObject.OriginalLine, keyValuePair.Key, keyValuePair.Value);
+            _nestingStringsReSubstitute.Remove(keyValuePair.Key);
+
+            Console.WriteLine("Substituted (" +lineObject.LineNumber +") " + keyValuePair.Key +" --> " + keyValuePair.Value );
         }
 
         private void ReSubstituteColorCode(LineObject lineObject)
@@ -127,7 +136,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLine;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(GenerateCompleteNestingStringToken(subs), GenerateNestingStringSubstitute(GenerateCompleteNestingStringToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute,GenerateCompleteNestingStringToken(subs), GenerateNestingStringSubstitute(GenerateCompleteNestingStringToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -153,7 +162,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -190,7 +199,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(GenerateCompleteNamespaceToken(subs), GenerateNamespaceSubstitute(GenerateCompleteNamespaceToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNamespaceToken(subs), GenerateNamespaceSubstitute(GenerateCompleteNamespaceToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -216,7 +225,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(GenerateCompleteIconToken(subs), GenerateIconSubstitute(GenerateCompleteIconToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteIconToken(subs), GenerateIconSubstitute(GenerateCompleteIconToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
