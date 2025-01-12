@@ -35,6 +35,9 @@ namespace HoI4_TranslationHelper
         public static string ICON_START = "£";
         public static string ICON_END = "£";
 
+        public static string NEW_LINE_START = "\\";
+        public static string NEW_LINE_END = "n";
+
         public IStringParser CreateParserNamespaces()
         {
             StringParser stringParser = new StringParser();
@@ -75,6 +78,18 @@ namespace HoI4_TranslationHelper
             stringParser.SubStringCount = 1;
             return stringParser;
         }
+
+        public IStringParser CreateParserNewLine()
+        {
+            StringParser stringParser = new StringParser();
+            stringParser.StartTag = NEW_LINE_START;
+            stringParser.EndTags.Add(NEW_LINE_END);
+            stringParser.SubStringCount = 2;
+            stringParser.StartIndexShift = -1;
+            IgnoreCommentLines(stringParser);
+            return stringParser;
+        }
+
         public IStringParser CreateParserInnerDoubleQuotes()
         {
             StringParserFirstLast stringParser = new StringParserFirstLast();

@@ -20,6 +20,9 @@ namespace HoI4_TranslationHelper
         public List<string> ColorCodes { get => _colorCodes; set => _colorCodes = value; }
         List<string> _icons = new List<string>();
         public List<string> Icons { get => _icons; set => _icons = value; }
+        public List<string> NewLines { get => _newLines; set => _newLines = value; }
+
+        List<string> _newLines = new List<string>();
 
 
         public LineObject Create( ulong lineNumber )
@@ -31,6 +34,7 @@ namespace HoI4_TranslationHelper
             lineObject.NestingStrings = _nestingStrings;
             lineObject.ColorCodes = _colorCodes;
             lineObject.Icons = _icons;
+            lineObject.NewLines = _newLines;
 
             CleanUp();
 
@@ -44,6 +48,7 @@ namespace HoI4_TranslationHelper
             _nestingStrings = new List<string>();
             _colorCodes = new List<string>();
             _icons = new List<string>();
+            _newLines = new List<string>();
         }
     }
 }
