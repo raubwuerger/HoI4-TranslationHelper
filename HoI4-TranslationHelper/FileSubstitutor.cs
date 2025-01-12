@@ -73,12 +73,17 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLine;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(NESTING_STRING_SIGN_START + subs + NESTING_STRING_SIGN_END, GenerateSubNestingString(NESTING_STRING_SIGN_START +subs +NESTING_STRING_SIGN_END));
+                substitute = substitute.Replace(GenerateCompleteNestingStringToken(subs), GenerateNestingStringSubstitute(GenerateCompleteNestingStringToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
         }
-        private string GenerateSubNestingString(string sub)
+        private string GenerateCompleteNestingStringToken(string subs)
+        {
+            return NESTING_STRING_SIGN_START + subs + NESTING_STRING_SIGN_END;
+        }
+
+        private string GenerateNestingStringSubstitute(string sub)
         {
             int count = _nestingStringsSubstitute.Count();
             count++;
@@ -87,21 +92,26 @@ namespace HoI4_TranslationHelper
             return subString;
         }
 
+        private string GenerateCompleteColorCodeToken(string subs)
+        {
+            return COLOR_CODE_SIGN_START + subs;
+        }
+
         private void SubstituteColorCode(LineObject lineObject)
         {
             List<string> token = new List<string>();
             token = parserColorCodes.GetToken(lineObject.OriginalLine, token);
 
-            string substitute = lineObject.OriginalLine;
+            string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = substitute.Replace(COLOR_CODE_SIGN_START + subs + COLOR_CODE_SIGN_END, GenerateSubColorCode(COLOR_CODE_SIGN_START + subs + COLOR_CODE_SIGN_END));
+                substitute = substitute.Replace(GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs)));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
         }
 
-        private string GenerateSubColorCode(string sub)
+        private string GenerateColorCodeSubstitute(string sub)
         {
             int count = _colorCodeSubstitute.Count();
             count++;
