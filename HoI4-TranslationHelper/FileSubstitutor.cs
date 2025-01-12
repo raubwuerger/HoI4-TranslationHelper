@@ -16,28 +16,24 @@ namespace HoI4_TranslationHelper
         private static string NESTING_STRING_SUFFIX = "NE";
         private static string NESTING_STRING_SIGN_START = StringParserFactory.NESTING_STRINGS_START;
         private static string NESTING_STRING_SIGN_END = StringParserFactory.NESTING_STRINGS_END;
-        IStringParser parserNestingStrings = StringParserFactory.Instance.CreateParserNestingStrings();
 
 
         private Dictionary<string, string> _colorCodeSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         private static string COLOR_CODE_SUFFIX = "CC";
         private static string COLOR_CODE_SIGN_START = StringParserFactory.COLOR_CODE_START;
         private static string COLOR_CODE_SIGN_END = StringParserFactory.COLOR_CODE_END;
-        IStringParser parserColorCodes = StringParserFactory.Instance.CreateParserColorCodes();
 
 
         private Dictionary<string, string> _namespaceSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         private static string NAMESPACE_SUFFIX = "NS";
         private static string NAMESPACE_START_SIGN_START = StringParserFactory.NAMESPACE_START;
         private static string NAMESPACE_START_SIGN_END = StringParserFactory.NAMESPACE_END;
-        IStringParser parserNamespace = StringParserFactory.Instance.CreateParserNamespaces();
 
 
         private Dictionary<string, string> _iconSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         private static string ICON_SUFFIX = "IC";
         private static string ICON_START_SIGN_START = StringParserFactory.ICON_START;
         private static string ICON_START_SIGN_END = StringParserFactory.ICON_END;
-        IStringParser parserIcon = StringParserFactory.Instance.CreateParserIcons();
 
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
 
@@ -92,8 +88,7 @@ namespace HoI4_TranslationHelper
 
         private void SubstituteNestingString(LineObject lineObject)
         {
-            List<string> token = new List<string>();
-            token = parserNestingStrings.GetToken(lineObject.OriginalLine, token);
+            List<string> token = lineObject.NestingStrings;
 
             string substitute = lineObject.OriginalLine;
             foreach (string subs in token)
@@ -119,8 +114,7 @@ namespace HoI4_TranslationHelper
 
         private void SubstituteColorCode(LineObject lineObject)
         {
-            List<string> token = new List<string>();
-            token = parserColorCodes.GetToken(lineObject.OriginalLine, token);
+            List<string> token = lineObject.ColorCodes;
 
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
@@ -157,8 +151,7 @@ namespace HoI4_TranslationHelper
 
         private void SubstituteNamespace(LineObject lineObject)
         {
-            List<string> token = new List<string>();
-            token = parserNamespace.GetToken(lineObject.OriginalLine, token);
+            List<string> token = lineObject.Brackets;
 
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
@@ -184,8 +177,7 @@ namespace HoI4_TranslationHelper
         }
         private void SubstituteIcon(LineObject lineObject)
         {
-            List<string> token = new List<string>();
-            token = parserIcon.GetToken(lineObject.OriginalLine, token);
+            List<string> token = lineObject.Icons;
 
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
