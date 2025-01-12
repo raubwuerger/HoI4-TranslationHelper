@@ -18,13 +18,13 @@ namespace HoI4_TranslationHelper_Test
             string key = "key1";
             TranslationFile translationFile = new TranslationFile(key);
             List<string> nestingString = new List<string>();
-            List<string> brackets = new List<string>();
+            List<string> namespaces = new List<string>();
             List<string> colorCodes = new List<string>();
             List<string> icons = new List<string>();
 
             lineObjectCreator.TranslationFile = translationFile;
             lineObjectCreator.Key = key;
-            lineObjectCreator.Brackets = brackets;
+            lineObjectCreator.NameSpace = namespaces;
             lineObjectCreator.NestingStrings = nestingString;
             lineObjectCreator.ColorCodes = colorCodes;
             lineObjectCreator.Icons = icons;
@@ -39,7 +39,7 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNull(lineObject.TranslationFile);
             Assert.IsNull(lineObject.Key);
             Assert.IsNull(lineObject.NestingStrings);
-            Assert.IsNull(lineObject.Brackets);
+            Assert.IsNull(lineObject.NameSpaces);
             Assert.IsNull(lineObject.ColorCodes);
             Assert.IsNull(lineObject.Icons);
         }
@@ -55,7 +55,7 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNotNull(lineObject.TranslationFile);
             Assert.IsNotNull(lineObject.Key);
             Assert.IsNotNull(lineObject.NestingStrings);
-            Assert.IsNotNull(lineObject.Brackets);
+            Assert.IsNotNull(lineObject.NameSpaces);
             Assert.IsNotNull(lineObject.ColorCodes);
             Assert.IsNotNull(lineObject.Icons);
         }
@@ -71,7 +71,7 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNotNull(lineObject.TranslationFile);
             Assert.IsNotNull(lineObject.Key);
             Assert.IsNotNull(lineObject.NestingStrings);
-            Assert.IsNotNull(lineObject.Brackets);
+            Assert.IsNotNull(lineObject.NameSpaces);
             Assert.IsNotNull(lineObject.ColorCodes);
             Assert.IsNotNull(lineObject.Icons);
 
@@ -80,7 +80,7 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNotNull(lineObject.TranslationFile);
             Assert.IsNull(lineObject.Key);
             Assert.IsNull(lineObject.NestingStrings);
-            Assert.IsNull(lineObject.Brackets);
+            Assert.IsNull(lineObject.NameSpaces);
             Assert.IsNull(lineObject.ColorCodes);
             Assert.IsNull(lineObject.Icons);
 

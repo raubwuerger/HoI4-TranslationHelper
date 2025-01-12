@@ -50,7 +50,7 @@ namespace HoI4_TranslationHelper
             foreach (string line in lines)
             {
                 SetKey(line);
-                SetBrackets(line);
+                SetNamespaces(line);
                 SetNestingStrings(line);
                 SetColorCodes(line);
                 SetIcons(line);
@@ -75,11 +75,11 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private void SetBrackets(string line)
+        private void SetNamespaces(string line)
         {
             IStringParser stringParser = StringParserFactory.Instance.CreateParserNamespaces();
             List<string> token = new List<string>();
-            lineObjectCreator.Brackets = stringParser.GetToken(line, token);
+            lineObjectCreator.NameSpace = stringParser.GetToken(line, token);
         }
 
         private void SetNestingStrings(string line)

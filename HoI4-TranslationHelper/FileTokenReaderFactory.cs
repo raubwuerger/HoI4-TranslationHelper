@@ -23,10 +23,10 @@ namespace HoI4_TranslationHelper
 
         private FileTokenReaderFactory() { }
 
-        public FileTokenReader CreateReaderBrackets()
+        public FileTokenReader CreateReaderNamespaces()
         {
             FileTokenReader fileReader = new FileTokenReader();
-            fileReader.PathReplace = "brackets";
+            fileReader.PathReplace = "namespace";
             fileReader.StringParser = StringParserFactory.Instance.CreateParserNamespaces();
             return fileReader;
         }

@@ -12,8 +12,8 @@ namespace HoI4_TranslationHelper
         public TranslationFile TranslationFile { get => _translationFile; set => _translationFile = value; }
         string _key;
         public string Key { get => _key; set => _key = value; }
-        List<string> _brackets;
-        public List<string> Brackets { get => _brackets; set => _brackets = value; }
+        List<string> _nameSpace;
+        public List<string> NameSpace { get => _nameSpace; set => _nameSpace = value; }
         List<string> _nestingStrings;
         public List<string> NestingStrings { get => _nestingStrings; set => _nestingStrings = value; }
         List<string> _colorCodes;
@@ -27,7 +27,7 @@ namespace HoI4_TranslationHelper
             LineObject lineObject = new LineObject( lineNumber );
             lineObject.TranslationFile = _translationFile;
             lineObject.Key = _key;
-            lineObject.Brackets = _brackets;
+            lineObject.NameSpaces = _nameSpace;
             lineObject.NestingStrings = _nestingStrings;
             lineObject.ColorCodes = _colorCodes;
             lineObject.Icons = _icons;
@@ -40,7 +40,7 @@ namespace HoI4_TranslationHelper
         private void CleanUp()
         {
             _key = null;
-            _brackets = null;
+            _nameSpace = null;
             _nestingStrings = null;
             _colorCodes = null;
             _icons = null;

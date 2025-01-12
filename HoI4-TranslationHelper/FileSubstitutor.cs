@@ -151,7 +151,7 @@ namespace HoI4_TranslationHelper
 
         private void SubstituteNamespace(LineObject lineObject)
         {
-            List<string> token = lineObject.Brackets;
+            List<string> token = lineObject.NameSpaces;
 
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)

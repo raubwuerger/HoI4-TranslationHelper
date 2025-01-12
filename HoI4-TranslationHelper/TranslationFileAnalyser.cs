@@ -29,7 +29,7 @@ namespace HoI4_TranslationHelper
             List<TranslationFile> translationFiles = new List<TranslationFile>();
             TranslationFileCreator translationFileCreator = new TranslationFileCreator();
 
-            FileTokenReader fileTokenReader = FileTokenReaderFactory.Instance.CreateReaderBrackets();
+            FileTokenReader fileTokenReader = FileTokenReaderFactory.Instance.CreateReaderNamespaces();
             foreach (string file in files)
             {
                 translationFiles.Add(translationFileCreator.Create(file));
@@ -49,7 +49,7 @@ namespace HoI4_TranslationHelper
 
             CheckMissingTranslationFile(localisationEnglish,localisationGerman);
             SubstitueSourceFiles(localisationEnglish[0]);
-//            CheckMissingKeys(localisationEnglish, localisationGerman);
+            CheckMissingKeys(localisationEnglish, localisationGerman);
         }
 
         private static void CheckMissingTranslationFile(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
@@ -106,7 +106,7 @@ namespace HoI4_TranslationHelper
             DataSetLineObjectCompare dataSetLineObjectCompareGerman = CreateDataSetLineObjectCompare(localisationGerman);
 
             LogMissingKeys(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
-            LogMissingBrackets(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
+            LogMissingNamespaces(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
             LogMissingNestingStrings(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
 
             LogMultipleKeys(dataSetLineObjectCompareEnglish.keysMultiple);
@@ -115,14 +115,14 @@ namespace HoI4_TranslationHelper
 
         private static void LogMultipleKeys(List<LineObject> keysMultiple)
         {
-            Console.WriteLine("Keys existing multiple times" +Environment.NewLine);
+            Console.WriteLine("##### Keys existing multiple times" + Environment.NewLine);
             keysMultiple.ForEach(key => { Console.WriteLine(key.TranslationFile + ": " + key.Key + ":" + key.LineNumber); });
             Console.WriteLine(Environment.NewLine);
         }
 
         private static void LogMissingKeys(Dictionary<string, LineObject> keysBase, Dictionary<string, LineObject> keysShould)
         {
-            Console.WriteLine("Missing keys" + Environment.NewLine);
+            Console.WriteLine("##### Missing keys #####" + Environment.NewLine);
             List<LineObject> missingKeys = new List<LineObject>();
             keysBase.ToList().ForEach
             (
@@ -139,10 +139,10 @@ namespace HoI4_TranslationHelper
             Console.WriteLine(Environment.NewLine);
         }
 
-        private static LineObject CreateLineObjectMissingBrackets(List<string> missingEnglishBrackets, KeyValuePair<string, LineObject> pair )
+        private static LineObject CreateLineObjectMissingNamespaces(List<string> missingEnglishNamespaces, KeyValuePair<string, LineObject> pair )
         {
             LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
-            missingLineObject.Brackets = missingEnglishBrackets;
+            missingLineObject.NameSpaces = missingEnglishNamespaces;
             missingLineObject.TranslationFile = pair.Value.TranslationFile;
             missingLineObject.Key = pair.Key;
             missingLineObject.NestingStrings = pair.Value.NestingStrings;
@@ -152,18 +152,18 @@ namespace HoI4_TranslationHelper
         private static LineObject CreateLineObjectMissingNestingStrings(List<string> missingEnglishNestingStrings, KeyValuePair<string, LineObject> pair)
         {
             LineObject missingLineObject = new LineObject(pair.Value.LineNumber);
-            missingLineObject.Brackets = pair.Value.Brackets;
+            missingLineObject.NameSpaces = pair.Value.NameSpaces;
             missingLineObject.TranslationFile = pair.Value.TranslationFile;
             missingLineObject.Key = pair.Key;
             missingLineObject.NestingStrings = missingEnglishNestingStrings;
             return missingLineObject;
         }
 
-        private static void LogMissingBrackets(Dictionary<string, LineObject> dictionaryEnglish, Dictionary<string, LineObject> dictionaryGerman)
+        private static void LogMissingNamespaces(Dictionary<string, LineObject> dictionaryEnglish, Dictionary<string, LineObject> dictionaryGerman)
         {
-            Console.WriteLine("Missing brackets []" + Environment.NewLine);
-            List<LineObject> missingBracketsGerman = new List<LineObject>();
-            List<LineObject> missingBracketsEnglish = new List<LineObject>();
+            Console.WriteLine("##### Missing namespaces [] #####" + Environment.NewLine);
+            List<LineObject> missingNamespacesGerman = new List<LineObject>();
+            List<LineObject> missingNamespacesEnglish = new List<LineObject>();
 
             dictionaryEnglish.ToList().ForEach
             (
@@ -175,16 +175,16 @@ namespace HoI4_TranslationHelper
                         
                         if (true == dictionaryGerman.TryGetValue(pair.Key, out lineObject))
                         {
-                            List<string> missingGermanBrackets = pair.Value.Brackets.Except(lineObject.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
-                            if (missingGermanBrackets.Count > 0)
+                            List<string> missingGermanNamespaces = pair.Value.NameSpaces.Except(lineObject.NameSpaces, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingGermanNamespaces.Count > 0)
                             {
-                                missingBracketsGerman.Add(CreateLineObjectMissingBrackets(missingGermanBrackets, pair));
+                                missingNamespacesGerman.Add(CreateLineObjectMissingNamespaces(missingGermanNamespaces, pair));
                             }
 
-                            List<string> missingEnglishBrackets = lineObject.Brackets.Except(pair.Value.Brackets, StringComparer.OrdinalIgnoreCase).ToList();
-                            if (missingEnglishBrackets.Count > 0)
+                            List<string> missingEnglishNamespaces = lineObject.NameSpaces.Except(pair.Value.NameSpaces, StringComparer.OrdinalIgnoreCase).ToList();
+                            if (missingEnglishNamespaces.Count > 0)
                             {
-                                missingBracketsEnglish.Add(CreateLineObjectMissingBrackets(missingEnglishBrackets, pair));
+                                missingNamespacesEnglish.Add(CreateLineObjectMissingNamespaces(missingEnglishNamespaces, pair));
                             }
                         }
                     }
@@ -192,8 +192,8 @@ namespace HoI4_TranslationHelper
             );
 
             string translationFileName = "";
-            Console.WriteLine("##### Missing brackets german #####");
-            missingBracketsGerman.ForEach
+            Console.WriteLine("##### Missing Namespaces [] german #####");
+            missingNamespacesGerman.ForEach
             (
                 item =>
                 {
@@ -202,13 +202,13 @@ namespace HoI4_TranslationHelper
                         translationFileName = item.TranslationFile.FileName;
                         Console.WriteLine(translationFileName);
                     }
-                    Console.WriteLine(item.Key +" (" +item.LineNumber + "): " + string.Join(", ", item.Brackets));
+                    Console.WriteLine(item.Key +" (" +item.LineNumber + "): " + string.Join(", ", item.NameSpaces));
                 }
             );
             Console.WriteLine();
 
-            Console.WriteLine("##### Missing brackets english #####");
-            missingBracketsEnglish.ForEach
+            Console.WriteLine("##### Missing Namespaces [] english #####");
+            missingNamespacesEnglish.ForEach
             (
                 item =>
                 {
@@ -217,25 +217,14 @@ namespace HoI4_TranslationHelper
                         translationFileName = item.TranslationFile.FileName;
                         Console.WriteLine(translationFileName);
                     }
-                    Console.WriteLine(item.Key + " (" + item.LineNumber + "): "  + string.Join(", ", item.Brackets));
+                    Console.WriteLine(item.Key + " (" + item.LineNumber + "): "  + string.Join(", ", item.NameSpaces));
                 }
             );
         }
 
-        private static string CreateStringFromList(List<string> strings)
-        {
-            string result = string.Empty;
-            foreach ( string s in strings )
-            { 
-                result += s;
-                result += "|";
-            }
-            return result;
-        }
-
         private static void LogMissingNestingStrings(Dictionary<string, LineObject> dictionaryEnglish, Dictionary<string, LineObject> dictionaryGerman)
         {
-            Console.WriteLine("Missing NestingStrings $$" + Environment.NewLine);
+            Console.WriteLine("##### Missing NestingStrings $$ #####" + Environment.NewLine);
             List<LineObject> missingNestingStringsGerman = new List<LineObject>();
             List<LineObject> missingNestingStringsEnglish = new List<LineObject>();
 
@@ -266,7 +255,7 @@ namespace HoI4_TranslationHelper
             );
 
             string translationFileName = "";
-            Console.WriteLine("##### Missing NestingStrings german #####");
+            Console.WriteLine("##### Missing NestingStrings $$ german #####");
             missingNestingStringsGerman.ForEach
             (
                 item =>
@@ -281,7 +270,7 @@ namespace HoI4_TranslationHelper
             );
             Console.WriteLine();
 
-            Console.WriteLine("##### Missing NestingStrings english #####");
+            Console.WriteLine("##### Missing NestingStrings $$ english #####");
             missingNestingStringsEnglish.ForEach
             (
                 item =>

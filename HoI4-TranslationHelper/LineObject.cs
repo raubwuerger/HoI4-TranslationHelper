@@ -11,7 +11,7 @@ namespace HoI4_TranslationHelper
         ulong _lineNumber;
         TranslationFile _translationFile;
         string _key;
-        List<string> _brackets = new List<string>();
+        List<string> _nameSpaces = new List<string>();
         List<string> _nestingStrings = new List<string>();
         List<string> _colorCodes = new List<string>();
         List<string> _icons = new List<string>();
@@ -27,7 +27,7 @@ namespace HoI4_TranslationHelper
         public ulong LineNumber { get => _lineNumber; }
         public string Key { get => _key; set => _key = value; }
         internal TranslationFile TranslationFile { get => _translationFile; set => _translationFile = value; }
-        public List<string> Brackets { get => _brackets; set => _brackets = value; }
+        public List<string> NameSpaces { get => _nameSpaces; set => _nameSpaces = value; }
         public List<string> NestingStrings { get => _nestingStrings; set => _nestingStrings = value; }
         public List<string> ColorCodes { get => _colorCodes; set => _colorCodes = value; }
         public List<string> Icons { get => _icons; set => _icons = value; }
