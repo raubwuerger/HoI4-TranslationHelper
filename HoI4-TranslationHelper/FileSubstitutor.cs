@@ -27,10 +27,17 @@ namespace HoI4_TranslationHelper
 
 
         private Dictionary<string, string> _namespaceSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private static string NAESPACE_SUFFIX = "NS";
+        private static string NAMESPACE_SUFFIX = "NS";
         private static string NAMESPACE_START_SIGN_START = StringParserFactory.NAMESPACE_START;
         private static string NAMESPACE_START_SIGN_END = StringParserFactory.NAMESPACE_END;
-        IStringParser parserNamespace = StringParserFactory.Instance.CreateParserNamespace();
+        IStringParser parserNamespace = StringParserFactory.Instance.CreateParserNamespaces();
+
+
+        private Dictionary<string, string> _iconSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
+        private static string ICON_SUFFIX = "IC";
+        private static string ICON_START_SIGN_START = StringParserFactory.ICON_START;
+        private static string ICON_START_SIGN_END = StringParserFactory.ICON_END;
+        IStringParser parserIcon = StringParserFactory.Instance.CreateParserIcons();
 
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
 
@@ -55,8 +62,11 @@ namespace HoI4_TranslationHelper
             fileWriterSubstitutionItem.FileSuffix = "." + COLOR_CODE_SUFFIX;
             WriteSubstitionFile(_colorCodeSubstitute);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + NAESPACE_SUFFIX;
+            fileWriterSubstitutionItem.FileSuffix = "." + NAMESPACE_SUFFIX;
             WriteSubstitionFile(_namespaceSubstitute);
+
+            fileWriterSubstitutionItem.FileSuffix = "." + ICON_SUFFIX;
+            WriteSubstitionFile(_iconSubstitute);
         }
 
         public void Substitute( List<LineObject> lineObjects )
@@ -76,6 +86,7 @@ namespace HoI4_TranslationHelper
                 SubstituteNestingString(lineObject);
                 SubstituteColorCode(lineObject);
                 SubstituteNamespace(lineObject);
+                SubstituteIcon(lineObject);
             }
         }
 
@@ -167,10 +178,38 @@ namespace HoI4_TranslationHelper
         {
             int count = _namespaceSubstitute.Count();
             count++;
-            string subString = SUBSTITUTION_START + NAESPACE_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            string subString = SUBSTITUTION_START + NAMESPACE_SUFFIX + count.ToString() + SUBSTITUTION_END;
             _namespaceSubstitute.Add(subString, sub);
             return subString;
         }
+        private void SubstituteIcon(LineObject lineObject)
+        {
+            List<string> token = new List<string>();
+            token = parserIcon.GetToken(lineObject.OriginalLine, token);
+
+            string substitute = lineObject.OriginalLineSubstituted;
+            foreach (string subs in token)
+            {
+                substitute = substitute.Replace(GenerateCompleteIconToken(subs), GenerateIconSubstitute(GenerateCompleteIconToken(subs)));
+            }
+
+            lineObject.OriginalLineSubstituted = substitute;
+        }
+
+        private string GenerateCompleteIconToken(string subs)
+        {
+            return ICON_START_SIGN_START + subs + ICON_START_SIGN_END;
+        }
+
+        private string GenerateIconSubstitute(string sub)
+        {
+            int count = _iconSubstitute.Count();
+            count++;
+            string subString = SUBSTITUTION_START + ICON_SUFFIX + count.ToString() + SUBSTITUTION_END;
+            _iconSubstitute.Add(subString, sub);
+            return subString;
+        }
+
         private void WriteSubstitionFile(TranslationFile translationFile)
         {
             if (translationFile == null)

@@ -32,7 +32,10 @@ namespace HoI4_TranslationHelper
         public static string NAMESPACE_START = "[";
         public static string NAMESPACE_END = "]";
 
-        public IStringParser CreateParserNamespace()
+        public static string ICON_START = "£";
+        public static string ICON_END = "£";
+
+        public IStringParser CreateParserNamespaces()
         {
             StringParser stringParser = new StringParser();
             stringParser.StartTag = NAMESPACE_START;
@@ -45,7 +48,8 @@ namespace HoI4_TranslationHelper
         public StringParser CreateParserIcons()
         {
             StringParser stringParser = new StringParser();
-            stringParser.StartTag = "£";
+            stringParser.StartTag = ICON_START;
+            stringParser.EndTags.Add(ICON_END);
             stringParser.EndTags.Add(" ");
             stringParser.EndTags.Add("\n");
             stringParser.EndTags.Add("\"");

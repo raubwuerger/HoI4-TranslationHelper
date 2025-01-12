@@ -9,6 +9,7 @@ namespace HoI4_TranslationHelper_Test
     {
         private string testTokenStart = "[";
         private string testTokenEnd = "]";
+        private string icon = "£";
         private StringParser _stringParser;
 
         private string _testStringInnerDoubleQuotes = "news.3.d:0 \"Äthiopien ist italienisch\", sagt Mussolini, als seine Truppen Addis Abeba besetzen\n Äthiopiens Ära der \\\"Unabhängigkeit\\\", die seit biblischen Zeiten andauerte, endete heute Nachmittag um 4 Uhr, nachdem Badoglio 30.000 Mann in die \"Hauptstadt\" geführt hatte, während am Himmel Flugzeuge schwirrten. In Rom sprach Mussolini zu einer riesigen Menschenmenge auf der Piazza Venezia, die sich auf jedem Dorfplatz Italiens vor den Lautsprechern versammelte, und die Botschaft war klar: Die Welt hat ihre erste Kostprobe italienischer Militärmacht bekommen - und es wird nicht die letzte sein!\"\"";
@@ -18,6 +19,7 @@ namespace HoI4_TranslationHelper_Test
         private string _testStringLineToIgnore = "# \"";
         private string _testStringLineToIgnore1 = " #\"";
         private string _testStringLineToIgnore2 = "  #       \"";
+        private string _testStringWithIcon = "alfacite_ore_icon: \"£alfacite_ore£\"";
 
         [TestInitialize]
         public void Initialize()
@@ -156,6 +158,14 @@ namespace HoI4_TranslationHelper_Test
             stringParserBase.LineIgnores.Add("  #");
 
             Assert.IsTrue(stringParserBase.GetToken(_testStringLineToIgnore2, tokens).Count == 0);
+        }
+
+        [TestMethod]
+        public void IconTest()
+        {
+            Assert.IsTrue(_testStringWithIcon.Contains(StringParserFactory.ICON_START));
+            Assert.IsTrue(_testStringWithIcon.Contains(icon));
+            Assert.AreEqual(icon, StringParserFactory.ICON_START);
         }
     }
 }

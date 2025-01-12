@@ -27,7 +27,7 @@ namespace HoI4_TranslationHelper
         {
             FileTokenReader fileReader = new FileTokenReader();
             fileReader.PathReplace = "brackets";
-            fileReader.StringParser = StringParserFactory.Instance.CreateParserNamespace();
+            fileReader.StringParser = StringParserFactory.Instance.CreateParserNamespaces();
             return fileReader;
         }
 

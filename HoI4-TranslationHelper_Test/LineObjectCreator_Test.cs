@@ -19,11 +19,15 @@ namespace HoI4_TranslationHelper_Test
             TranslationFile translationFile = new TranslationFile(key);
             List<string> nestingString = new List<string>();
             List<string> brackets = new List<string>();
+            List<string> colorCodes = new List<string>();
+            List<string> icons = new List<string>();
 
             lineObjectCreator.TranslationFile = translationFile;
             lineObjectCreator.Key = key;
             lineObjectCreator.Brackets = brackets;
             lineObjectCreator.NestingStrings = nestingString;
+            lineObjectCreator.ColorCodes = colorCodes;
+            lineObjectCreator.Icons = icons;
         }
 
         [TestMethod]
@@ -36,6 +40,8 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNull(lineObject.Key);
             Assert.IsNull(lineObject.NestingStrings);
             Assert.IsNull(lineObject.Brackets);
+            Assert.IsNull(lineObject.ColorCodes);
+            Assert.IsNull(lineObject.Icons);
         }
 
         [TestMethod]
@@ -50,6 +56,8 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNotNull(lineObject.Key);
             Assert.IsNotNull(lineObject.NestingStrings);
             Assert.IsNotNull(lineObject.Brackets);
+            Assert.IsNotNull(lineObject.ColorCodes);
+            Assert.IsNotNull(lineObject.Icons);
         }
 
         [TestMethod]
@@ -64,6 +72,8 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNotNull(lineObject.Key);
             Assert.IsNotNull(lineObject.NestingStrings);
             Assert.IsNotNull(lineObject.Brackets);
+            Assert.IsNotNull(lineObject.ColorCodes);
+            Assert.IsNotNull(lineObject.Icons);
 
             lineObject = lineObjectCreator.Create(2UL);
             Assert.AreEqual(LINE_NUMBER_TWO, lineObject.LineNumber);
@@ -71,6 +81,8 @@ namespace HoI4_TranslationHelper_Test
             Assert.IsNull(lineObject.Key);
             Assert.IsNull(lineObject.NestingStrings);
             Assert.IsNull(lineObject.Brackets);
+            Assert.IsNull(lineObject.ColorCodes);
+            Assert.IsNull(lineObject.Icons);
 
         }
     }
