@@ -1,11 +1,8 @@
 ﻿l_english:
 
-
- #STNC_federation_story.2272.desc: "[Root.GetCaptainTitle] [Root.Leader.GetName] gives an open and honest explanation of their presence, including the importance of their unusual cargo. \n\nCaptain Ndoye is at first sceptical but is eventually persuaded, and a detailed scan of the [Root.GetFleetName] provides ample evidence that the story is true. \n\nShe states that the current year is 3188. The [Root.GetFleetName] has massively overshot their targetted temporal destination. \n\nBoth agree that the Temporal Prime Directive applies, and Ndoye cannot hinder [Root.GetCaptainTitle] [Root.Leader.GetName] since the risk of damage to the timeline would be too great. \n\nFrom this [Root.Leader.GetName] surmises that the [Root.GetFleetName] must ultimately succeed in its mission and, with confidence, the crew prepares to execute one last temporal slingshot manoeuvre."
- #STNC_samaritan_snare_category_desc: "In orbit of the lifeless planet [Root.Planet.GetName] we've detected a drifting ship sending out a distress signal."
  #STNC_samaritan_snare_category: "Samaritan Snare"
- accession_country_integration_in_progress: "§HIntegrating New Member Worlds§! §R--§! $points$"
- accession_country_opener: "The [This.GetName]'s response is likely to be affected by:\n"
+ accession_country_integration_in_progress: "§HIntegrating New Member Worlds§! §R--§! $points$ [This.rejected_union_isu] and £alloys£"
+ accession_country_opener: "The [This.GetName]'s [This.GetName] [This.GetName] response is likely to be affected by:\n"
  accession_country_opinion_excellent: "§HEmpire Opinion§! §G++§!"
  accession_country_opinion_good: "§HEmpire Opinion§! §G+§!"
  accession_country_opinion_neutral: ""
