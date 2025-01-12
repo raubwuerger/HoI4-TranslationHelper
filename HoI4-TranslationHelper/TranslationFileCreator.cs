@@ -49,11 +49,14 @@ namespace HoI4_TranslationHelper
             ulong lineNumber = 0;
             foreach (string line in lines)
             {
-                SetKey(line);
-                SetNamespaces(line);
-                SetNestingStrings(line);
-                SetColorCodes(line);
-                SetIcons(line);
+                if( false == IgnoreLine(line) )
+                {
+                    SetKey(line);
+                    SetNamespaces(line);
+                    SetNestingStrings(line);
+                    SetColorCodes(line);
+                    SetIcons(line);
+                }
 
                 lineNumber++;
                 LineObject lineObject = lineObjectCreator.Create(lineNumber);
@@ -62,6 +65,21 @@ namespace HoI4_TranslationHelper
             }
 
             return lineObjects;
+        }
+
+        private bool IgnoreLine(string line) 
+        {
+            if( true == string.IsNullOrEmpty(line) )
+            {
+                return true;
+            }
+            string lineTrimmed = line.Trim();
+            if (lineTrimmed.StartsWith("#") )
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void SetKey(string line)

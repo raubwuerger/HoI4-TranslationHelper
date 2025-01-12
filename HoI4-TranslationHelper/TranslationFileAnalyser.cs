@@ -14,7 +14,8 @@ namespace HoI4_TranslationHelper
         {
             List<TranslationFile> localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
             List<TranslationFile> localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
-            DoCompare(localisationEnglish, localisationGerman);
+            SubstitueSourceFiles(localisationEnglish[0]);
+//            DoCompare(localisationEnglish, localisationGerman);
 
         }
 
@@ -29,7 +30,6 @@ namespace HoI4_TranslationHelper
             List<TranslationFile> translationFiles = new List<TranslationFile>();
             TranslationFileCreator translationFileCreator = new TranslationFileCreator();
 
-            FileTokenReader fileTokenReader = FileTokenReaderFactory.Instance.CreateReaderNamespaces();
             foreach (string file in files)
             {
                 translationFiles.Add(translationFileCreator.Create(file));
@@ -48,7 +48,6 @@ namespace HoI4_TranslationHelper
             }
 
             CheckMissingTranslationFile(localisationEnglish,localisationGerman);
-            SubstitueSourceFiles(localisationEnglish[0]);
             CheckMissingKeys(localisationEnglish, localisationGerman);
         }
 
