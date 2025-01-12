@@ -76,7 +76,7 @@ namespace HoI4_TranslationHelper
 
         private void SetBrackets(string line)
         {
-            IStringParser stringParser = StringParserFactory.Instance.CreateParserBrackets();
+            IStringParser stringParser = StringParserFactory.Instance.CreateParserNamespace();
             List<string> token = new List<string>();
             lineObjectCreator.Brackets = stringParser.GetToken(line, token);
         }

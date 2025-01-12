@@ -29,12 +29,15 @@ namespace HoI4_TranslationHelper
         public static string COLOR_CODE_START = "§";
         public static string COLOR_CODE_END = "§!";
 
-        public IStringParser CreateParserBrackets()
+        public static string NAMESPACE_START = "[";
+        public static string NAMESPACE_END = "]";
+
+        public IStringParser CreateParserNamespace()
         {
             StringParser stringParser = new StringParser();
-            stringParser.StartTag = "[";
+            stringParser.StartTag = NAMESPACE_START;
             stringParser.EndTags.Clear();
-            stringParser.EndTags.Add("]");
+            stringParser.EndTags.Add(NAMESPACE_END);
             IgnoreCommentLines(stringParser);
             return stringParser;
         }
