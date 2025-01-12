@@ -10,6 +10,15 @@ namespace HoI4_TranslationHelper
 {
     internal class TranslationFileCreator
     {
+        public TranslationFile CopyExceptFileName( string filename, TranslationFile other )
+        {
+            TranslationFile translationFile = new TranslationFile(filename);
+            translationFile.FileNameWithoutLocalisation = CreateFileNameWithoutLocalisation(filename);
+            translationFile.Lines = other.Lines;
+
+            return translationFile;
+        }
+
         LineObjectCreator lineObjectCreator = new LineObjectCreator();
         public TranslationFile Create(string fileName)
         {

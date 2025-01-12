@@ -57,5 +57,6 @@ namespace HoI4_TranslationHelper
         {
             return HashCode.Combine(_fileName);
         }
+
     }
 }

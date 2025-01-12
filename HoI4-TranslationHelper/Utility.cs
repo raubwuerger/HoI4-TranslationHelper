@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,6 +139,47 @@ namespace HoI4_TranslationHelper
             }
 
             return resubstitutes;
+        }
+
+        public static void WriteTranslationFile(TranslationFile translationFile)
+        {
+            if (translationFile == null)
+            {
+                return;
+            }
+
+            string fileName = Path.GetFileNameWithoutExtension(translationFile.FileName);
+            string substitionFileSuffix = ".sub.yml";
+
+            Dictionary<ulong, LineObject> _lines = translationFile.Lines;
+            List<LineObject> lineObjects = _lines.Values.ToList();
+
+            Console.WriteLine("Writing substituted source file started ...");
+            // Write the string array to a new file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(translationFile.FileName + substitionFileSuffix))
+            {
+                foreach (LineObject line in lineObjects)
+                {
+                    outputFile.WriteLine(GetSubstitutedLine(line));
+                }
+            }
+            Console.WriteLine("Writing substituted source file finished ...");
+
+        }
+
+        private static string GetSubstitutedLine(LineObject lineObject)
+        {
+            if (lineObject.OriginalLineSubstituted == null)
+            {
+                return lineObject.OriginalLine;
+            }
+
+            if (lineObject.OriginalLineSubstituted.Length <= 0)
+            {
+                return lineObject.OriginalLine;
+            }
+
+            return lineObject.OriginalLineSubstituted;
         }
 
     }

@@ -66,6 +66,11 @@ namespace HoI4_TranslationHelper
                 ReSubstituteIcon(lineObject);
             }
 
+            TranslationFileCreator translationFileCreator = new TranslationFileCreator();
+            TranslationFile translationFile = translationFileCreator.CopyExceptFileName(translationFileSetSubstitution.SubstitutedFile.FileName + ".substituted.txt", translationFileSetSubstitution.SubstitutedFile);
+
+            Utility.WriteTranslationFile(translationFile);
+
             Console.WriteLine("Finished ...");
         }
 
@@ -284,15 +289,6 @@ namespace HoI4_TranslationHelper
         }
 
 
-        private string GetSubstitutedLine(LineObject lineObject)
-        {
-            if( lineObject.OriginalLineSubstituted.Length > 0 )
-            {
-                return lineObject.OriginalLineSubstituted;
-            }
-            return lineObject.OriginalLine;
-        }
-
         private void SubstituteNamespace(LineObject lineObject)
         {
             List<string> token = lineObject.NameSpaces;
@@ -348,27 +344,7 @@ namespace HoI4_TranslationHelper
 
         private void WriteSubstitionFile(TranslationFile translationFile)
         {
-            if (translationFile == null)
-            {
-                return;
-            }
-
-            string fileName = Path.GetFileNameWithoutExtension(translationFile.FileName);
-            string substitionFileSuffix = ".sub.yml";
-
-            Dictionary<ulong, LineObject> _lines = translationFile.Lines;
-            List<LineObject> lineObjects = _lines.Values.ToList();
-
-            Console.WriteLine("Writing substituted source file started ...");
-            // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter(translationFile.FileName + substitionFileSuffix))
-            {
-                foreach (LineObject line in lineObjects)
-                {
-                    outputFile.WriteLine(GetSubstitutedLine(line));
-                }
-            }
-            Console.WriteLine("Writing substituted source file finished ...");
+            Utility.WriteTranslationFile(translationFile);
         }
         private void WriteSubstitionFile( Dictionary<string, string> nestingStrings )
         {
