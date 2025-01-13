@@ -44,8 +44,7 @@ namespace HoI4_TranslationHelper
             fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathIconFile;
             _iconReSubstitute = fileReaderSubstitutionItem.Read();
 
-            fileReaderSubstitutionItem.FileName = translationFileSetSubstitution.PathNewLineFile;
-            _newLineReSubstitute = fileReaderSubstitutionItem.Read();
+            _newLineReSubstitute.Add("___NL___","\n");
 
             DoReSubstitute(translationFileSetSubstitution);
         }
@@ -194,6 +193,7 @@ namespace HoI4_TranslationHelper
             }
         }
 
+        //TODO: 2025-01-12 - JHA - Den String ___NL___ im lineObject._originalLine durch den entsprechenden Eintrag ersetzen.
         private void ReSubstituteNewLine(LineObject lineObject)
         {
             if (false == _newLineReSubstitute.Any())
@@ -246,9 +246,6 @@ namespace HoI4_TranslationHelper
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.ICON_SUFFIX;
             WriteSubstitionFile(_iconSubstitute);
-
-            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NEW_LINE_SUFFIX;
-            WriteSubstitionFile(_newLineSubstitute);
         }
 
         public void Substitute( List<LineObject> lineObjects )
@@ -269,7 +266,6 @@ namespace HoI4_TranslationHelper
                 SubstituteColorCode(lineObject);
                 SubstituteNamespace(lineObject);
                 SubstituteIcon(lineObject);
-                SubstituteNewLine(lineObject);
             }
         }
 
@@ -377,33 +373,6 @@ namespace HoI4_TranslationHelper
             count++;
             string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.ICON_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
             _iconSubstitute.Add(subString, sub);
-            return subString;
-        }
-
-        private void SubstituteNewLine(LineObject lineObject)
-        {
-            List<string> token = lineObject.NewLines;
-
-            string substitute = lineObject.OriginalLineSubstituted;
-            foreach (string subs in token)
-            {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNewLineToken(subs), GenerateNewLineSubstitute(GenerateCompleteNewLineToken(subs)));
-            }
-
-            lineObject.OriginalLineSubstituted = substitute;
-        }
-
-        private string GenerateCompleteNewLineToken(string subs)
-        {
-            return FileSubstitutionConstants.NEW_LINE_SIGN_START + subs + FileSubstitutionConstants.NEW_LINE_SIGN_END;
-        }
-
-        private string GenerateNewLineSubstitute(string sub)
-        {
-            int count = _newLineSubstitute.Count();
-            count++;
-            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.NEW_LINE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _newLineSubstitute.Add(subString, sub);
             return subString;
         }
 
