@@ -8,20 +8,19 @@ namespace HoI4_TranslationHelper
 {
     internal class ModSelector
     {
-        private ConfigReader _configReader = null;
+        private static List<DataSetMod> _modList = new List<DataSetMod>();
 
-        public ConfigReader ConfigReader
-        { set { _configReader = value; } }
-     
+        internal static List<DataSetMod> ModList { get => _modList; set => _modList = value; }
+
         public bool SelectMod( string modName )
         {
-            if( _configReader == null )
+            if( _modList.Any() == false )
             {
                 Console.WriteLine("ModSelector not initialized");
                 return false;
             }
 
-            DataSetMod found = _configReader.ModList.Find( i => i.Name == modName );
+            DataSetMod found = _modList.Find( i => i.Name == modName );
             if( found == null ) 
             {
                 Console.WriteLine("Mod not found: " + modName);

@@ -14,11 +14,25 @@ namespace HoI4_TranslationHelper
         static List<TranslationFile> _localisationEnglish = null;
         static List<TranslationFile> _localisationGerman = null;
 
-        public static void ReSubstitueSourceFiles(TranslationFileSetSubstitution translationFileSetSubstitution)
+        public static void ReSubstitueSourceFiles()
         {
             Analyse();
-            FileSubstitutor fileSubstitutor = new FileSubstitutor();
-            fileSubstitutor.ReSubstitute(translationFileSetSubstitution);
+            foreach (TranslationFile translationFile in _localisationGerman)
+            {
+                FileSubstitutor fileSubstitutor = new FileSubstitutor();
+                fileSubstitutor.ReSubstitute(Create(translationFile, FindCorrespondingTranslationFile(translationFile)));
+            }
+        }
+
+        private static string FindCorrespondingTranslationFile( TranslationFile translationFile )
+        {
+            TranslationFile corresponding = _localisationEnglish.Find( x => x.FileNameWithoutLocalisation.Equals( translationFile.FileNameWithoutLocalisation ) );
+            if( corresponding == null ) 
+            { 
+                return null;
+            }
+
+            return corresponding.FileName;
         }
 
         public static void SubstitueSourceFiles()

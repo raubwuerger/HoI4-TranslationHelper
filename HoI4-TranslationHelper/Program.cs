@@ -12,7 +12,6 @@ namespace HoI4_TranslationHelper
 {
     class Program
     {
-        private static List<DataSetMod> _modList = new List<DataSetMod>();
         static void Main(string[] args)
         {
             ReadConfig();
@@ -42,7 +41,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("        => analyse (analyse translation file)");
             Console.WriteLine("Known mods (HoI4-TranslationHelper.xml): ");
             Console.WriteLine(Environment.NewLine);
-            foreach (DataSetMod dataSetMod in _modList )
+            foreach (DataSetMod dataSetMod in ModSelector.ModList)
             {
                 Console.WriteLine( dataSetMod.Name + Environment.NewLine);
             }
@@ -56,7 +55,7 @@ namespace HoI4_TranslationHelper
                 return false;
             }
 
-            _modList = configReader.ModList;
+            ModSelector.ModList = configReader.ModList;
             return true;
         }
 
@@ -76,6 +75,10 @@ namespace HoI4_TranslationHelper
             if( text.Equals("sub",StringComparison.CurrentCultureIgnoreCase) )
             {
                 TranslationFileAnalyser.SubstitueSourceFiles();
+            }
+            else if( text.Equals("resub", StringComparison.CurrentCultureIgnoreCase ) ) 
+            {
+                TranslationFileAnalyser.ReSubstitueSourceFiles();
             }
         }
 
