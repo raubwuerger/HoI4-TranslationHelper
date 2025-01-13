@@ -13,5 +13,6 @@ namespace HoI4_TranslationHelper
         public string PathColorCodeFile;
         public string PathIconFile;
         public string PathNestingStringsFile;
+        public string PathNewLineFile;
     }
 }

@@ -20,7 +20,7 @@ namespace HoI4_TranslationHelper
         {
             if (_fileName == null)
             {
-                return null;
+                return new Dictionary<string, string>();
             }
 
             List<string> allLines = new List<string>();

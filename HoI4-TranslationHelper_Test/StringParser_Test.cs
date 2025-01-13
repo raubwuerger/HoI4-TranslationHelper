@@ -209,15 +209,17 @@ namespace HoI4_TranslationHelper_Test
             char nn = (char)110;
 
             string backSlashnn = backSlash.ToString() + nn.ToString();
-            string corruptedToken = "\nno Token";
-            string corruptedToken2 = "\n o Token";
-            string corruptedToken3 = "\\ no Token";
-            int index = corruptedToken.IndexOf("\n");
+            string corruptedToken = @"\nno \Toke\n";
+            string corruptedToken2 = @"\n o Token";
+            string corruptedToken3 = @"\ no Token";
+            int index = corruptedToken.IndexOf(@"\n");
             int index2 = corruptedToken.IndexOf('\n');
             IStringParser stringParser = StringParserFactory.Instance.CreateParserNewLine();
             List<string> tokens = new List<string>();
-//            Assert.AreEqual(1, stringParser.GetToken(corruptedToken, tokens).Count);
-//            Assert.AreEqual(2, stringParser.GetToken(corruptedToken2, tokens).Count);
+            Assert.AreEqual(1, stringParser.GetToken(corruptedToken, tokens).Count);
+            stringParser = StringParserFactory.Instance.CreateParserNewLine();
+            Assert.AreEqual(2, stringParser.GetToken(corruptedToken2, tokens).Count);
+            stringParser = StringParserFactory.Instance.CreateParserNewLine();
             Assert.AreEqual(0, stringParser.GetToken(corruptedToken3, null).Count);
         }
     }
