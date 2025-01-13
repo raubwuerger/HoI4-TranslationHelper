@@ -10,16 +10,40 @@ namespace HoI4_TranslationHelper
     internal class TranslationFileAnalyser
     {
         static string FILE_PATTERN = "*.yml";
-        public static void Analyse()
+
+        static List<TranslationFile> _localisationEnglish = null;
+        static List<TranslationFile> _localisationGerman = null;
+
+        public static void ReSubstitueSourceFiles(TranslationFileSetSubstitution translationFileSetSubstitution)
         {
-            List<TranslationFile> localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
-            List<TranslationFile> localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
+            Analyse();
+            FileSubstitutor fileSubstitutor = new FileSubstitutor();
+            fileSubstitutor.ReSubstitute(translationFileSetSubstitution);
+        }
 
-//            SubstitueSourceFiles(localisationEnglish[0]);
+        public static void SubstitueSourceFiles()
+        {
+            Analyse();
 
-            ReSubstitueSourceFiles( Create(localisationGerman[0], localisationEnglish[0].FileName) );
+            foreach (TranslationFile translationFile in _localisationEnglish)
+            {
+                FileSubstitutor fileSubstitutor = new FileSubstitutor();
+                fileSubstitutor.Substitute(translationFile);
+            }
+        }
 
-//            DoCompare(localisationEnglish, localisationGerman);
+        public static void Compare()
+        {
+            Analyse();
+
+            CheckMissingTranslationFile();
+            CheckMissingKeys();
+        }
+
+        private static void Analyse()
+        {
+            _localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            _localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
         }
 
         private static TranslationFileSetSubstitution Create(TranslationFile substitutedFile, string pathToSubstiteFile)
@@ -54,23 +78,10 @@ namespace HoI4_TranslationHelper
             return translationFiles;
         }
 
-
-
-        private static void DoCompare(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
+        private static void CheckMissingTranslationFile()
         {
-            if( null == localisationEnglish || null == localisationGerman )
-            {
-                return;
-            }
-
-            CheckMissingTranslationFile(localisationEnglish,localisationGerman);
-            CheckMissingKeys(localisationEnglish, localisationGerman);
-        }
-
-        private static void CheckMissingTranslationFile(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
-        {
-            List<string> localisationFileNamesEnglish = localisationEnglish.ConvertAll(s => s.FileNameWithoutLocalisation);
-            List<string> localisationFileNamesGerman = localisationGerman.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> localisationFileNamesEnglish = _localisationEnglish.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> localisationFileNamesGerman = _localisationGerman.ConvertAll(s => s.FileNameWithoutLocalisation);
             List<string> missingTranslationFiles = localisationFileNamesEnglish.Except(localisationFileNamesGerman).ToList<string>();
 
             if ( missingTranslationFiles.Count > 0 )
@@ -81,17 +92,6 @@ namespace HoI4_TranslationHelper
                     Console.WriteLine(translationFile + Environment.NewLine);
                 }
             }
-        }
-        private static void ReSubstitueSourceFiles( TranslationFileSetSubstitution translationFileSetSubstitution )
-        {
-            FileSubstitutor fileSubstitutor = new FileSubstitutor();
-            fileSubstitutor.ReSubstitute(translationFileSetSubstitution);
-        }
-
-        private static void SubstitueSourceFiles(TranslationFile translationFile)
-        {
-            FileSubstitutor fileSubstitutor = new FileSubstitutor();
-            fileSubstitutor.Substitute(translationFile);
         }
 
         private static DataSetLineObjectCompare CreateDataSetLineObjectCompare(List<TranslationFile> localisation)
@@ -120,10 +120,10 @@ namespace HoI4_TranslationHelper
             return dataSetLineObjectCompare;
         }
 
-        private static void CheckMissingKeys(List<TranslationFile> localisationEnglish, List<TranslationFile> localisationGerman)
+        private static void CheckMissingKeys()
         {
-            DataSetLineObjectCompare dataSetLineObjectCompareEnglish = CreateDataSetLineObjectCompare(localisationEnglish);
-            DataSetLineObjectCompare dataSetLineObjectCompareGerman = CreateDataSetLineObjectCompare(localisationGerman);
+            DataSetLineObjectCompare dataSetLineObjectCompareEnglish = CreateDataSetLineObjectCompare(_localisationEnglish);
+            DataSetLineObjectCompare dataSetLineObjectCompareGerman = CreateDataSetLineObjectCompare(_localisationGerman);
 
             LogMissingKeys(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);
             LogMissingNamespaces(dataSetLineObjectCompareEnglish.keysUnique, dataSetLineObjectCompareGerman.keysUnique);

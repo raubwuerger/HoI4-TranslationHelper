@@ -15,9 +15,10 @@ namespace HoI4_TranslationHelper
         private static List<DataSetMod> _modList = new List<DataSetMod>();
         static void Main(string[] args)
         {
-            if (args.Length < 1)
+            ReadConfig();
+            if (args.Length < 2)
             {
-                LogInfosMods("No arguments passed ...");
+                LogInfosMods("Too few arguments passed ...");
                 return;
             }
 
@@ -27,13 +28,18 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-            TranslationFileAnalyser.Analyse();
+            AnalyseFunction(args[1]);
+
         }
 
         private static void LogInfosMods(string text)
         {
             Console.WriteLine(text + Environment.NewLine);
             Console.WriteLine("args[0] == mod name");
+            Console.WriteLine("args[1] == function");
+            Console.WriteLine("        => sub (substitute translation file)");
+            Console.WriteLine("        => resub (resubstitute translation file)");
+            Console.WriteLine("        => analyse (analyse translation file)");
             Console.WriteLine("Known mods (HoI4-TranslationHelper.xml): ");
             Console.WriteLine(Environment.NewLine);
             foreach (DataSetMod dataSetMod in _modList )
@@ -41,8 +47,8 @@ namespace HoI4_TranslationHelper
                 Console.WriteLine( dataSetMod.Name + Environment.NewLine);
             }
         }
-
-        private static bool SetActiveMod(string modName)
+        
+        private static bool ReadConfig()
         {
             ConfigReader configReader = new ConfigReader();
             if (false == configReader.Read())
@@ -51,15 +57,26 @@ namespace HoI4_TranslationHelper
             }
 
             _modList = configReader.ModList;
-            ModSelector modSelector = new ModSelector();
+            return true;
+        }
 
-            modSelector.ConfigReader = configReader;
+        private static bool SetActiveMod(string modName)
+        {
+            ModSelector modSelector = new ModSelector();
             if( false == modSelector.SelectMod(modName.Trim()) )
             {
                 return false;
             }
 
             return true;
+        }
+
+        private static void AnalyseFunction(string text)
+        { 
+            if( text.Equals("sub",StringComparison.CurrentCultureIgnoreCase) )
+            {
+                TranslationFileAnalyser.SubstitueSourceFiles();
+            }
         }
 
     }
