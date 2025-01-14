@@ -80,6 +80,10 @@ namespace HoI4_TranslationHelper
             {
                 TranslationFileAnalyser.ReSubstitueSourceFiles();
             }
+            else if( text.Equals("analyse", StringComparison.CurrentCultureIgnoreCase) )
+            {
+                TranslationFileAnalyser.Compare();
+            }
         }
 
     }
