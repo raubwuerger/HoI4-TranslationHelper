@@ -95,32 +95,38 @@ namespace HoI4_TranslationHelper
         {
             Console.WriteLine("Validating file: " + _translationFileSetSubstitution.SubstitutedFile.FileName);
             string allText = File.ReadAllText(_translationFileSetSubstitution.SubstitutedFile.FileName);
-            ulong fileCount = 0;
-            fileCount = Validate(allText, _nestingStringsReSubstitute);
-            fileCount += Validate(allText, _colorCodeReSubstitute);
-            fileCount += Validate(allText, _namespaceReSubstitute);
-            fileCount += Validate(allText, _iconReSubstitute);
+            int fileOriginal = GetItemCount();
 
-            Console.WriteLine("Overall items missing: " + fileCount);
+            _nestingStringsReSubstitute = Validate(allText, _nestingStringsReSubstitute);
+            _colorCodeReSubstitute = Validate(allText, _colorCodeReSubstitute);
+            _namespaceReSubstitute = Validate(allText, _namespaceReSubstitute);
+            _iconReSubstitute = Validate(allText, _iconReSubstitute);
+
+            Console.WriteLine("Overall items missing: " + (fileOriginal - GetItemCount()));
             Console.WriteLine();
         }
 
-        private ulong Validate( string text, Dictionary<string, string> substitutionSubSet )
+        private int GetItemCount()
         {
-            ulong count = 0;
+            return _nestingStringsReSubstitute.Count + _colorCodeReSubstitute.Count + _namespaceReSubstitute.Count + _iconReSubstitute.Count;
+        }
+
+        private Dictionary<string, string> Validate( string text, Dictionary<string, string> substitutionSubSet )
+        {
+            Dictionary<string, string> validItems = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> keyValuePair in substitutionSubSet)
             {
                 if (text.Contains(keyValuePair.Key))
                 {
+                    validItems.Add(keyValuePair.Key, keyValuePair.Value);
                     continue;
                 }
 
-                count++;
                 Console.WriteLine("Substitution item not found: " + keyValuePair.Key + ";" + keyValuePair.Value);
             }
-            Console.WriteLine("Count items: " +count.ToString());
+            Console.WriteLine("Items missing: " + (substitutionSubSet.Count - validItems.Count).ToString());
 
-            return count;
+            return validItems;
         }
 
         private void ReSubstitute(LineObject lineObject, Dictionary<string, string> substitutions )
