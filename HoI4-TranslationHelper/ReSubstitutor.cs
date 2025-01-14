@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace HoI4_TranslationHelper
 {
@@ -70,7 +72,7 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-            //            string allText = File.ReadAllText(translationFileSetSubstitution.PathNestingStringsFile);
+            ValidateAgaintsSubstitutionDataFiles();
 
             foreach (var lineObject in lineObjects)
             {
@@ -86,6 +88,39 @@ namespace HoI4_TranslationHelper
             Utility.WriteTranslationFile(translationFile);
 
             Console.WriteLine("Finished ...");
+        }
+
+        //TODO: 2025-01-14 - JHA - Extract in separate class SubstitutionFileValidator
+        private void ValidateAgaintsSubstitutionDataFiles()
+        {
+            Console.WriteLine("Validating file: " + _translationFileSetSubstitution.SubstitutedFile.FileName);
+            string allText = File.ReadAllText(_translationFileSetSubstitution.SubstitutedFile.FileName);
+            ulong fileCount = 0;
+            fileCount = Validate(allText, _nestingStringsReSubstitute);
+            fileCount += Validate(allText, _colorCodeReSubstitute);
+            fileCount += Validate(allText, _namespaceReSubstitute);
+            fileCount += Validate(allText, _iconReSubstitute);
+
+            Console.WriteLine("Overall items missing: " + fileCount);
+            Console.WriteLine();
+        }
+
+        private ulong Validate( string text, Dictionary<string, string> substitutionSubSet )
+        {
+            ulong count = 0;
+            foreach (KeyValuePair<string, string> keyValuePair in substitutionSubSet)
+            {
+                if (text.Contains(keyValuePair.Key))
+                {
+                    continue;
+                }
+
+                count++;
+                Console.WriteLine("Substitution item not found: " + keyValuePair.Key + ";" + keyValuePair.Value);
+            }
+            Console.WriteLine("Count items: " +count.ToString());
+
+            return count;
         }
 
         private void ReSubstitute(LineObject lineObject, Dictionary<string, string> substitutions )

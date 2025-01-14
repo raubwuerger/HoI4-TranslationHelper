@@ -35,15 +35,24 @@ namespace HoI4_TranslationHelper
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NESTING_STRING_SUFFIX;
             WriteSubstitionFile(_nestingStringsSubstitute);
+            Console.WriteLine("Substituted nesting strings : " + _nestingStringsSubstitute.Count);
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.COLOR_CODE_SUFFIX;
             WriteSubstitionFile(_colorCodeSubstitute);
+            Console.WriteLine("Substituted color codes : " + _colorCodeSubstitute.Count);
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NAMESPACE_SUFFIX;
             WriteSubstitionFile(_namespaceSubstitute);
+            Console.WriteLine("Substituted name spaces : " + _namespaceSubstitute.Count);
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.ICON_SUFFIX;
             WriteSubstitionFile(_iconSubstitute);
+            Console.WriteLine("Substituted icons : " + _iconSubstitute.Count);
+
+            Console.WriteLine("Overall items substituted: " + (_nestingStringsSubstitute.Count + _colorCodeSubstitute.Count + _namespaceSubstitute.Count + _iconSubstitute.Count));
+
+
+
             //TODO: 2025-01-14 - JHA - Check if all files have been successfully written
             return true;
 

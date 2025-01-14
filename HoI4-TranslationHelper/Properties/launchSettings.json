@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "HoI4-TranslationHelper": {
+    "resub": {
       "commandName": "Project",
-      "commandLineArgs": "Stellaris sub"
+      "commandLineArgs": "Stellaris resub"
     }
   }
 }
