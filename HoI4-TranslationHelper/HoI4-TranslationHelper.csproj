@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>HoI4_TranslationHelper</RootNamespace>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+	<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="HoI4-TranslationHelper_Test" />

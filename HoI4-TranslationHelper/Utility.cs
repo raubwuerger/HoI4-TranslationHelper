@@ -149,7 +149,7 @@ namespace HoI4_TranslationHelper
             }
 
             string fileName = Path.GetFileNameWithoutExtension(translationFile.FileName);
-            string substitionFileSuffix = ".sub.yml";
+            string substitionFileSuffix = ".sub";
 
             Dictionary<ulong, LineObject> _lines = translationFile.Lines;
             List<LineObject> lineObjects = _lines.Values.ToList();
