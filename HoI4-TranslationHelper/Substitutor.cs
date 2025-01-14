@@ -77,7 +77,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLine;
             foreach (string subs in token)
             {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNestingStringToken(subs), GenerateNestingStringSubstitute(GenerateCompleteNestingStringToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNestingStringToken(subs), GenerateNestingStringSubstitute(GenerateCompleteNestingStringToken(subs), lineObject));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -87,12 +87,12 @@ namespace HoI4_TranslationHelper
             return FileSubstitutionConstants.NESTING_STRING_SIGN_START + subs + FileSubstitutionConstants.NESTING_STRING_SIGN_END;
         }
 
-        private string GenerateNestingStringSubstitute(string sub)
+        private string GenerateNestingStringSubstitute(string sub, LineObject lineObject)
         {
             int count = _nestingStringsSubstitute.Count();
             count++;
             string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.NESTING_STRING_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _nestingStringsSubstitute.Add(subString, sub);
+            _nestingStringsSubstitute.Add(subString, CreateSubKeyLineTripel(sub, lineObject));
             return subString;
         }
 
@@ -103,7 +103,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs), lineObject));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -114,12 +114,12 @@ namespace HoI4_TranslationHelper
             return FileSubstitutionConstants.COLOR_CODE_SIGN_START + subs;
         }
 
-        private string GenerateColorCodeSubstitute(string sub)
+        private string GenerateColorCodeSubstitute(string sub, LineObject lineObject)
         {
             int count = _colorCodeSubstitute.Count();
             count++;
             string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.COLOR_CODE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _colorCodeSubstitute.Add(subString, sub);
+            _colorCodeSubstitute.Add(subString, CreateSubKeyLineTripel(sub, lineObject));
             return subString;
         }
 
@@ -131,7 +131,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNamespaceToken(subs), GenerateNamespaceSubstitute(GenerateCompleteNamespaceToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteNamespaceToken(subs), GenerateNamespaceSubstitute(GenerateCompleteNamespaceToken(subs), lineObject));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -142,12 +142,12 @@ namespace HoI4_TranslationHelper
             return FileSubstitutionConstants.NAMESPACE_START_SIGN_START + subs + FileSubstitutionConstants.NAMESPACE_START_SIGN_END;
         }
 
-        private string GenerateNamespaceSubstitute(string sub)
+        private string GenerateNamespaceSubstitute(string sub, LineObject lineObject)
         {
             int count = _namespaceSubstitute.Count();
             count++;
             string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.NAMESPACE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _namespaceSubstitute.Add(subString, sub);
+            _namespaceSubstitute.Add(subString, CreateSubKeyLineTripel(sub, lineObject));
             return subString;
         }
         private void SubstituteIcon(LineObject lineObject)
@@ -157,7 +157,7 @@ namespace HoI4_TranslationHelper
             string substitute = lineObject.OriginalLineSubstituted;
             foreach (string subs in token)
             {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteIconToken(subs), GenerateIconSubstitute(GenerateCompleteIconToken(subs)));
+                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteIconToken(subs), GenerateIconSubstitute(GenerateCompleteIconToken(subs), lineObject));
             }
 
             lineObject.OriginalLineSubstituted = substitute;
@@ -168,13 +168,18 @@ namespace HoI4_TranslationHelper
             return FileSubstitutionConstants.ICON_START_SIGN_START + subs + FileSubstitutionConstants.ICON_START_SIGN_END;
         }
 
-        private string GenerateIconSubstitute(string sub)
+        private string GenerateIconSubstitute(string sub, LineObject lineObject)
         {
             int count = _iconSubstitute.Count();
             count++;
             string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.ICON_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _iconSubstitute.Add(subString, sub);
+            _iconSubstitute.Add(subString, CreateSubKeyLineTripel(sub,lineObject));
             return subString;
+        }
+
+        private string CreateSubKeyLineTripel(string sub, LineObject lineObject)
+        {
+            return sub + ";" + lineObject.Key + ";" + lineObject.LineNumber;
         }
 
         private void WriteSubstitionFile(TranslationFile translationFile)
