@@ -32,7 +32,10 @@ namespace HoI4_TranslationHelper
 
             ReadSubstitutionFiles();
 
+            ValidateAgaintsSubstitutionDataFiles();
+
             ReSubstitute(_translationFileSetSubstitution.SubstitutedFile.Lines.Values.ToList());
+//            ReSubstitute(_translationFileSetSubstitution.SubstitutedFile.FileName);
         }
 
         private bool ReadSubstitutionFiles()
@@ -60,6 +63,15 @@ namespace HoI4_TranslationHelper
             _newLineReSubstitute.Add("___NL___", "\\n");
         }
 
+        private void ReSubstitute( string fileName )
+        {
+            string allText = File.ReadAllText(fileName);
+            foreach( KeyValuePair<string,string> keyValuePair in _namespaceReSubstitute )
+            {
+                allText = allText.Replace(keyValuePair.Key, keyValuePair.Value);
+            }
+        }
+
         private void ReSubstitute(List<LineObject> lineObjects )
         {
             if (lineObjects == null)
@@ -71,8 +83,6 @@ namespace HoI4_TranslationHelper
             {
                 return;
             }
-
-            ValidateAgaintsSubstitutionDataFiles();
 
             foreach (var lineObject in lineObjects)
             {

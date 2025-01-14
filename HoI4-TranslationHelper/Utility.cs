@@ -154,7 +154,7 @@ namespace HoI4_TranslationHelper
             Dictionary<ulong, LineObject> _lines = translationFile.Lines;
             List<LineObject> lineObjects = _lines.Values.ToList();
 
-            Console.WriteLine("Writing substituted source file started ...");
+            Console.WriteLine("Writing substituted source file started: " + translationFile.FileName);
             // Write the string array to a new file named "WriteLines.txt".
             using (StreamWriter outputFile = new StreamWriter(translationFile.FileName + substitionFileSuffix))
             {
