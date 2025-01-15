@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "resub": {
+    "Stellaris analyse": {
       "commandName": "Project",
-      "commandLineArgs": "Stellaris resub"
+      "commandLineArgs": "Stellaris analyse"
     }
   }
 }

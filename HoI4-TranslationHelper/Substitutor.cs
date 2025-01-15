@@ -9,10 +9,8 @@ namespace HoI4_TranslationHelper
     internal class Substitutor
     {
         private Dictionary<string, string> _nestingStringsSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private Dictionary<string, string> _colorCodeSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         private Dictionary<string, string> _namespaceSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         private Dictionary<string, string> _iconSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
-        private Dictionary<string, string> _newLineSubstitute = new Dictionary<string, string>(); //ulong substitute number, string original text
         FileWriterSubstitutionItem fileWriterSubstitutionItem = new FileWriterSubstitutionItem();
 
         public void Substitute(TranslationFile translationFile)
@@ -25,7 +23,6 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Substituting file: " + translationFile.FileName);
             Substitute(translationFile.Lines.Values.ToList());
             Console.WriteLine("Substituted nesting strings : " + _nestingStringsSubstitute.Count);
-            Console.WriteLine("Substituted color codes : " + _colorCodeSubstitute.Count);
             Console.WriteLine("Substituted name spaces : " + _namespaceSubstitute.Count);
             Console.WriteLine("Substituted icons : " + _iconSubstitute.Count);
 
@@ -41,18 +38,13 @@ namespace HoI4_TranslationHelper
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NESTING_STRING_SUFFIX;
             WriteSubstitionFile(_nestingStringsSubstitute);
 
-            fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.COLOR_CODE_SUFFIX;
-            WriteSubstitionFile(_colorCodeSubstitute);
-
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.NAMESPACE_SUFFIX;
             WriteSubstitionFile(_namespaceSubstitute);
 
             fileWriterSubstitutionItem.FileSuffix = "." + FileSubstitutionConstants.ICON_SUFFIX;
             WriteSubstitionFile(_iconSubstitute);
 
-            Console.WriteLine("Overall items substituted: " + (_nestingStringsSubstitute.Count + _colorCodeSubstitute.Count + _namespaceSubstitute.Count + _iconSubstitute.Count));
-
-
+            Console.WriteLine("Overall items substituted: " + (_nestingStringsSubstitute.Count + _namespaceSubstitute.Count + _iconSubstitute.Count));
 
             //TODO: 2025-01-14 - JHA - Check if all files have been successfully written
             return true;
@@ -74,7 +66,6 @@ namespace HoI4_TranslationHelper
             foreach (var lineObject in lineObjects)
             {
                 SubstituteNestingString(lineObject);
-                SubstituteColorCode(lineObject);
                 SubstituteNamespace(lineObject);
                 SubstituteIcon(lineObject);
             }
@@ -105,34 +96,6 @@ namespace HoI4_TranslationHelper
             _nestingStringsSubstitute.Add(subString, CreateSubKeyLineTripel(sub, lineObject));
             return subString;
         }
-
-        private void SubstituteColorCode(LineObject lineObject)
-        {
-            List<string> token = lineObject.ColorCodes;
-
-            string substitute = lineObject.OriginalLineSubstituted;
-            foreach (string subs in token)
-            {
-                substitute = StringExtensionMethods.ReplaceFirst(substitute, GenerateCompleteColorCodeToken(subs), GenerateColorCodeSubstitute(GenerateCompleteColorCodeToken(subs), lineObject));
-            }
-
-            lineObject.OriginalLineSubstituted = substitute;
-        }
-
-        private string GenerateCompleteColorCodeToken(string subs)
-        {
-            return FileSubstitutionConstants.COLOR_CODE_SIGN_START + subs;
-        }
-
-        private string GenerateColorCodeSubstitute(string sub, LineObject lineObject)
-        {
-            int count = _colorCodeSubstitute.Count();
-            count++;
-            string subString = FileSubstitutionConstants.SUBSTITUTION_START + FileSubstitutionConstants.COLOR_CODE_SUFFIX + count.ToString() + FileSubstitutionConstants.SUBSTITUTION_END;
-            _colorCodeSubstitute.Add(subString, CreateSubKeyLineTripel(sub, lineObject));
-            return subString;
-        }
-
 
         private void SubstituteNamespace(LineObject lineObject)
         {

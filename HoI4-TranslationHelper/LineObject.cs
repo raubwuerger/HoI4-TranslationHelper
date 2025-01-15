@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HoI4_TranslationHelper
 {
-    internal class LineObject
+    public class LineObject
     {
         ulong _lineNumber;
         TranslationFile _translationFile;

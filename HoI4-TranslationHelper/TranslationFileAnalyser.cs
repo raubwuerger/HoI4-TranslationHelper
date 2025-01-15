@@ -12,6 +12,7 @@ namespace HoI4_TranslationHelper
         static string FILE_PATTERN = "*.yml";
 
         static List<TranslationFile> _localisationEnglish = null;
+        static List<TranslationFile> _localisationEnglishUpdated = null;
         static List<TranslationFile> _localisationGerman = null;
 
         public static void ReSubstitueSourceFiles()
@@ -57,6 +58,7 @@ namespace HoI4_TranslationHelper
         private static void Analyse()
         {
             _localisationEnglish = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglish);
+            _localisationEnglishUpdated = AnalyseDirectory(HoI4_TranslationHelper_Config.PathEnglishUpdated);
             _localisationGerman = AnalyseDirectory(HoI4_TranslationHelper_Config.PathGerman);
         }
 
@@ -68,7 +70,6 @@ namespace HoI4_TranslationHelper
             translationFileSetSubstitution.PathNestingStringsFile = pathToSubstiteFile +"." +FileSubstitutionConstants.NESTING_STRING_SUFFIX;
             translationFileSetSubstitution.PathNamespaceFile = pathToSubstiteFile + "." + FileSubstitutionConstants.NAMESPACE_SUFFIX;
             translationFileSetSubstitution.PathIconFile = pathToSubstiteFile + "." + FileSubstitutionConstants.ICON_SUFFIX;
-            translationFileSetSubstitution.PathColorCodeFile = pathToSubstiteFile + "." + FileSubstitutionConstants.COLOR_CODE_SUFFIX;
 
             return translationFileSetSubstitution;
         }

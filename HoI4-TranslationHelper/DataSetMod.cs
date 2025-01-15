@@ -11,6 +11,7 @@ namespace HoI4_TranslationHelper
         private string _name;
         private string _pathGerman;
         private string _pathEnglish;
+        private string _pathEnglishUpdated;
         private DataSetMod() { }
 
         public string Name
@@ -28,6 +29,12 @@ namespace HoI4_TranslationHelper
         {
             get { return _pathEnglish; }
             set { _pathEnglish = value;}
+        }
+
+        public string PathEnglishUpdated
+        { 
+            get => _pathEnglishUpdated; 
+            set => _pathEnglishUpdated = value; 
         }
 
         public DataSetMod( string name )

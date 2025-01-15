@@ -10,9 +10,7 @@ namespace HoI4_TranslationHelper
     {
         public TranslationFile SubstitutedFile;
         public string PathNamespaceFile;
-        public string PathColorCodeFile;
         public string PathIconFile;
         public string PathNestingStringsFile;
-        public string PathNewLineFile;
     }
 }

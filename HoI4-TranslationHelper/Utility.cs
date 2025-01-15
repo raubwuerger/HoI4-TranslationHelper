@@ -141,6 +141,19 @@ namespace HoI4_TranslationHelper
             return resubstitutes;
         }
 
+        public static void WriteLines( List<LineObject> lineObjects, string fileName )
+        {
+            Console.WriteLine("Writing substituted source file started: " + fileName);
+            using (StreamWriter outputFile = new StreamWriter(fileName))
+            {
+                foreach (LineObject line in lineObjects)
+                {
+                    outputFile.WriteLine(GetSubstitutedLine(line));
+                }
+            }
+            Console.WriteLine("Writing substituted source file finished ...");
+        }
+
         public static void WriteTranslationFile(TranslationFile translationFile)
         {
             if (translationFile == null)
@@ -148,15 +161,23 @@ namespace HoI4_TranslationHelper
                 return;
             }
 
-            string fileName = Path.GetFileNameWithoutExtension(translationFile.FileName);
+            WriteTranslationFile(translationFile, translationFile.FileName);
+        }
+
+        public static void WriteTranslationFile(TranslationFile translationFile, string fileName )
+        {
+            if (translationFile == null)
+            {
+                return;
+            }
+
             string substitionFileSuffix = ".sub";
 
             Dictionary<ulong, LineObject> _lines = translationFile.Lines;
             List<LineObject> lineObjects = _lines.Values.ToList();
 
-            Console.WriteLine("Writing substituted source file started: " + translationFile.FileName);
-            // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter(translationFile.FileName + substitionFileSuffix))
+            Console.WriteLine("Writing substituted source file started: " + fileName);
+            using (StreamWriter outputFile = new StreamWriter(fileName + substitionFileSuffix))
             {
                 foreach (LineObject line in lineObjects)
                 {
@@ -166,7 +187,6 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Writing substituted source file finished ...");
 
         }
-
         private static string GetSubstitutedLine(LineObject lineObject)
         {
             if (lineObject.OriginalLineSubstituted == null)

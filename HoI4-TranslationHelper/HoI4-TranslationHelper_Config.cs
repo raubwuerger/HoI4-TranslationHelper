@@ -8,10 +8,12 @@ namespace HoI4_TranslationHelper
 {
     public class HoI4_TranslationHelper_Config
     {
-        private static string pathEnglish = Constants.pathEnglish;
-        private static string pathGerman = Constants.pathGerman;
+        private static string pathEnglish = Constants.PATH_DEFAULT_ENGLISH;
+        private static string pathEnglishUpdated = Constants.PATH_DEFAULT_ENGLISH_UPDATED;
+        private static string pathGerman = Constants.PATH_DEFAULT_GERMAN;
 
         public static string PathEnglish { get => pathEnglish; set => pathEnglish = value; }
         public static string PathGerman { get => pathGerman; set => pathGerman = value; }
+        public static string PathEnglishUpdated { get => pathEnglishUpdated; set => pathEnglishUpdated = value; }
     }
 }

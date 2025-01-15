@@ -15,10 +15,6 @@ namespace HoI4_TranslationHelper
         public static string NESTING_STRING_SIGN_START = StringParserFactory.NESTING_STRINGS_START;
         public static string NESTING_STRING_SIGN_END = StringParserFactory.NESTING_STRINGS_END;
 
-        public static string COLOR_CODE_SUFFIX = "CC";
-        public static string COLOR_CODE_SIGN_START = StringParserFactory.COLOR_CODE_START;
-        public static string COLOR_CODE_SIGN_END = StringParserFactory.COLOR_CODE_END;
-
         public static string NAMESPACE_SUFFIX = "NS";
         public static string NAMESPACE_START_SIGN_START = StringParserFactory.NAMESPACE_START;
         public static string NAMESPACE_START_SIGN_END = StringParserFactory.NAMESPACE_END;

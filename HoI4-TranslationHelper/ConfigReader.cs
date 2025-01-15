@@ -15,10 +15,10 @@ namespace HoI4_TranslationHelper
         public bool Read()
         {
             _modList.Clear();
-            XmlDocument config = XMLFileUtility.Load(Constants.config);
+            XmlDocument config = XMLFileUtility.Load(Constants.CONFIG);
             if (null == config)
             {
-                Console.WriteLine("Unable to load config: " + Constants.config + Environment.NewLine);
+                Console.WriteLine("Unable to load config: " + Constants.CONFIG + Environment.NewLine);
                 return false;
             }
             
@@ -33,13 +33,19 @@ namespace HoI4_TranslationHelper
                 }
 
                 DataSetMod dataSetMod = new DataSetMod(modName);
-                string pathEnglish = Utility.FindNodeByName(configPath.ChildNodes, Constants.configNodePathEnglish);
+                string pathEnglish = Utility.FindNodeByName(configPath.ChildNodes, Constants.CONFIG_NODE_PATH_ENGLISH);
                 if (null != pathEnglish)
                 {
                     dataSetMod.PathEnglish = pathEnglish;
                 }
 
-                string pathGerman = Utility.FindNodeByName(configPath.ChildNodes, Constants.configNodePathGerman);
+                string pathEnglishUpdated = Utility.FindNodeByName(configPath.ChildNodes, Constants.CONFIG_NODE_PATH_ENGLISH_UPDATED);
+                if (null != pathEnglishUpdated)
+                {
+                    dataSetMod.PathEnglishUpdated = pathEnglishUpdated;
+                }
+
+                string pathGerman = Utility.FindNodeByName(configPath.ChildNodes, Constants.CONFIG_NODE_PATH_GERMAN);
                 if (null != pathGerman)
                 {
                     dataSetMod.PathGerman = pathGerman;
