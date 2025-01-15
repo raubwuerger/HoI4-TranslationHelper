@@ -8,7 +8,7 @@ namespace HoI4_TranslationHelper
 {
     public class LineObject
     {
-        ulong _lineNumber;
+        int _lineNumber;
         TranslationFile _translationFile;
         string _key;
         List<string> _nameSpaces = new List<string>();
@@ -18,14 +18,14 @@ namespace HoI4_TranslationHelper
         List<string> _newLines = new List<string>();
         string _originalLine;
         string _originalLineSubstituted;
-        public LineObject(ulong lineNumber)
+        public LineObject(int lineNumber)
         {
             _lineNumber = lineNumber;
         }
 
         private LineObject() { }
 
-        public ulong LineNumber { get => _lineNumber; }
+        public int LineNumber { get => _lineNumber; }
         public string Key { get => _key; set => _key = value; }
         internal TranslationFile TranslationFile { get => _translationFile; set => _translationFile = value; }
         public List<string> NameSpaces { get => _nameSpaces; set => _nameSpaces = value; }

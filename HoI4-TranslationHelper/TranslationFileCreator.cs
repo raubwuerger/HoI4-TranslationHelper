@@ -45,17 +45,17 @@ namespace HoI4_TranslationHelper
             }
         }
 
-        private Dictionary<ulong,LineObject> CreateLineObjects(string[] lines)
+        private Dictionary<int,LineObject> CreateLineObjects(string[] lines)
         {
             if (lines == null || lines.Length == 0)
             {  
                 return null;
             }   
 
-            Dictionary<ulong, LineObject> lineObjects = new Dictionary<ulong, LineObject>();
+            Dictionary<int, LineObject> lineObjects = new Dictionary<int, LineObject>();
             List<LineTextTupel> lineTextTupels = new List<LineTextTupel>();
 
-            ulong lineNumber = 0;
+            int lineNumber = 0;
             foreach (string line in lines)
             {
                 if( false == IgnoreLine(line) )

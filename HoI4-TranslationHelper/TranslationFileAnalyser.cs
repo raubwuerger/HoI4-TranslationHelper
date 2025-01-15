@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,8 +52,12 @@ namespace HoI4_TranslationHelper
         {
             Analyse();
 
-            CheckMissingTranslationFile();
-            CheckMissingKeys();
+//            CheckTranslationFilesMissingUpdate();
+//            CheckTranslationFilesDeletedUpdate();
+            CheckNewKeysUpdate();
+
+            //            CheckMissingTranslationFile();
+            //            CheckMissingKeys();
         }
 
         private static void Analyse()
@@ -109,6 +114,77 @@ namespace HoI4_TranslationHelper
             }
         }
 
+        private static void CheckTranslationFilesMissingUpdate()
+        {
+            if (false == _localisationEnglishUpdated.Any() || false == _localisationEnglish.Any())
+            {
+                Console.WriteLine("No translation files found!");
+                return;
+            }
+
+            Console.WriteLine("Following transtlation files are no more existant in update: " + Path.GetFullPath(_localisationEnglishUpdated[0].FileName) +Environment.NewLine);
+            List<string> localisationFileNamesEnglish = _localisationEnglish.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> localisationFileNamesEnglishUpdated = _localisationEnglishUpdated.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> missingTranslationFiles = localisationFileNamesEnglish.Except(localisationFileNamesEnglishUpdated).ToList<string>();
+
+            if (missingTranslationFiles.Count > 0)
+            {
+                foreach (string translationFile in missingTranslationFiles)
+                {
+                    Console.WriteLine(translationFile + Environment.NewLine);
+                }
+            }
+        }
+
+        private static void CheckTranslationFilesDeletedUpdate()
+        {
+            if( false == _localisationEnglishUpdated.Any() || false == _localisationEnglish.Any() )
+            {
+                Console.WriteLine("No translation files found!");
+                return;
+            }
+
+            Console.WriteLine("Following transtlation files are new in update: " + Path.GetFullPath(_localisationEnglishUpdated[0].FileName) +Environment.NewLine);
+            List<string> localisationFileNamesEnglish = _localisationEnglish.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> localisationFileNamesEnglishUpdated = _localisationEnglishUpdated.ConvertAll(s => s.FileNameWithoutLocalisation);
+            List<string> translationFilesToDelete = localisationFileNamesEnglishUpdated.Except(localisationFileNamesEnglish).ToList<string>();
+
+            foreach (string translationFile in translationFilesToDelete)
+            {
+                Console.WriteLine(translationFile + Environment.NewLine);
+            }
+        }
+
+        private static void CheckNewKeysUpdate()
+        {
+            Dictionary<string, LineObject> updated = GetKeys(_localisationEnglishUpdated);
+            Dictionary<string, LineObject> old = GetKeys(_localisationEnglish);
+            Console.WriteLine("Following keys are new in update: " + Path.GetFullPath(_localisationEnglishUpdated[0].FileName) + Environment.NewLine);
+            Dictionary<string, LineObject> toCreate = updated.Except(old).ToDictionary<string,LineObject>();
+
+            Console.WriteLine("Following keys (" + toCreate.Count + ") are new in update: " + Path.GetFullPath(_localisationEnglishUpdated[0].FileName) + Environment.NewLine);
+            foreach (string key in toCreate.Keys) 
+            {  
+                Console.WriteLine(key);
+            }
+        }
+
+        private static Dictionary<string, LineObject> GetKeys( List<TranslationFile> files )
+        {
+            if (false == files.Any())
+            {
+                Console.WriteLine("No translation files found!");
+                return null;
+            }
+
+            Dictionary<string, LineObject> keys = new Dictionary<string, LineObject>();
+            foreach ( TranslationFile translationFile in files)
+            {
+                keys = keys.Union(Utility.GetValidKeys(translationFile.Lines.Values.ToList()).Where(k => !keys.ContainsKey(k.Key))).ToDictionary(k => k.Key, v => v.Value);
+            }
+
+            return keys;
+        }
         private static DataSetLineObjectCompare CreateDataSetLineObjectCompare(List<TranslationFile> localisation)
         {
             DataSetLineObjectCompare dataSetLineObjectCompare = new DataSetLineObjectCompare();
@@ -206,7 +282,7 @@ namespace HoI4_TranslationHelper
                 {
                     if (true == dictionaryGerman.ContainsKey(pair.Key))
                     {
-                        LineObject lineObject = new LineObject(0UL);
+                        LineObject lineObject = new LineObject(0);
                         
                         if (true == dictionaryGerman.TryGetValue(pair.Key, out lineObject))
                         {
@@ -269,7 +345,7 @@ namespace HoI4_TranslationHelper
                 {
                     if (true == dictionaryGerman.ContainsKey(pair.Key))
                     {
-                        LineObject lineObject = new LineObject(0UL);
+                        LineObject lineObject = new LineObject(0);
 
                         if (true == dictionaryGerman.TryGetValue(pair.Key, out lineObject))
                         {

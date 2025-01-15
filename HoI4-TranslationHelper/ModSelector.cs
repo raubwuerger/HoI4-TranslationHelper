@@ -29,6 +29,7 @@ namespace HoI4_TranslationHelper
             Console.WriteLine("Mod found: " + modName);
 
             HoI4_TranslationHelper_Config.PathEnglish = found.PathEnglish;
+            HoI4_TranslationHelper_Config.PathEnglishUpdated = found.PathEnglishUpdated;
             HoI4_TranslationHelper_Config.PathGerman = found.PathGerman;
 
             return true;

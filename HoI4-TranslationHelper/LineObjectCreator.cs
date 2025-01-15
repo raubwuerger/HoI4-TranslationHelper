@@ -25,7 +25,7 @@ namespace HoI4_TranslationHelper
         List<string> _newLines = new List<string>();
 
 
-        public LineObject Create( ulong lineNumber )
+        public LineObject Create( int lineNumber )
         {
             LineObject lineObject = new LineObject( lineNumber );
             lineObject.TranslationFile = _translationFile;

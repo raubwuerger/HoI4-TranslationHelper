@@ -13,7 +13,7 @@ namespace HoI4_TranslationHelper
     {
         private string _fileName;
         private string _fileNameWithoutLocalisation;
-        private Dictionary<ulong, LineObject> _lines = new Dictionary<ulong, LineObject>(); //long is line number
+        private Dictionary<int, LineObject> _lines = new Dictionary<int, LineObject>(); //long is line number
         public TranslationFile(string filename)
         {
             _fileName = filename;
@@ -25,7 +25,7 @@ namespace HoI4_TranslationHelper
 
         public string FileName { get => _fileName; }
         public string FileNameWithoutLocalisation { get => _fileNameWithoutLocalisation; set => _fileNameWithoutLocalisation = value; }
-        internal Dictionary<ulong, LineObject> Lines { get => _lines; set => _lines = value; }
+        internal Dictionary<int, LineObject> Lines { get => _lines; set => _lines = value; }
 
         public override string ToString()
         {

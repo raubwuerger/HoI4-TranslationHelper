@@ -87,7 +87,7 @@ namespace HoI4_TranslationHelper
                 return null;
             }
 
-            Dictionary<ulong, LineObject> _lines = translationFile.Lines;
+            Dictionary<int, LineObject> _lines = translationFile.Lines;
             List<LineObject> lines = _lines.Values.ToList();
 
             string completeString = "";
@@ -173,7 +173,7 @@ namespace HoI4_TranslationHelper
 
             string substitionFileSuffix = ".sub";
 
-            Dictionary<ulong, LineObject> _lines = translationFile.Lines;
+            Dictionary<int, LineObject> _lines = translationFile.Lines;
             List<LineObject> lineObjects = _lines.Values.ToList();
 
             Console.WriteLine("Writing substituted source file started: " + fileName);
@@ -200,6 +200,28 @@ namespace HoI4_TranslationHelper
             }
 
             return lineObject.OriginalLineSubstituted;
+        }
+
+        public static Dictionary<string,LineObject> GetValidKeys( List<LineObject> lines)
+        {
+            if( null == lines )
+            {
+                return null;
+            }
+
+            Dictionary<string,LineObject> keys = new Dictionary<string,LineObject>();  
+
+            foreach (LineObject line in lines) 
+            {
+                if (  string.IsNullOrEmpty(line.Key) )
+                {
+                    continue;
+                }
+
+                keys[line.Key] = line;
+            }
+
+            return keys;
         }
 
     }
